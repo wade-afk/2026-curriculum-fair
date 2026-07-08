@@ -401,6 +401,9 @@ label.ck-row.sel{background:var(--blue-soft)}
 .ck-alert .btn-retry{background:var(--ink);color:#fff}
 .ck-alert .btn-keep{background:#fff;border-color:var(--line);color:var(--ink)}
 .ck-alert .btn-keep:hover{border-color:var(--ink)}
+label.ck-row.lockdim{opacity:.45;cursor:not-allowed}
+label.ck-row.lockon{background:var(--blue-soft);cursor:default}
+.lock-badge{font-size:10.5px;font-weight:700;color:var(--blue);background:#fff;border:1.5px solid var(--blue);border-radius:999px;padding:2px 8px;white-space:nowrap}
 .btn-full{width:100%;justify-content:center;margin-top:6px}
 
 /* ---------- 대학별 권장과목 ---------- */
@@ -1752,6 +1755,18 @@ const GRP_COLOR = {"제2외국어/한문":0,"과학/사회":1,"국어/영어/수
    선택 검증 (계열 혼합 · 과학 위계 · 교차 수강)
 ===================================================================== */
 const SCISOC_GRP = "과학/사회";
+const KEM_GRP = "국어/영어/수학";
+const LANG_GRP = "제2외국어/한문";
+/* 연계 자동 선택·고정 규칙: from 과목 선택 시 to 과목이 자동 선택·고정됨 (필요 시 행 추가) */
+const AUTO_LINKS = [
+  { fromSem:"s21", fromGrp:KEM_GRP,  fromSub:"기하",   toSem:"s22", toGrp:KEM_GRP,  toSub:"인공지능 수학" },
+  { fromSem:"s21", fromGrp:LANG_GRP, fromSub:"일본어", toSem:"s22", toGrp:LANG_GRP, toSub:"일본어 회화" },
+];
+const semName = id => allSems().find(s=>s.id===id).name;
+function activeLock(toSem, toGrp){
+  return AUTO_LINKS.find(l => l.toSem===toSem && l.toGrp===toGrp &&
+    ((ckState[l.fromSem]||{})[l.fromGrp]||[]).includes(l.fromSub)) || null;
+}
 /* 2학년 2학기 과학 위계: 2학기 과목 → 1학기 선수 과목 */
 const SCI_PREREQ = {
   "역학과 에너지":"물리학",
@@ -1794,26 +1809,32 @@ function ckAlert({tone="warn", ico="⚠️", title, bodyHTML, buttons}){
 function closeCkAlert(){ caOverlay.classList.remove("open"); document.body.style.overflow=""; }
 document.addEventListener("keydown",e=>{ if(e.key==="Escape" && caOverlay.classList.contains("open")) closeCkAlert(); });
 
-/* ----- 검증 1: 계열 혼합 경고 (s21·s22·s31) ----- */
-function checkMixedTrack(semId){
-  const opts = grpSelOptions(semId, SCISOC_GRP);
+/* ----- 검증 1: 계열 고정 — 2학년은 1·2학기 통합, 3학년 1학기는 학기 내 동일 계열 ----- */
+function blockMixedTrack(semId, name){
   const sem = allSems().find(s=>s.id===semId);
   const grp = sem.groups.find(g=>g.name===SCISOC_GRP);
-  if(opts.length !== grp.pick) return;               // 택3 완료 시점에만 판정
-  const soc = opts.filter(isSocOpt).length, sci = opts.filter(isSciOpt).length;
-  if(soc>0 && sci>0){
+  const newOpt = grp.options.find(o=>o[0]===name);
+  const newSoc = isSocOpt(newOpt);
+  const year2 = (semId==="s21"||semId==="s22");
+  const anchors = year2
+    ? [["s21", grpSelOptions("s21",SCISOC_GRP)],["s22", grpSelOptions("s22",SCISOC_GRP)]]
+    : [[semId, grpSelOptions(semId,SCISOC_GRP)]];
+  for(const [aSem, opts] of anchors){
+    if(!opts.length) continue;
+    const curSoc = isSocOpt(opts[0]);
+    if(curSoc === newSoc) continue;
+    const curName = curSoc?"사회":"과학", newName = newSoc?"사회":"과학";
     ckAlert({
-      tone:"warn", ico:"⚠️",
-      title:"[안내] 희망 계열에 맞는 선택과목을 확인해 주세요.",
-      bodyHTML:`<p>대입 전공 연계성을 위해 인문계열은 <b>'사회 3과목'</b>, 자연계열은 <b>'과학 3과목'</b> 이수를 권장합니다.
-      기준과 다를 경우 대입 서류 평가에 불리할 수 있으니 다시 한번 확인 바랍니다.</p>
-      <p class="ca-note">현재 선택: 사회 ${soc}과목 · 과학 ${sci}과목 (${sem.name})</p>`,
-      buttons:[
-        {label:"과목 다시 선택하기", cls:"btn-retry"},
-        {label:"그대로 진행하기", cls:"btn-keep"},
-      ],
+      tone:"danger", ico:"🚫",
+      title: year2 ? "[안내] 2학년 과학/사회는 같은 계열로 이수해야 해요." : "[안내] 같은 계열에서 3과목을 선택해 주세요.",
+      bodyHTML:`<p>대입 전공 연계성을 위해 인문계열은 <b>'사회'</b>, 자연계열은 <b>'과학'</b> 계열로 ${year2?"<b>2학년 1·2학기 모두 같은 계열에서 3과목씩</b>":"<b>같은 계열에서 3과목</b>을"} 선택해야 합니다.</p>
+      <p><b>${semName(aSem)}</b>에서 <b>${curName}계열</b>(${opts.map(o=>o[0]).join(", ")})을 선택 중이므로, ${newName}계열 과목 '<b>${name}</b>'은(는) 선택할 수 없습니다.</p>
+      <p class="ca-note">계열을 바꾸려면 선택된 ${curName}계열 과목을 모두 해제한 뒤 다시 선택해 주세요.</p>`,
+      buttons:[{label:"과목 다시 선택하기", cls:"btn-retry"}],
     });
+    return false;
   }
+  return true;
 }
 
 /* ----- 검증 2: 2학년 2학기 과학 위계 (s22) ----- */
@@ -1845,30 +1866,25 @@ function checkSciHierarchy(name){
   return false;
 }
 
-/* ----- 검증 3: 3학년 2학기 필수 교차 수강 (s32) ----- */
-function checkCrossRequirement(){
-  const s31 = grpSelOptions("s31", SCISOC_GRP);
-  const s32 = grpSelOptions("s32", SCISOC_GRP);
+/* ----- 검증 3: 3학년 2학기 — 사회·과학 계열이 각각 1과목 이상 반드시 포함 ----- */
+function blockCrossRequirement(name){
+  const sel = grpSelOptions("s32", SCISOC_GRP);
   const grp32 = allSems().find(s=>s.id==="s32").groups.find(g=>g.name===SCISOC_GRP);
-  if(s32.length !== grp32.pick) return;               // 택3 완료 시점에만 판정
-  if(s31.length < 3) return;                          // 1학기 선택이 완료되어야 판정 가능
-  const s31Soc = s31.filter(isSocOpt).length, s31Sci = s31.filter(isSciOpt).length;
-  const s32Soc = s32.filter(isSocOpt).length, s32Sci = s32.filter(isSciOpt).length;
-  const needSci = (s31Soc===3 && s32Sci===0);
-  const needSoc = (s31Sci===3 && s32Soc===0);
-  if(needSci || needSoc){
-    ckAlert({
-      tone:"danger", ico:"📢",
-      title:"[필독] 2학기 필수 교차 수강 안내 (졸업 요건)",
-      bodyHTML:`<ul>
-        <li>• 1학기 <b>사회 3과목</b> 이수자 ➔ 2학기 <b>과학 1과목 이상 필수</b></li>
-        <li>• 1학기 <b>과학 3과목</b> 이수자 ➔ 2학기 <b>사회 1과목 이상 필수</b></li>
-      </ul>
-      <p>현재 3학년 1학기에 <b>${needSci?"사회":"과학"} 3과목</b>을 선택했으므로, 2학기에는 <b>${needSci?"과학":"사회"} 과목을 1과목 이상</b> 반드시 포함해야 합니다.</p>
-      <p class="ca-note">※ 미충족 시 졸업 이수 학점 부족으로 졸업이 제한될 수 있습니다.</p>`,
-      buttons:[{label:"과목 다시 선택하기", cls:"btn-retry"}],
-    });
-  }
+  if(sel.length + 1 !== grp32.pick) return true;      // 마지막(3번째) 선택 시점에만 판정
+  const all = [...sel, grp32.options.find(o=>o[0]===name)];
+  const soc = all.filter(isSocOpt).length, sci = all.filter(isSciOpt).length;
+  if(soc>0 && sci>0) return true;                     // 양 계열 포함 → 통과
+  const t = soc===grp32.pick ? "사회" : "과학";
+  const other = t==="사회" ? "과학" : "사회";
+  ckAlert({
+    tone:"danger", ico:"📢",
+    title:"[필독] 3학년 2학기 필수 교차 수강 안내",
+    bodyHTML:`<p><b>${t}계열을 3과목 선택할 수 없습니다.</b><br>
+    ${t}계열을 3개 선택했다면, <b>${other}계열에서 반드시 1개 과목을 이수해야 합니다.</b></p>
+    <p class="ca-note">3학년 2학기 과학/사회 선택에는 사회계열과 과학계열 과목이 각각 1과목 이상 포함되어야 합니다. ${other}계열 과목을 포함해 다시 선택해 주세요.</p>`,
+    buttons:[{label:"과목 다시 선택하기", cls:"btn-retry"}],
+  });
+  return false;
 }
 
 /* ----- 탭 ----- */
@@ -1890,6 +1906,14 @@ ckTabsEl.addEventListener("click",e=>{
 const ckView = document.getElementById("ckView");
 function renderView(){
   if(ckTab===3){ renderGrad(); updateTotals(); return; }
+  /* 연계 고정 상태 보정 */
+  AUTO_LINKS.forEach(l=>{
+    if(((ckState[l.fromSem]||{})[l.fromGrp]||[]).includes(l.fromSub)){
+      ckState[l.toSem] = ckState[l.toSem]||{};
+      const cur = ckState[l.toSem][l.toGrp]||[];
+      if(!(cur.length===1 && cur[0]===l.toSub)){ ckState[l.toSem][l.toGrp]=[l.toSub]; ckSave(); }
+    }
+  });
   const grade = CK_GRADES[ckTab];
   ckView.innerHTML = `<div class="ck-grid">${grade.semesters.map(sem=>{
     const st = ckState[sem.id]||{};
@@ -1916,12 +1940,24 @@ function renderView(){
             <span>● ${g.name}</span>
             <span class="rule">택${g.pick} × ${per}학점${g.pick>1?` = ${g.pick*per}학점`:''}</span>
           </div>
-          ${g.options.map(o=>`
+          ${g.options.map(o=>{
+            const lk = activeLock(sem.id, g.name);
+            if(lk){
+              const isAI = o[0]===lk.toSub;
+              return `
+            <label class="ck-row ${isAI?'sel lockon':'lockdim'}" data-lockmsg="${AUTO_LINKS.indexOf(lk)}">
+              <input type="checkbox" disabled ${isAI?'checked':''}>
+              <span class="nm">${o[0]}</span>
+              <span class="meta">${isAI?`<span class="lock-badge">🔒 ${lk.fromSub} 연계 고정</span>`:''}<span class="mini-tag ${TYPE_CLASS[o[1]]}">${o[1]}</span>${o[2]}<span class="cr">${o[3]}학점</span></span>
+            </label>`;
+            }
+            return `
             <label class="ck-row ${sel.includes(o[0])?'sel':''}">
               <input type="checkbox" data-sem="${sem.id}" data-grp="${g.name}" data-name="${o[0]}" ${sel.includes(o[0])?'checked':''}>
               <span class="nm">${o[0]}</span>
               <span class="meta"><span class="mini-tag ${TYPE_CLASS[o[1]]}">${o[1]}</span>${o[2]}<span class="cr">${o[3]}학점</span></span>
-            </label>`).join("")}`;
+            </label>`;
+          }).join("")}`;
         }).join("")}
       </div>
     </div>`;
@@ -1945,8 +1981,18 @@ ckView.addEventListener("change",e=>{
       if(head){ head.classList.remove("flash"); void head.offsetWidth; head.classList.add("flash"); }
       return;
     }
+    /* 계열 고정 검증 (2-1·2-2·3-1): 다른 계열 과목 선택 차단 */
+    if(grpName===SCISOC_GRP && (semId==="s21"||semId==="s22"||semId==="s31") && !blockMixedTrack(semId, name)){
+      cb.checked = false;
+      return;
+    }
     /* 2학년 2학기 과학 위계 검증: 위반 시 선택 자체를 차단 */
     if(semId==="s22" && grpName===SCISOC_GRP && !checkSciHierarchy(name)){
+      cb.checked = false;
+      return;
+    }
+    /* 3학년 2학기 교차 수강 검증: 단일 계열 3과목 차단 */
+    if(semId==="s32" && grpName===SCISOC_GRP && !blockCrossRequirement(name)){
       cb.checked = false;
       return;
     }
@@ -1973,13 +2019,40 @@ ckView.addEventListener("change",e=>{
   }
   ckState[semId][grpName] = sel;
   ckSave();
-  renderView();
 
-  /* 택3 완료 시점 검증 (계열 혼합 · 교차 수강) */
-  if(cb.checked && grpName===SCISOC_GRP){
-    if(semId==="s21" || semId==="s22" || semId==="s31") checkMixedTrack(semId);
-    if(semId==="s32") checkCrossRequirement();
+  /* 연계 과목 자동 선택·해제 처리 (기하→인공지능 수학, 일본어→일본어 회화) */
+  const link = AUTO_LINKS.find(l=>l.fromSem===semId && l.fromGrp===grpName && l.fromSub===name);
+  if(link){
+    ckState[link.toSem] = ckState[link.toSem]||{};
+    if(cb.checked){
+      ckState[link.toSem][link.toGrp] = [link.toSub];
+      ckAlert({ tone:"warn", ico:"🔗",
+        title:"[안내] 연계 과목이 자동 선택되었습니다.",
+        bodyHTML:`<p>과목 위계에 따라 ${semName(link.fromSem)} '<b>${link.fromSub}</b>' 선택 시, ${semName(link.toSem)} ${link.toGrp} 선택군은 '<b>${link.toSub}</b>'이(가) 자동으로 선택·고정됩니다.</p>
+        <p class="ca-note">변경하려면 ${semName(link.fromSem)} '${link.fromSub}' 선택을 해제하세요.</p>`,
+        buttons:[{label:"확인", cls:"btn-retry"}] });
+    }else if(((ckState[link.toSem][link.toGrp])||[]).includes(link.toSub)){
+      ckState[link.toSem][link.toGrp] = [];
+      ckAlert({ tone:"warn", ico:"⚠️",
+        title:"[안내] 연계된 2학기 과목이 함께 해제되었습니다.",
+        bodyHTML:`<p>${semName(link.fromSem)} '<b>${link.fromSub}</b>'을(를) 해제하여, 연계 고정되었던 ${semName(link.toSem)} '<b>${link.toSub}</b>'도 함께 해제되었습니다.</p>`,
+        buttons:[{label:"확인", cls:"btn-retry"}] });
+    }
+    ckSave();
   }
+  renderView();
+});
+
+/* 잠금(연계 고정)된 선택군 클릭 시 안내 */
+ckView.addEventListener("click",e=>{
+  const lkEl = e.target.closest("[data-lockmsg]");
+  if(!lkEl) return;
+  const l = AUTO_LINKS[+lkEl.dataset.lockmsg] || AUTO_LINKS[0];
+  ckAlert({ tone:"warn", ico:"🔒",
+    title:"[안내] 연계 고정된 선택군입니다.",
+    bodyHTML:`<p>${semName(l.fromSem)}에서 '<b>${l.fromSub}</b>'을(를) 선택하여, ${semName(l.toSem)} ${l.toGrp} 선택군은 '<b>${l.toSub}</b>'(으)로 자동 고정되어 있습니다.</p>
+    <p class="ca-note">다른 과목을 선택하려면 ${semName(l.fromSem)} '${l.fromSub}' 선택을 먼저 해제하세요.</p>`,
+    buttons:[{label:"확인", cls:"btn-retry"}] });
 });
 
 /* ----- 합계 ----- */
@@ -2145,7 +2218,14 @@ document.getElementById("submitSend").addEventListener("click",async ()=>{
 });
 
 /* 초기 렌더 */
-ckLoad(); renderTabs(); renderView();
+ckLoad();
+/* 규칙 강화 이전에 저장된 2학년 계열 불일치 선택 정리 */
+(function sanitizeYear2(){
+  const t = s => { const o = grpSelOptions(s, SCISOC_GRP); return o.length ? (isSocOpt(o[0])?"soc":"sci") : null; };
+  const t1 = t("s21"), t2 = t("s22");
+  if(t1 && t2 && t1!==t2){ ckState.s22[SCISOC_GRP] = []; ckSave(); }
+})();
+renderTabs(); renderView();
 
 /* =====================================================================
    대학별 권장과목 (2028학년도)
