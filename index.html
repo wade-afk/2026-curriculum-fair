@@ -593,6 +593,109 @@ table.fd td.dash{color:#CBD0DD}
 .qa-block li::marker{color:var(--blue)}
 .modal-src{margin-top:24px;font-size:11.5px;color:#9AA1B5;text-align:right}
 
+
+/* ---------- 고교학점제란? (워크북 스타일) ---------- */
+.wb-block{margin-top:70px}
+.wb-head{display:flex;align-items:center;gap:14px;margin-bottom:8px}
+.wb-no{font-family:"Black Han Sans";font-size:17px;color:#fff;background:var(--blue);width:44px;height:44px;border-radius:50%;display:grid;place-items:center;flex:none}
+.wb-head h3{font-size:clamp(18px,2.5vw,23px)}
+.wb-sub{font-size:14px;color:var(--ink-soft);margin:0 0 22px 58px}
+@media(max-width:640px){.wb-sub{margin-left:0}}
+
+/* 편제 다이어그램 */
+.ed-wrap{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:24px;display:grid;gap:14px}
+.ed-top{text-align:center;font-weight:700;font-size:15px;background:var(--ink);color:#fff;border-radius:11px;padding:10px}
+.ed-grid{display:grid;grid-template-columns:2fr 1.1fr;gap:14px}
+@media(max-width:760px){.ed-grid{grid-template-columns:1fr}}
+.ed-box{border:1.5px solid;border-radius:14px;padding:16px 16px 14px}
+.ed-box>h4{font-size:14.5px;margin-bottom:12px;display:flex;align-items:center;gap:7px}
+.ed-kyo{border-color:#B9C8F5;background:#F6F8FF}.ed-kyo>h4{color:var(--blue)}
+.ed-cha{border-color:#F5DCA6;background:#FFFBEF}.ed-cha>h4{color:#9A6A00}
+.ed-in{background:#fff;border:1.5px solid var(--line);border-radius:11px;padding:12px 14px;margin-bottom:10px}
+.ed-in:last-child{margin-bottom:0}
+.ed-in b{display:block;font-size:13px;margin-bottom:8px}
+.ed-chips{display:flex;gap:7px;flex-wrap:wrap}
+.ed-chip{font-size:12px;font-weight:700;padding:5px 12px;border-radius:8px}
+.ed-chip.c{background:var(--c-common-bg);color:var(--c-common)}
+.ed-chip.g{background:var(--c-general-bg);color:var(--c-general)}
+.ed-chip.j{background:var(--c-career-bg);color:var(--c-career)}
+.ed-chip.y{background:var(--c-fusion-bg);color:var(--c-fusion)}
+.ed-chip.n{background:#F1F2F7;color:var(--ink-soft)}
+
+/* 핵심 정보 카드 */
+.kc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:18px}
+@media(max-width:960px){.kc-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.kc-grid{grid-template-columns:1fr}}
+.kc{background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:20px}
+.kc .kc-t{font-size:12px;font-weight:700;color:var(--blue);letter-spacing:.05em;margin-bottom:8px}
+.kc .kc-m{font-family:"Black Han Sans";font-size:21px;line-height:1.3;margin-bottom:6px}
+.kc p{font-size:12.5px;color:var(--ink-soft);line-height:1.6}
+
+/* 워크북 표 공통 */
+.wb-table-scroll{overflow-x:auto;border:1.5px solid var(--line);border-radius:16px;background:#fff;-webkit-overflow-scrolling:touch}
+table.wbt{border-collapse:collapse;width:100%;min-width:640px;font-size:13.5px}
+table.wbt th{background:#F2F4F9;color:var(--ink-soft);font-size:12.5px;padding:11px 12px;border-bottom:1.5px solid var(--line);text-align:center}
+table.wbt td{padding:11px 12px;text-align:center;border-bottom:1px solid var(--line)}
+table.wbt tr:last-child td{border-bottom:0}
+table.wbt td.l{text-align:left;font-weight:600}
+table.wbt td.dim{color:#C4CADB}
+table.wbt tr.hl td{background:var(--blue-soft);font-weight:700}
+.wb-details{margin-top:14px;background:#F2F4F9;border-radius:12px;padding:4px 18px;font-size:13px;color:var(--ink-soft)}
+.wb-details summary{cursor:pointer;font-weight:700;color:var(--ink);padding:10px 0}
+.wb-details ol{margin:4px 0 14px 20px;display:grid;gap:6px}
+
+/* 편성표 (전체 표시) */
+.plan-scroll{overflow-x:auto;border:1.5px solid var(--line);border-radius:16px;background:#fff;-webkit-overflow-scrolling:touch}
+table.plan{border-collapse:separate;border-spacing:0;width:100%;min-width:940px;font-size:11.5px}
+table.plan th{background:#F2F4F9;color:var(--ink-soft);font-size:11px;padding:5px 5px;border-bottom:1.5px solid var(--line);border-right:1px solid var(--line)}
+table.plan th small{display:block;font-size:9.5px;font-weight:600;opacity:.8;margin-top:1px}
+table.plan th.ph-y1{color:#1D5AB8}table.plan th.ph-y2{color:#0E9F5E}table.plan th.ph-y3{color:#A6551B}
+table.plan td{padding:3px 5px;text-align:center;vertical-align:middle;border-bottom:1px solid #EEF0F5;border-right:1px solid #EEF0F5}
+table.plan td .mini-tag{font-size:9.5px;padding:2px 7px}
+td.p-div{font-weight:700;background:#F2F4F9;color:var(--ink);min-width:34px;font-size:12px}
+td.p-grp{font-weight:700;background:#FAFBFD;white-space:normal;min-width:62px;border-right:1px solid var(--line);font-size:11px}
+td.p-name{text-align:left;font-weight:600;white-space:nowrap}
+td.p-pick{font-size:11px;color:var(--c-career);min-width:32px}
+td.p-cr{font-weight:600;color:var(--ink-soft)}
+td.p-sem{min-width:30px;color:#D4D9E4}
+td.p-sem.on{background:var(--blue-soft);color:#1D3FAE;font-weight:700}
+td.p-note{font-size:10px;color:var(--ink-soft);text-align:left;max-width:104px;white-space:normal;line-height:1.35}
+tr.p-gs td{border-top:2px solid #D6DAE6}
+tr.p-tot td{background:#F6F8FB;font-weight:700;border-top:1.5px solid var(--line)}
+tr.p-tot2 td{background:#F2F4F9;color:var(--ink)}
+td.p-sumlab{text-align:right;padding-right:14px}
+td.p-sum{font-weight:700}
+
+
+/* 어디서 보나요 / 미편제 과목 */
+.where-list{display:grid;gap:12px}
+.where-item{background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:16px 20px;display:flex;align-items:center;gap:16px}
+.where-item .wno{flex:none;width:36px;height:36px;border-radius:50%;background:var(--blue-soft);color:var(--blue);font-family:"Black Han Sans";font-size:13px;display:grid;place-items:center}
+.where-item p{font-size:14px}
+.where-item p a{color:var(--blue);font-weight:700}
+.site-chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.site-chips a{font-size:13px;font-weight:700;text-decoration:none;background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:8px 16px;transition:.15s}
+.site-chips a:hover{border-color:var(--blue);color:var(--blue)}
+.tip-list{display:grid;gap:12px}
+.tip-item{background:#FFFBEF;border:1.5px solid #F0D9A8;border-radius:14px;padding:16px 20px;display:flex;gap:14px;align-items:flex-start;font-size:14px}
+.tip-item .ico{flex:none;font-size:18px}
+.tip-item b{color:#8A5A00}
+
+/* 과목 선택 전 체크 & 위계(구) */
+.chk3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:860px){.chk3{grid-template-columns:1fr}}
+.chk-card{background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:22px}
+.chk-card .no{font-family:"Black Han Sans";color:var(--blue);font-size:15px;margin-bottom:8px}
+.chk-card h4{font-size:15.5px;margin-bottom:8px}
+.chk-card p{font-size:13px;color:var(--ink-soft)}
+.hier{margin-top:20px;background:var(--card);border:1.5px dashed #C9CFDE;border-radius:16px;padding:20px 22px}
+.hier b.ht{display:block;font-size:13.5px;margin-bottom:14px}
+.hier-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.hier-row:last-child{margin-bottom:0}
+.h-chip{font-size:12.5px;font-weight:700;padding:6px 13px;border-radius:9px}
+.h-arrow{color:#AEB5C9;font-weight:700}
+.h-tag{font-size:11px;font-weight:700;color:var(--ink-soft)}
+
 /* ---------- 배너 & 푸터 ---------- */
 .banner{background:var(--ink);color:#fff;border-radius:20px;padding:44px 40px;display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap;
   background-image:linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px),linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px);background-size:32px 32px}
@@ -689,333 +792,292 @@ footer{border-top:1.5px solid var(--line);background:#fff}
       <span class="eyebrow">ABOUT</span>
       <h2>고교학점제란 무엇인가요?</h2>
       <div class="def-box">
-        고교학점제란 학생이 기초 소양과 기본 학력을 바탕으로 <b>진로·적성에 따라 과목을 선택</b>하고,
+        학생이 기초 소양과 기본 학력을 바탕으로 <b>진로·적성에 따라 과목을 선택</b>하고,
         이수 기준에 도달한 과목에 대해 <b>학점을 취득·누적하여 졸업</b>하는 제도입니다.
       </div>
 
-      <div class="circle-flow">
-        <div class="cf-item cf-1">
-          <div class="cf-circle">
-            <svg viewBox="0 0 64 64" fill="none" stroke="#1E7CD6" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <rect x="18" y="6" width="28" height="52" rx="6"/>
-              <line x1="26" y1="14" x2="38" y2="14"/>
-              <path d="M27 30l5 5 9-11" stroke-width="3.6"/>
-              <line x1="26" y1="46" x2="38" y2="46"/>
-            </svg>
-          </div>
-          <p>진로에 따라<br><b>다양한 과목 선택</b></p>
-        </div>
-        <div class="cf-arrow" aria-hidden="true">→</div>
-        <div class="cf-item cf-2">
-          <div class="cf-circle">
-            <svg viewBox="0 0 64 64" fill="none" stroke="#0E9F5E" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M12 12h32a6 6 0 0 1 6 6v36H18a6 6 0 0 1-6-6V12z"/>
-              <path d="M12 12a6 6 0 0 1 6 6v36"/>
-              <line x1="27" y1="24" x2="42" y2="24"/>
-              <line x1="27" y1="33" x2="42" y2="33"/>
-            </svg>
-          </div>
-          <p>이수 기준 충족 시<br><b>과목 이수</b></p>
-        </div>
-        <div class="cf-arrow" aria-hidden="true">→</div>
-        <div class="cf-item cf-3">
-          <div class="cf-circle">
-            <svg viewBox="0 0 64 64" fill="none" stroke="#E8650D" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M32 12L6 24l26 12 26-12-26-12z"/>
-              <path d="M16 30v12c0 4 7 8 16 8s16-4 16-8V30"/>
-              <line x1="58" y1="24" x2="58" y2="40"/>
-            </svg>
-          </div>
-          <p>3년간 <b>192학점 이상<br>취득 시 졸업 인정*</b></p>
-          <p class="foot">*학년별 수업일수의<br>2/3 이상 출석 기준 유지</p>
-        </div>
-      </div>
-
-      <div class="pass-title">과목 이수 기준</div>
-      <div class="pass-grid">
-        <div class="pass-card">
-          <svg viewBox="0 0 64 64" fill="none" stroke="#1F2B4D" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M8 14c8-4 16-4 24 0v38c-8-4-16-4-24 0V14z"/>
-            <path d="M56 14c-8-4-16-4-24 0v38c8-4 16-4 24 0V14z"/>
-          </svg>
-          <div class="big">과목 수업 횟수의<br>2/3 이상 출석</div>
-          <p>수업에 성실히 참여해요</p>
-        </div>
-        <div class="pass-op" aria-hidden="true">＋</div>
-        <div class="pass-card">
-          <svg viewBox="0 0 64 64" fill="none" stroke="#1F2B4D" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="14" y="8" width="36" height="48" rx="5"/>
-            <line x1="22" y1="32" x2="42" y2="32"/>
-            <line x1="22" y1="42" x2="42" y2="42"/>
-            <circle cx="26" cy="19" r="5"/>
-            <path d="M34 17l8 0" stroke-width="3.4"/>
-          </svg>
-          <div class="big">학업성취율<br>40% 이상</div>
-          <p>배운 만큼 성취에 도달해요</p>
-          <small>※ 공통과목만 적용</small>
-        </div>
-      </div>
-      <p class="pass-note">
-        두 기준을 충족한 과목은 <b>이수(학점 취득)</b>로 인정되어 졸업 학점에 누적됩니다.
-        기준 도달이 어려운 학생에게는 학교가 <b>예방·보충지도</b>로 끝까지 함께합니다.
-      </p>
-    </div>
-  </section>
-
-  <!-- ===== 왜 필요한가요? ===== -->
-  <section id="why">
-    <div class="wrap">
-      <span class="eyebrow">WHY</span>
-      <h2>왜 필요한가요?</h2>
-      <div class="why-grid">
-        <div class="why-card why-1">
-          <div class="why-quote">
-            <svg viewBox="0 0 64 64" fill="none" stroke="#3E7A2E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <circle cx="32" cy="20" r="9"/>
-              <path d="M14 54c2-11 9-17 18-17s16 6 18 17"/>
-              <path d="M46 10l6-4M50 18l7-1" stroke-width="2.6"/>
-            </svg>
-            <p class="qtext">"학생이 원하는 과목을 스스로 선택해요."</p>
-          </div>
-          <div class="why-label">자기주도적 학습 역량 신장 · 적극적 진로 설계</div>
-        </div>
-        <div class="why-card why-2">
-          <div class="why-quote">
-            <svg viewBox="0 0 64 64" fill="none" stroke="#166B54" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <circle cx="22" cy="22" r="8"/>
-              <circle cx="44" cy="24" r="7"/>
-              <path d="M8 54c1.5-9 7-14 14-14s12.5 5 14 14"/>
-              <path d="M40 54c1-7 5-11 10-11 3 0 5.5 1 7.5 3"/>
-            </svg>
-            <p class="qtext">"각자가 진로·적성에 따라 원하는 과목을 수강하고 성취도를 평가해요."</p>
-          </div>
-          <div class="why-label">경쟁이 아닌 성장을 위한 교육</div>
-        </div>
-        <div class="why-card why-3">
-          <div class="why-quote">
-            <svg viewBox="0 0 64 64" fill="none" stroke="#9A6114" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <circle cx="32" cy="17" r="8"/>
-              <path d="M18 52c1.5-9 6.5-14 14-14s12.5 5 14 14"/>
-              <path d="M10 40c6-3 12-3 18 0M36 40c6-3 12-3 18 0" stroke-width="2.6"/>
-            </svg>
-            <p class="qtext">"과목 이수 기준에 도달할 수 있도록 필요한 경우 예방·보충지도가 이루어져요."</p>
-          </div>
-          <div class="why-label">책임 교육을 통한 공교육 경쟁력 제고</div>
-        </div>
-        <div class="why-card why-4">
-          <div class="why-quote">
-            <svg viewBox="0 0 64 64" fill="none" stroke="#1D5E8F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M10 54V30l22-16 22 16v24"/>
-              <rect x="26" y="38" width="12" height="16"/>
-              <circle cx="32" cy="28" r="4"/>
-              <line x1="6" y1="54" x2="58" y2="54"/>
-            </svg>
-            <p class="qtext">"학교와 지역 사회의 기관들이 협력하여 과목을 개설해요."</p>
-          </div>
-          <div class="why-label">교육과정 다양화 · 더 넓은 배움의 기회 제공</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== 무엇이 바뀌나요? ===== -->
-  <section id="changes">
-    <div class="wrap">
-      <span class="eyebrow">CHANGES</span>
-      <h2>무엇이 바뀌나요?</h2>
-
-      <div class="change-block">
-        <div class="change-head"><span class="no">01</span><h3>졸업 요건이 바뀝니다</h3></div>
-        <div class="compare">
-          <div class="cmp-side">
-            <span class="cmp-tag old">기존</span>
-            <div class="cmp-visual">
-              <svg width="150" height="120" viewBox="0 0 150 120" fill="none" stroke="#8D96AC" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <rect x="45" y="14" width="60" height="92" rx="4"/>
-                <rect x="55" y="8" width="40" height="12" rx="3" fill="#8D96AC" stroke="none"/>
-                <circle cx="94" cy="62" r="3.5" fill="#8D96AC" stroke="none"/>
-                <path d="M45 106l-14 8M105 106l14 8" stroke-dasharray="4 5"/>
-              </svg>
+      <!-- 01 편제 -->
+      <div class="wb-block">
+        <div class="wb-head"><span class="wb-no">01</span><h3>고등학교 교육과정(2022 개정) 편제를 살펴볼까요?</h3></div>
+        <p class="wb-sub">1학년 때는 기초적이고 필수적인 공통과목을, 2·3학년 때는 과목을 직접 선택해서 배워요. 시간표는 학교지정과목과 학생선택과목으로 구성됩니다.</p>
+        <div class="ed-wrap">
+          <div class="ed-top">2022 개정 교육과정 · 고등학교 편제</div>
+          <div class="ed-grid">
+            <div class="ed-box ed-kyo">
+              <h4>📚 교과</h4>
+              <div class="ed-in">
+                <b>보통 교과</b>
+                <div class="ed-chips" style="margin-bottom:8px"><span class="ed-chip c">공통과목 — 기초 소양·기본 학력 함양</span></div>
+                <div class="ed-chips">
+                  <span class="ed-chip g">일반 선택 — 교과별 주요 내용 이해·탐구</span>
+                  <span class="ed-chip j">진로 선택 — 심화 학습·진로 관련</span>
+                  <span class="ed-chip y">융합 선택 — 주제 융합·실생활 응용</span>
+                </div>
+              </div>
+              <div class="ed-in"><b>전문 교과</b><div class="ed-chips"><span class="ed-chip n">특성화고·특수목적고 등에서 개설</span></div></div>
             </div>
-            <p class="cmp-cap">학교 수업 일수의 2/3 이상<br>출석 시 졸업 가능</p>
-          </div>
-          <div class="cmp-arrow" aria-hidden="true">→</div>
-          <div class="cmp-side">
-            <span class="cmp-tag new">고교학점제</span>
-            <div class="cmp-visual">
-              <div class="donut-wrap">
-                <svg width="130" height="130" viewBox="0 0 130 130" role="img" aria-label="192학점: 교과 174학점, 창의적 체험활동 18학점">
-                  <circle cx="65" cy="65" r="52" fill="none" stroke="#E3E6EF" stroke-width="16"/>
-                  <circle cx="65" cy="65" r="52" fill="none" stroke="#2F5BEA" stroke-width="16"
-                          stroke-dasharray="296 31" stroke-dashoffset="82" transform="rotate(-90 65 65)"/>
-                  <circle cx="65" cy="65" r="52" fill="none" stroke="#FFB020" stroke-width="16"
-                          stroke-dasharray="30 297" stroke-dashoffset="-215" transform="rotate(-90 65 65)"/>
-                  <text x="65" y="60" text-anchor="middle" font-family="Black Han Sans" font-size="24" fill="#1F2B4D">192</text>
-                  <text x="65" y="80" text-anchor="middle" font-size="13" font-weight="700" fill="#5A6480">학점</text>
-                </svg>
-                <div class="donut-legend">
-                  <span><i class="dot" style="background:#2F5BEA"></i>교과 174학점</span>
-                  <span><i class="dot" style="background:#FFB020"></i>창의적 체험활동 18학점</span>
+            <div class="ed-box ed-cha">
+              <h4>🌱 창의적 체험활동</h4>
+              <div class="ed-in" style="margin-bottom:0"><b>3개 영역 · 18학점(288시간)</b>
+                <div class="ed-chips">
+                  <span class="ed-chip n">자율·자치 활동</span>
+                  <span class="ed-chip n">동아리 활동</span>
+                  <span class="ed-chip n">진로 활동</span>
                 </div>
               </div>
             </div>
-            <p class="cmp-cap"><span class="point">3년간 192학점 이상 취득 시 졸업 인정*</span>
-              <span class="sub">*학년별 수업일수의 2/3 이상 출석 기준 유지</span></p>
+          </div>
+        </div>
+        <div class="kc-grid">
+          <div class="kc"><div class="kc-t">총 이수(졸업) 학점</div><div class="kc-m">192학점</div><p>교과 174학점 ＋ 창의적 체험활동 18학점(288시간)</p></div>
+          <div class="kc"><div class="kc-t">1학점 수업량</div><div class="kc-m">50분 × 16회</div><p>1학점은 50분 수업을 16회 이수하는 수업량이에요.</p></div>
+          <div class="kc"><div class="kc-t">과목 이수 기준</div><div class="kc-m">40% ＋ 2/3</div><p>학업성취율 40% 이상 ＋ 과목 출석률 2/3 이상. 단, 교양 교과는 출석률 기준만 적용돼요.</p></div>
+          <div class="kc"><div class="kc-t">책임 교육</div><div class="kc-m">최소 성취 보장</div><p>과목이수제(2025학년도 1학년부터 전 과목 적용)와 최소성취수준 보장지도로 끝까지 함께해요.</p></div>
+        </div>
+      </div>
+
+      <!-- 02 학점 배당 기준 -->
+      <div class="wb-block">
+        <div class="wb-head"><span class="wb-no">02</span><h3>학점 배당 기준 (일반고)</h3></div>
+        <p class="wb-sub">교과(군)마다 반드시 이수해야 하는 최소 학점이 정해져 있고, 나머지는 적성과 진로를 고려해 자율적으로 편성해요.</p>
+        <div class="wb-table-scroll">
+          <table class="wbt">
+            <thead><tr><th>교과(군)</th><th>공통 과목</th><th>필수 이수 학점</th><th>자율 이수 학점</th></tr></thead>
+            <tbody>
+              <tr><td><b>국어</b></td><td>공통국어1, 공통국어2</td><td><b>8</b></td><td rowspan="8" style="vertical-align:middle;background:#FAFBFD">학생의 적성과 진로를<br>고려하여 편성<br><b style="font-size:17px">90학점</b></td></tr>
+              <tr><td><b>수학</b></td><td>공통수학1, 공통수학2</td><td><b>8</b></td></tr>
+              <tr><td><b>영어</b></td><td>공통영어1, 공통영어2</td><td><b>8</b></td></tr>
+              <tr><td><b>사회 (역사/도덕 포함)</b></td><td>한국사1·2 <b>6</b> / 통합사회1·2 <b>8</b></td><td><b>14</b></td></tr>
+              <tr><td><b>과학</b></td><td>통합과학1·2, 과학탐구실험1·2</td><td><b>10</b></td></tr>
+              <tr><td><b>체육</b></td><td class="dim">—</td><td><b>10</b></td></tr>
+              <tr><td><b>예술</b></td><td class="dim">—</td><td><b>10</b></td></tr>
+              <tr><td><b>기술·가정 / 정보 / 제2외국어 / 한문 / 교양</b></td><td class="dim">—</td><td><b>16</b></td></tr>
+              <tr class="hl"><td><b>소계</b></td><td class="dim"></td><td>84</td><td>90</td></tr>
+              <tr><td><b>창의적 체험활동</b></td><td class="dim">자율·자치 / 동아리 / 진로</td><td colspan="2"><b>18</b> (288시간)</td></tr>
+              <tr class="hl"><td><b>총 이수 학점</b></td><td class="dim"></td><td colspan="2" style="font-size:16px">192학점</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <details class="wb-details">
+          <summary>📎 학점 배당 기준 비고 전체 보기</summary>
+          <ol>
+            <li>1학점은 50분을 기준으로 하여 16회를 이수하는 수업량임.</li>
+            <li>1시간의 수업은 50분을 원칙으로 하되, 학교 실정 등을 고려하여 탄력적으로 편성·운영할 수 있음.</li>
+            <li>공통과목의 기본 학점은 4학점이며, 1학점 범위 내에서 감하여 편성·운영할 수 있음. 단, 한국사1·2의 기본 학점은 3학점이며 감할 수 없음.</li>
+            <li>과학탐구실험1·2의 기본 학점은 1학점이며 증감 없이 편성·운영하는 것을 원칙으로 함.</li>
+            <li>필수 이수 학점 수는 해당 교과(군)의 최소 이수 학점임.</li>
+            <li>국어·수학·영어 교과의 이수 학점 총합은 81학점을 초과하지 않도록 함.</li>
+            <li>창의적 체험활동 학점 수는 최소 이수 학점이며 ( ) 안은 시간 수로 환산한 것임.</li>
+            <li>총 이수 학점 수는 고등학교 졸업을 위해 3년간 이수해야 할 최소 이수 학점을 의미함.</li>
+          </ol>
+        </details>
+      </div>
+
+      <!-- 03 성적산출 -->
+      <div class="wb-block">
+        <div class="wb-head"><span class="wb-no">03</span><h3>보통교과 과목별 성적산출</h3></div>
+        <p class="wb-sub">과목 유형에 따라 성적이 산출되는 방식이 달라요. 성적표에 어떤 정보가 표기되는지 확인해 보세요.</p>
+        <div class="wb-table-scroll">
+          <table class="wbt" style="min-width:760px">
+            <thead><tr><th rowspan="2">구분</th><th colspan="2">절대평가</th><th>상대평가</th><th colspan="3">통계정보</th></tr>
+            <tr><th>원점수</th><th>성취도</th><th>석차등급</th><th>성취도별 분포비율</th><th>과목평균</th><th>수강자수</th></tr></thead>
+            <tbody>
+              <tr><td><b>보통교과</b></td><td>○</td><td>A·B·C·D·E</td><td><b>5등급</b></td><td>○</td><td>○</td><td>○</td></tr>
+              <tr><td><b>사회·과학 융합선택</b></td><td>○</td><td>A·B·C·D·E</td><td class="dim">—</td><td>○</td><td>○</td><td>○</td></tr>
+              <tr><td><b>체육·예술 / 과학탐구실험</b></td><td class="dim">—</td><td>A·B·C</td><td class="dim">—</td><td class="dim">—</td><td class="dim">—</td><td class="dim">—</td></tr>
+              <tr><td><b>교양</b></td><td class="dim">—</td><td>P</td><td class="dim">—</td><td class="dim">—</td><td class="dim">—</td><td class="dim">—</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 04 작전고 편성표 -->
+      <div class="wb-block">
+        <div class="wb-head"><span class="wb-no">04</span><h3>작전고등학교 2026학년도 3개년 교육과정 편성표</h3></div>
+        <p class="wb-sub">우리 학교의 실제 편성표예요. 학기별 파란 칸이 그 학기에 배우는 학점이고, <b>택N</b>은 그 묶음에서 N과목을 선택한다는 뜻입니다.
+        3학년(2024학년도 입학)은 2015 개정 교육과정이 적용돼요.</p>
+        <div class="plan-scroll">
+        <table class="plan">
+          <thead>
+            <tr>
+              <th rowspan="2">구분</th><th rowspan="2">교과(군)</th><th rowspan="2">분류</th>
+              <th rowspan="2">세부 과목</th><th rowspan="2">택</th><th rowspan="2">기준<br>학점</th><th rowspan="2">운영<br>학점</th>
+              <th colspan="2" class="ph-y1">1학년<br><small>2026 입학 · 2022 개정</small></th>
+              <th colspan="2" class="ph-y2">2학년<br><small>2025 입학 · 2022 개정</small></th>
+              <th colspan="2" class="ph-y3">3학년<br><small>2024 입학 · 2015 개정</small></th>
+              <th rowspan="2">비고</th>
+            </tr>
+            <tr>
+              <th class="ph-y1">1학기</th><th class="ph-y1">2학기</th>
+              <th class="ph-y2">1학기</th><th class="ph-y2">2학기</th>
+              <th class="ph-y3">1학기</th><th class="ph-y3">2학기</th>
+            </tr>
+          </thead>
+          <tbody>
+<tr><td class="p-div" rowspan="35">학교<br>지정</td><td class="p-grp" rowspan="2">국어</td><td><span class="mini-tag common">공통</span></td><td class="p-name">공통국어1</td><td class="p-pick" rowspan="1">·</td><td class="p-cr">4</td><td class="p-cr">4</td><td class="p-sem on">4</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-note"></td></tr>
+<tr><td><span class="mini-tag common">공통</span></td><td class="p-name">공통국어2</td><td class="p-pick" rowspan="1">·</td><td class="p-cr">4</td><td class="p-cr">4</td><td class="p-sem">·</td><td class="p-sem on">4</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-note"></td></tr>
+<tr><td class="p-grp" rowspan="2">수학</td><td><span class="mini-tag common">공통</span></td><td class="p-name">공통수학1</td><td class="p-pick" rowspan="1">·</td><td class="p-cr">4</td><td class="p-cr">4</td><td class="p-sem on">4</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-note"></td></tr>
+<tr><td><span class="mini-tag common">공통</span></td><td class="p-name">공통수학2</td><td class="p-pick" rowspan="1">·</td><td class="p-cr">4</td><td class="p-cr">4</td><td class="p-sem">·</td><td class="p-sem on">4</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-note"></td></tr>
+<tr><td class="p-grp" rowspan="2">영어</td><td><span class="mini-tag common">공통</span></td><td class="p-name">공통영어1</td><td class="p-pick" rowspan="1">·</td><td class="p-cr">4</td><td class="p-cr">4</td><td class="p-sem on">4</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-note"></td></tr>
+<tr><td><span class="mini-tag common">공통</span></td><td class="p-name">공통영어2</td><td class="p-pick" rowspan="1">·</td><td class="p-cr">4</td><td class="p-cr">4</td><td class="p-sem">·</td><td class="p-sem on">4</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-note"></td></tr>
+<tr><td class="p-grp" rowspan="2">체육</td><td><span class="mini-tag general">일반</span></td><td class="p-name">체육1</td><td class="p-pick" rowspan="1">·</td><td class="p-cr">3</td><td class="p-cr">2</td><td class="p-sem on">2</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-note"></td></tr>
+<tr><td><span class="mini-tag general">일반</span></td><td class="p-name">체육2</td><td class="p-pick" rowspan="1">·</td><td class="p-cr">3</td><td class="p-cr">2</td><td class="p-sem">·</td><td class="p-sem on">2</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-note"></td></tr>
+<tr><td class="p-grp" rowspan="2">예술</td><td><span class="mini-tag general">일반</span></td><td class="p-name">음악</td><td class="p-pick" rowspan="1">·</td><td class="p-cr">3</td><td class="p-cr">2</td><td class="p-sem on">2</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-note">1, 2학기 교차수강</td></tr>
+<tr><td><span class="mini-tag general">일반</span></td><td class="p-name">미술</td><td class="p-pick" rowspan="1">·</td><td class="p-cr">3</td><td class="p-cr">2</td><td class="p-sem">·</td><td class="p-sem on">2</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-note"></td></tr>
+<tr><td class="p-grp" rowspan="2">기술·가정/정보</td><td><span class="mini-tag general">일반</span></td><td class="p-name">정보</td><td class="p-pick" rowspan="1">·</td><td class="p-cr">4</td><td class="p-cr">3</td><td class="p-sem on">3</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-note">정보, 로봇과 공학세계 1, 2학기 교차 수강</td></tr>
+<tr><td><span class="mini-tag career">진로</span></td><td class="p-name">로봇과 공학세계</td><td class="p-pick" rowspan="1">·</td><td class="p-cr">4</td><td class="p-cr">3</td><td class="p-sem">·</td><td class="p-sem on">3</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-note"></td></tr>
+<tr><td class="p-grp" rowspan="2">사회(역사/도덕 포함)</td><td><span class="mini-tag common">공통</span></td><td class="p-name">통합사회1</td><td class="p-pick" rowspan="1">·</td><td class="p-cr">4</td><td class="p-cr">3</td><td class="p-sem on">3</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-note"></td></tr>
+<tr><td><span class="mini-tag common">공통</span></td><td class="p-name">통합사회2</td><td class="p-pick" rowspan="1">·</td><td class="p-cr">4</td><td class="p-cr">3</td><td class="p-sem">·</td><td class="p-sem on">3</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-note"></td></tr>
+<tr><td class="p-grp" rowspan="2">사회(한국사)</td><td><span class="mini-tag common">공통</span></td><td class="p-name">한국사1</td><td class="p-pick" rowspan="1">·</td><td class="p-cr">3</td><td class="p-cr">3</td><td class="p-sem on">3</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-note"></td></tr>
+<tr><td><span class="mini-tag common">공통</span></td><td class="p-name">한국사2</td><td class="p-pick" rowspan="1">·</td><td class="p-cr">3</td><td class="p-cr">3</td><td class="p-sem">·</td><td class="p-sem on">3</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-note"></td></tr>
+<tr><td class="p-grp" rowspan="4">과학</td><td><span class="mini-tag common">공통</span></td><td class="p-name">통합과학1</td><td class="p-pick" rowspan="1">·</td><td class="p-cr">4</td><td class="p-cr">3</td><td class="p-sem on">3</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-note"></td></tr>
+<tr><td><span class="mini-tag common">공통</span></td><td class="p-name">통합과학2</td><td class="p-pick" rowspan="1">·</td><td class="p-cr">4</td><td class="p-cr">3</td><td class="p-sem">·</td><td class="p-sem on">3</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-note"></td></tr>
+<tr><td><span class="mini-tag common">공통</span></td><td class="p-name">과학탐구실험1</td><td class="p-pick" rowspan="1">·</td><td class="p-cr">1</td><td class="p-cr">1</td><td class="p-sem on">1</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-note"></td></tr>
+<tr><td><span class="mini-tag common">공통</span></td><td class="p-name">과학탐구실험2</td><td class="p-pick" rowspan="1">·</td><td class="p-cr">1</td><td class="p-cr">1</td><td class="p-sem">·</td><td class="p-sem on">1</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-note"></td></tr>
+<tr><td class="p-grp" rowspan="2">국어</td><td><span class="mini-tag general">일반</span></td><td class="p-name">화법과 언어</td><td class="p-pick" rowspan="1">·</td><td class="p-cr">4</td><td class="p-cr">4</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem on">4</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-note"></td></tr>
+<tr><td><span class="mini-tag general">일반</span></td><td class="p-name">문학</td><td class="p-pick" rowspan="1">·</td><td class="p-cr">4</td><td class="p-cr">4</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem on">4</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-note"></td></tr>
+<tr><td class="p-grp" rowspan="2">수학</td><td><span class="mini-tag general">일반</span></td><td class="p-name">대수</td><td class="p-pick" rowspan="1">·</td><td class="p-cr">4</td><td class="p-cr">4</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem on">4</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-note"></td></tr>
+<tr><td><span class="mini-tag general">일반</span></td><td class="p-name">미적분Ⅰ</td><td class="p-pick" rowspan="1">·</td><td class="p-cr">4</td><td class="p-cr">4</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem on">4</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-note"></td></tr>
+<tr><td class="p-grp" rowspan="2">영어</td><td><span class="mini-tag general">일반</span></td><td class="p-name">영어Ⅰ</td><td class="p-pick" rowspan="1">·</td><td class="p-cr">4</td><td class="p-cr">4</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem on">4</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-note"></td></tr>
+<tr><td><span class="mini-tag general">일반</span></td><td class="p-name">영어Ⅱ</td><td class="p-pick" rowspan="1">·</td><td class="p-cr">4</td><td class="p-cr">4</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem on">4</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-note"></td></tr>
+<tr><td class="p-grp" rowspan="2">체육</td><td><span class="mini-tag fusion">융합</span></td><td class="p-name">스포츠 생활1</td><td class="p-pick" rowspan="1">·</td><td class="p-cr">3</td><td class="p-cr">2</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem on">2</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-note"></td></tr>
+<tr><td><span class="mini-tag fusion">융합</span></td><td class="p-name">스포츠 생활2</td><td class="p-pick" rowspan="1">·</td><td class="p-cr">3</td><td class="p-cr">2</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem on">2</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-note"></td></tr>
+<tr><td class="p-grp" rowspan="2">국어</td><td><span class="mini-tag general">일반</span></td><td class="p-name">화법과 작문</td><td class="p-pick" rowspan="1">·</td><td class="p-cr">5</td><td class="p-cr">3</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem on">3</td><td class="p-note"></td></tr>
+<tr><td><span class="mini-tag general">일반</span></td><td class="p-name">언어와 매체</td><td class="p-pick" rowspan="1">·</td><td class="p-cr">5</td><td class="p-cr">4</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem on">4</td><td class="p-sem">·</td><td class="p-note"></td></tr>
+<tr><td class="p-grp" rowspan="2">수학</td><td><span class="mini-tag general">일반</span></td><td class="p-name">확률과 통계</td><td class="p-pick" rowspan="1">·</td><td class="p-cr">5</td><td class="p-cr">4</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem on">4</td><td class="p-sem">·</td><td class="p-note"></td></tr>
+<tr><td><span class="mini-tag career">진로</span></td><td class="p-name">통합수학Ⅰ</td><td class="p-pick" rowspan="1">·</td><td class="p-cr">5</td><td class="p-cr">3</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem on">3</td><td class="p-note"></td></tr>
+<tr><td class="p-grp" rowspan="2">영어</td><td><span class="mini-tag general">일반</span></td><td class="p-name">영어 독해와 작문</td><td class="p-pick" rowspan="1">·</td><td class="p-cr">5</td><td class="p-cr">4</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem on">4</td><td class="p-sem">·</td><td class="p-note"></td></tr>
+<tr><td><span class="mini-tag career">진로</span></td><td class="p-name">영어권 문화</td><td class="p-pick" rowspan="1">·</td><td class="p-cr">5</td><td class="p-cr">3</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem on">3</td><td class="p-note"></td></tr>
+<tr><td class="p-grp" rowspan="1">체육</td><td><span class="mini-tag career">진로</span></td><td class="p-name">스포츠 생활</td><td class="p-pick" rowspan="1">·</td><td class="p-cr">5</td><td class="p-cr">2</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem">·</td><td class="p-sem on">1</td><td class="p-sem on">1</td><td class="p-note"></td></tr>
+<tr class="p-gs"><td class="p-div" rowspan="43">학생<br>선택</td><td class="p-grp" rowspan="6">제2외국어/한문</td><td><span class="mini-tag career">진로</span></td><td class="p-name">중국어 회화</td><td class="p-pick" rowspan="3"><b>택1</b></td><td class="p-cr">4</td><td class="p-cr">3</td><td class="p-sem" rowspan="3">·</td><td class="p-sem" rowspan="3">·</td><td class="p-sem" rowspan="3">·</td><td class="p-sem on" rowspan="3">3</td><td class="p-sem" rowspan="3">·</td><td class="p-sem" rowspan="3">·</td><td class="p-note"></td></tr>
+<tr><td><span class="mini-tag career">진로</span></td><td class="p-name">일본어 회화</td><td class="p-cr">4</td><td class="p-cr">3</td><td class="p-note"></td></tr>
+<tr><td><span class="mini-tag fusion">융합</span></td><td class="p-name">언어생활과 한자</td><td class="p-cr">4</td><td class="p-cr">3</td><td class="p-note"></td></tr>
+<tr class="p-gs"><td><span class="mini-tag general">일반</span></td><td class="p-name">중국어</td><td class="p-pick" rowspan="3"><b>택1</b></td><td class="p-cr">4</td><td class="p-cr">3</td><td class="p-sem" rowspan="3">·</td><td class="p-sem" rowspan="3">·</td><td class="p-sem on" rowspan="3">3</td><td class="p-sem" rowspan="3">·</td><td class="p-sem" rowspan="3">·</td><td class="p-sem" rowspan="3">·</td><td class="p-note"></td></tr>
+<tr><td><span class="mini-tag general">일반</span></td><td class="p-name">일본어</td><td class="p-cr">4</td><td class="p-cr">3</td><td class="p-note"></td></tr>
+<tr><td><span class="mini-tag general">일반</span></td><td class="p-name">한문</td><td class="p-cr">4</td><td class="p-cr">3</td><td class="p-note"></td></tr>
+<tr class="p-gs"><td class="p-grp" rowspan="4">사회(역사/도덕 포함)</td><td><span class="mini-tag career">진로</span></td><td class="p-name">한국지리 탐구</td><td class="p-pick" rowspan="8"><b>택3</b></td><td class="p-cr">4</td><td class="p-cr">3</td><td class="p-sem" rowspan="8">·</td><td class="p-sem" rowspan="8">·</td><td class="p-sem" rowspan="8">·</td><td class="p-sem on" rowspan="8">9</td><td class="p-sem" rowspan="8">·</td><td class="p-sem" rowspan="8">·</td><td class="p-note"></td></tr>
+<tr><td><span class="mini-tag career">진로</span></td><td class="p-name">동아시아 역사 기행</td><td class="p-cr">4</td><td class="p-cr">3</td><td class="p-note"></td></tr>
+<tr><td><span class="mini-tag career">진로</span></td><td class="p-name">경제</td><td class="p-cr">4</td><td class="p-cr">3</td><td class="p-note"></td></tr>
+<tr><td><span class="mini-tag career">진로</span></td><td class="p-name">인문학과 윤리</td><td class="p-cr">4</td><td class="p-cr">3</td><td class="p-note"></td></tr>
+<tr><td class="p-grp" rowspan="4">과학</td><td><span class="mini-tag career">진로</span></td><td class="p-name">역학과 에너지</td><td class="p-cr">4</td><td class="p-cr">3</td><td class="p-note"></td></tr>
+<tr><td><span class="mini-tag career">진로</span></td><td class="p-name">물질과 에너지</td><td class="p-cr">4</td><td class="p-cr">3</td><td class="p-note"></td></tr>
+<tr><td><span class="mini-tag career">진로</span></td><td class="p-name">세포와 물질대사</td><td class="p-cr">4</td><td class="p-cr">3</td><td class="p-note"></td></tr>
+<tr><td><span class="mini-tag career">진로</span></td><td class="p-name">지구시스템과학</td><td class="p-cr">4</td><td class="p-cr">3</td><td class="p-note"></td></tr>
+<tr class="p-gs"><td class="p-grp" rowspan="4">사회(역사/도덕 포함)</td><td><span class="mini-tag general">일반</span></td><td class="p-name">세계시민과 지리</td><td class="p-pick" rowspan="8"><b>택3</b></td><td class="p-cr">4</td><td class="p-cr">3</td><td class="p-sem" rowspan="8">·</td><td class="p-sem" rowspan="8">·</td><td class="p-sem on" rowspan="8">9</td><td class="p-sem" rowspan="8">·</td><td class="p-sem" rowspan="8">·</td><td class="p-sem" rowspan="8">·</td><td class="p-note"></td></tr>
+<tr><td><span class="mini-tag general">일반</span></td><td class="p-name">세계사</td><td class="p-cr">4</td><td class="p-cr">3</td><td class="p-note"></td></tr>
+<tr><td><span class="mini-tag general">일반</span></td><td class="p-name">사회와 문화</td><td class="p-cr">4</td><td class="p-cr">3</td><td class="p-note"></td></tr>
+<tr><td><span class="mini-tag career">진로</span></td><td class="p-name">윤리와 사상</td><td class="p-cr">4</td><td class="p-cr">3</td><td class="p-note"></td></tr>
+<tr><td class="p-grp" rowspan="4">과학</td><td><span class="mini-tag general">일반</span></td><td class="p-name">물리학</td><td class="p-cr">4</td><td class="p-cr">3</td><td class="p-note"></td></tr>
+<tr><td><span class="mini-tag general">일반</span></td><td class="p-name">화학</td><td class="p-cr">4</td><td class="p-cr">3</td><td class="p-note"></td></tr>
+<tr><td><span class="mini-tag general">일반</span></td><td class="p-name">생명과학</td><td class="p-cr">4</td><td class="p-cr">3</td><td class="p-note"></td></tr>
+<tr><td><span class="mini-tag general">일반</span></td><td class="p-name">지구과학</td><td class="p-cr">4</td><td class="p-cr">3</td><td class="p-note"></td></tr>
+<tr class="p-gs"><td class="p-grp" rowspan="1">국어</td><td><span class="mini-tag career">진로</span></td><td class="p-name">문학과 영상</td><td class="p-pick" rowspan="3"><b>택1</b></td><td class="p-cr">4</td><td class="p-cr">3</td><td class="p-sem" rowspan="3">·</td><td class="p-sem" rowspan="3">·</td><td class="p-sem" rowspan="3">·</td><td class="p-sem on" rowspan="3">3</td><td class="p-sem" rowspan="3">·</td><td class="p-sem" rowspan="3">·</td><td class="p-note"></td></tr>
+<tr><td class="p-grp" rowspan="1">수학</td><td><span class="mini-tag fusion">융합</span></td><td class="p-name">인공지능 수학</td><td class="p-cr">4</td><td class="p-cr">3</td><td class="p-note"></td></tr>
+<tr><td class="p-grp" rowspan="1">영어</td><td><span class="mini-tag career">진로</span></td><td class="p-name">영미 문학 읽기</td><td class="p-cr">4</td><td class="p-cr">3</td><td class="p-note"></td></tr>
+<tr class="p-gs"><td class="p-grp" rowspan="1">국어</td><td><span class="mini-tag career">진로</span></td><td class="p-name">주제 탐구 독서</td><td class="p-pick" rowspan="3"><b>택1</b></td><td class="p-cr">4</td><td class="p-cr">3</td><td class="p-sem" rowspan="3">·</td><td class="p-sem" rowspan="3">·</td><td class="p-sem on" rowspan="3">3</td><td class="p-sem" rowspan="3">·</td><td class="p-sem" rowspan="3">·</td><td class="p-sem" rowspan="3">·</td><td class="p-note"></td></tr>
+<tr><td class="p-grp" rowspan="1">수학</td><td><span class="mini-tag career">진로</span></td><td class="p-name">기하</td><td class="p-cr">4</td><td class="p-cr">3</td><td class="p-note"></td></tr>
+<tr><td class="p-grp" rowspan="1">영어</td><td><span class="mini-tag career">진로</span></td><td class="p-name">영어 발표와 토론</td><td class="p-cr">4</td><td class="p-cr">3</td><td class="p-note"></td></tr>
+<tr class="p-gs"><td class="p-grp" rowspan="2">예술</td><td><span class="mini-tag career">진로</span></td><td class="p-name">음악 감상과 비평</td><td class="p-pick" rowspan="2"><b>택1</b></td><td class="p-cr">5</td><td class="p-cr">4</td><td class="p-sem" rowspan="2">·</td><td class="p-sem" rowspan="2">·</td><td class="p-sem" rowspan="2">·</td><td class="p-sem" rowspan="2">·</td><td class="p-sem on" rowspan="2">2</td><td class="p-sem on" rowspan="2">2</td><td class="p-note">택1</td></tr>
+<tr><td><span class="mini-tag career">진로</span></td><td class="p-name">미술 창작</td><td class="p-cr">5</td><td class="p-cr">4</td><td class="p-note"></td></tr>
+<tr class="p-gs"><td class="p-grp" rowspan="1">사회</td><td><span class="mini-tag career">진로</span></td><td class="p-name">여행지리</td><td class="p-pick" rowspan="2"><b>택1</b></td><td class="p-cr">5</td><td class="p-cr">4</td><td class="p-sem" rowspan="2">·</td><td class="p-sem" rowspan="2">·</td><td class="p-sem" rowspan="2">·</td><td class="p-sem" rowspan="2">·</td><td class="p-sem on" rowspan="2">2</td><td class="p-sem on" rowspan="2">2</td><td class="p-note">택1</td></tr>
+<tr><td class="p-grp" rowspan="1">과학</td><td><span class="mini-tag career">진로</span></td><td class="p-name">생활과 과학</td><td class="p-cr">5</td><td class="p-cr">4</td><td class="p-note"></td></tr>
+<tr class="p-gs"><td class="p-grp" rowspan="4">사회</td><td><span class="mini-tag general">일반</span></td><td class="p-name">한국지리</td><td class="p-pick" rowspan="8"><b>택3</b></td><td class="p-cr">5</td><td class="p-cr">6</td><td class="p-sem" rowspan="8">·</td><td class="p-sem" rowspan="8">·</td><td class="p-sem" rowspan="8">·</td><td class="p-sem" rowspan="8">·</td><td class="p-sem on" rowspan="8">9</td><td class="p-sem on" rowspan="8">9</td><td class="p-note">택3</td></tr>
+<tr><td><span class="mini-tag general">일반</span></td><td class="p-name">세계사</td><td class="p-cr">5</td><td class="p-cr">6</td><td class="p-note"></td></tr>
+<tr><td><span class="mini-tag general">일반</span></td><td class="p-name">사회·문화</td><td class="p-cr">5</td><td class="p-cr">6</td><td class="p-note"></td></tr>
+<tr><td><span class="mini-tag general">일반</span></td><td class="p-name">생활과 윤리</td><td class="p-cr">5</td><td class="p-cr">6</td><td class="p-note"></td></tr>
+<tr><td class="p-grp" rowspan="4">과학</td><td><span class="mini-tag career">진로</span></td><td class="p-name">물리학Ⅱ</td><td class="p-cr">5</td><td class="p-cr">6</td><td class="p-note"></td></tr>
+<tr><td><span class="mini-tag career">진로</span></td><td class="p-name">화학Ⅱ</td><td class="p-cr">5</td><td class="p-cr">6</td><td class="p-note"></td></tr>
+<tr><td><span class="mini-tag career">진로</span></td><td class="p-name">생명과학Ⅱ</td><td class="p-cr">5</td><td class="p-cr">6</td><td class="p-note"></td></tr>
+<tr><td><span class="mini-tag career">진로</span></td><td class="p-name">지구과학Ⅱ</td><td class="p-cr">5</td><td class="p-cr">6</td><td class="p-note"></td></tr>
+<tr class="p-gs"><td class="p-grp" rowspan="1">국어</td><td><span class="mini-tag career">진로</span></td><td class="p-name">고전 읽기</td><td class="p-pick" rowspan="3"><b>택1</b></td><td class="p-cr">5</td><td class="p-cr">5</td><td class="p-sem" rowspan="3">·</td><td class="p-sem" rowspan="3">·</td><td class="p-sem" rowspan="3">·</td><td class="p-sem" rowspan="3">·</td><td class="p-sem on" rowspan="3">3</td><td class="p-sem on" rowspan="3">2</td><td class="p-note">택1</td></tr>
+<tr><td class="p-grp" rowspan="1">수학</td><td><span class="mini-tag general">일반</span></td><td class="p-name">미적분</td><td class="p-cr">5</td><td class="p-cr">5</td><td class="p-note"></td></tr>
+<tr><td class="p-grp" rowspan="1">영어</td><td><span class="mini-tag career">진로</span></td><td class="p-name">심화 영어Ⅰ</td><td class="p-cr">5</td><td class="p-cr">5</td><td class="p-note"></td></tr>
+<tr class="p-tot"><td colspan="7" class="p-sumlab">교과 이수 학점 소계</td><td class="p-sum">29</td><td class="p-sum">29</td><td class="p-sum">29</td><td class="p-sum">29</td><td class="p-sum">29</td><td class="p-sum">25</td><td class="p-sum"></td></tr><tr class="p-tot"><td colspan="7" class="p-sumlab">창의적 체험활동</td><td class="p-sum">3</td><td class="p-sum">3</td><td class="p-sum">3</td><td class="p-sum">3</td><td class="p-sum">3</td><td class="p-sum">3</td><td class="p-sum"></td></tr><tr class="p-tot p-tot2"><td colspan="7" class="p-sumlab">학기별 총 이수 학점</td><td class="p-sum">32</td><td class="p-sum">32</td><td class="p-sum">32</td><td class="p-sum">32</td><td class="p-sum">32</td><td class="p-sum">28</td><td class="p-sum"></td></tr><tr class="p-tot p-tot2"><td colspan="7" class="p-sumlab">학년별 총 이수 학점</td><td class="p-sum" colspan="2">64</td><td class="p-sum" colspan="2">64</td><td class="p-sum" colspan="2">60</td><td class="p-sum"></td></tr>
+          </tbody>
+        </table>
+      </div>
+        <p class="scroll-hint">↔ 작은 화면에서는 표를 옆으로 밀어 볼 수 있어요</p>
+        <div class="center-cta" style="margin-top:24px">
+          <a class="btn btn-primary" href="#checklist">과목 선택 체크리스트에서 직접 골라 보기 <span class="arr">→</span></a>
+        </div>
+      </div>
+
+      <!-- 05 편제표 어디서 보나요 -->
+      <div class="wb-block">
+        <div class="wb-head"><span class="wb-no">05</span><h3>교육과정 편제표는 어디에서 볼 수 있을까요?</h3></div>
+        <p class="wb-sub">알아볼 수 있는 방법 3가지를 안내할게요.</p>
+        <div class="where-list">
+          <div class="where-item"><span class="wno">01</span>
+            <p><a href="https://www.schoolinfo.go.kr" target="_blank" rel="noopener">'학교알리미(schoolinfo.go.kr)'</a>에서 진학할 고등학교 이름을 검색하여 확인!</p></div>
+          <div class="where-item"><span class="wno">02</span>
+            <p><a href="https://www.ice.go.kr/hakjeom/main.do" target="_blank" rel="noopener">'인천광역시교육청 고교학점제 누리집'</a>에서 교육과정 자료 확인!</p></div>
+          <div class="where-item"><span class="wno">03</span>
+            <p>'고등학교별 학교 홈페이지 공지사항, 알림판, 학교 안내' 등에서 확인!</p></div>
+        </div>
+        <div class="site-chips">
+          <span style="font-size:13px;font-weight:700;align-self:center">🔗 진로·진학에 도움되는 누리집 :</span>
+          <a href="https://www.career.go.kr" target="_blank" rel="noopener">커리어넷</a>
+          <a href="https://www.work24.go.kr" target="_blank" rel="noopener">워크넷</a>
+          <a href="https://www.adiga.kr" target="_blank" rel="noopener">대학정보포털 어디가</a>
+        </div>
+      </div>
+
+      <!-- 06 미편제 과목 -->
+      <div class="wb-block">
+        <div class="wb-head"><span class="wb-no">06</span><h3>배우고 싶은 과목이 우리 학교에 편제되어 있지 않다면?</h3></div>
+        <div class="tip-list">
+          <div class="tip-item"><span class="ico">💡</span>
+            <p>다른 학교 학생들과 함께 수업을 들을 수 있는 <b>공동교육과정(온·오프라인)</b>을 활용할 수 있어요.</p></div>
+          <div class="tip-item"><span class="ico">💡</span>
+            <p>교육청에서 개설하는 <b>학교 밖 교육·온라인 과정</b>도 활용할 수 있어요. 개설 과목과 신청 방법은 <b>교육과정 담당·담임 선생님과 상담</b>해 보세요.</p></div>
+        </div>
+      </div>
+
+      <!-- 07 과목 선택 전 체크 -->
+      <div class="wb-block">
+        <div class="wb-head"><span class="wb-no">07</span><h3>과목 선택 전 체크!</h3></div>
+        <p class="wb-sub">선택은 1학년 때 하게 되니, 미리 자신의 진로와 적성에 맞추어 생각해 두면 좋아요.</p>
+        <div class="chk3">
+          <div class="chk-card"><div class="no">CHECK 1</div><h4>공통과목 먼저!</h4><p>공통과목을 이수한 후 선택과목(일반·진로·융합선택)을 이수해요.</p></div>
+          <div class="chk-card"><div class="no">CHECK 2</div><h4>Ⅰ 다음에 Ⅱ!</h4><p>Ⅰ·Ⅱ로 구분된 과목은 Ⅰ을 먼저 이수한 후 Ⅱ를 이수해요.<br>예) 미적분Ⅰ→미적분Ⅱ, 영어Ⅰ→영어Ⅱ</p></div>
+          <div class="chk-card"><div class="no">CHECK 3</div><h4>위계를 고려해요!</h4><p>위계가 있는 과목은 순서를 고려해서 선택해요. 아래 수학 위계도를 참고하세요.</p></div>
+        </div>
+        <div class="hier">
+          <b class="ht">📐 수학 과목 위계 예시</b>
+          <div class="hier-row">
+            <span class="h-chip" style="background:var(--c-common-bg);color:var(--c-common)">공통수학1·2</span><span class="h-arrow">→</span>
+            <span class="h-chip" style="background:var(--c-general-bg);color:var(--c-general)">대수</span><span class="h-arrow">→</span>
+            <span class="h-chip" style="background:var(--c-general-bg);color:var(--c-general)">미적분Ⅰ</span><span class="h-tag">(병행 이수 가능)</span><span class="h-arrow">→</span>
+            <span class="h-chip" style="background:var(--c-career-bg);color:var(--c-career)">미적분Ⅱ</span>
+          </div>
+          <div class="hier-row">
+            <span class="h-chip" style="background:var(--c-general-bg);color:var(--c-general)">대수</span><span class="h-arrow">→</span>
+            <span class="h-chip" style="background:var(--c-career-bg);color:var(--c-career)">경제 수학</span><span class="h-tag">(권장)</span>
           </div>
         </div>
       </div>
 
-      <div class="change-block">
-        <div class="change-head"><span class="no">02</span><h3>과목 이수 기준이 적용됩니다</h3></div>
-        <div class="compare">
-          <div class="cmp-side">
-            <span class="cmp-tag old">기존</span>
-            <div class="cmp-visual">
-              <svg width="170" height="120" viewBox="0 0 170 120" fill="none" stroke="#8D96AC" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <rect x="30" y="14" width="110" height="62" rx="4"/>
-                <text x="85" y="52" text-anchor="middle" font-size="16" font-weight="700" fill="#8D96AC" stroke="none">수업 끝!</text>
-                <rect x="48" y="88" width="30" height="20" rx="3"/>
-                <rect x="92" y="88" width="30" height="20" rx="3"/>
-              </svg>
-            </div>
-            <p class="cmp-cap">과목 수업이 종료되면 이수 인정</p>
-          </div>
-          <div class="cmp-arrow" aria-hidden="true">→</div>
-          <div class="cmp-side">
-            <span class="cmp-tag new">고교학점제</span>
-            <div class="cmp-visual">
-              <svg width="220" height="110" viewBox="0 0 220 110" fill="none" aria-hidden="true">
-                <circle cx="55" cy="50" r="38" fill="#fff"/>
-                <g stroke="#2F5BEA" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M37 38c6-3 12-3 18 0v26c-6-3-12-3-18 0V38z"/>
-                  <path d="M73 38c-6-3-12-3-18 0v26c6-3 12-3 18 0V38z"/>
-                </g>
-                <text x="55" y="102" text-anchor="middle" font-size="11.5" font-weight="700" fill="#5A6480">출석 2/3 이상</text>
-                <text x="110" y="56" text-anchor="middle" font-size="22" font-weight="700" fill="#2F5BEA">＋</text>
-                <circle cx="165" cy="50" r="38" fill="#fff"/>
-                <g stroke="#2F5BEA" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="148" y="28" width="34" height="44" rx="4"/>
-                  <line x1="155" y1="50" x2="175" y2="50"/>
-                  <line x1="155" y1="59" x2="175" y2="59"/>
-                  <text x="165" y="43" text-anchor="middle" font-size="12" font-weight="700" fill="#2F5BEA" stroke="none">A⁺</text>
-                </g>
-                <text x="165" y="102" text-anchor="middle" font-size="11.5" font-weight="700" fill="#5A6480">성취율 40% 이상</text>
-              </svg>
-            </div>
-            <p class="cmp-cap"><span class="point">'수업 횟수의 2/3 이상 출석 ＋ 학업성취율 40%' 이상 시</span><br>과목 이수 인정 및 학점 취득</p>
-          </div>
+      <!-- 06 수능 출제범위 -->
+      <div class="wb-block">
+        <div class="wb-head"><span class="wb-no">08</span><h3>대학수학능력시험(2028 수능~) 출제범위</h3></div>
+        <p class="wb-sub">2028학년도 수능부터는 아래 과목에서 출제돼요. 대부분 공통과목과 일반선택과목이에요.</p>
+        <div class="wb-table-scroll">
+          <table class="wbt" style="min-width:700px">
+            <thead><tr><th>영역</th><th>출제범위(과목)</th><th>비고</th></tr></thead>
+            <tbody>
+              <tr><td><b>국어</b></td><td>화법과 언어, 독서와 작문, 문학</td><td class="dim">—</td></tr>
+              <tr><td><b>수학</b></td><td>대수, 미적분Ⅰ, 확률과 통계</td><td class="dim">—</td></tr>
+              <tr><td><b>영어</b></td><td>영어Ⅰ, 영어Ⅱ</td><td><b>절대평가</b></td></tr>
+              <tr><td><b>한국사</b></td><td>한국사</td><td><b>절대평가</b></td></tr>
+              <tr><td><b>탐구 (사회·과학)</b></td><td>통합사회, 통합과학</td><td class="dim">—</td></tr>
+              <tr><td><b>직업</b></td><td>성공적인 직업 생활</td><td class="dim">—</td></tr>
+              <tr><td><b>제2외국어/한문</b></td><td>9과목 중 택1 (독일어·프랑스어·스페인어·중국어·일본어·러시아어·아랍어·베트남어·한문)</td><td><b>절대평가</b></td></tr>
+            </tbody>
+          </table>
         </div>
+        
       </div>
 
-      <div class="change-block">
-        <div class="change-head"><span class="no">03</span><h3>학생 개별 시간표가 만들어집니다</h3></div>
-        <div class="compare">
-          <div class="cmp-side">
-            <span class="cmp-tag old">기존</span>
-            <div class="cmp-visual">
-              <svg width="170" height="120" viewBox="0 0 170 120" fill="none" aria-hidden="true">
-                <rect x="35" y="10" width="100" height="70" rx="5" fill="#fff" stroke="#8D96AC" stroke-width="3"/>
-                <g fill="#C7CCDA">
-                  <rect x="45" y="20" width="80" height="9" rx="2"/>
-                  <rect x="45" y="34" width="80" height="9" rx="2"/>
-                  <rect x="45" y="48" width="80" height="9" rx="2"/>
-                  <rect x="45" y="62" width="80" height="9" rx="2"/>
-                </g>
-                <g stroke="#8D96AC" stroke-width="3" stroke-linecap="round" fill="none">
-                  <circle cx="55" cy="95" r="7"/><path d="M46 114c1-7 4.5-11 9-11s8 4 9 11"/>
-                  <circle cx="85" cy="95" r="7"/><path d="M76 114c1-7 4.5-11 9-11s8 4 9 11"/>
-                  <circle cx="115" cy="95" r="7"/><path d="M106 114c1-7 4.5-11 9-11s8 4 9 11"/>
-                </g>
-              </svg>
-            </div>
-            <p class="cmp-cap">같은 학년 학생들이 계열별로 유사한 과목 수강
-              <span class="sub">(학급 시간표)</span></p>
-          </div>
-          <div class="cmp-arrow" aria-hidden="true">→</div>
-          <div class="cmp-side">
-            <span class="cmp-tag new">고교학점제</span>
-            <div class="cmp-visual">
-              <svg width="170" height="120" viewBox="0 0 170 120" fill="none" aria-hidden="true">
-                <rect x="40" y="14" width="90" height="66" rx="5" fill="#fff" stroke="#2F5BEA" stroke-width="3"/>
-                <g>
-                  <rect x="50" y="24" width="22" height="13" rx="2" fill="#1E7CD6"/>
-                  <rect x="76" y="24" width="22" height="13" rx="2" fill="#0E9F5E"/>
-                  <rect x="102" y="24" width="18" height="13" rx="2" fill="#E8650D"/>
-                  <rect x="50" y="42" width="22" height="13" rx="2" fill="#C0398C"/>
-                  <rect x="76" y="42" width="44" height="13" rx="2" fill="#0E9F5E"/>
-                  <rect x="50" y="60" width="34" height="13" rx="2" fill="#E8650D"/>
-                  <rect x="88" y="60" width="32" height="13" rx="2" fill="#1E7CD6"/>
-                </g>
-                <g stroke="#2F5BEA" stroke-width="3" stroke-linecap="round" fill="none">
-                  <circle cx="85" cy="93" r="8"/>
-                  <path d="M74 116c1-8 5-13 11-13s10 5 11 13"/>
-                </g>
-              </svg>
-            </div>
-            <p class="cmp-cap"><span class="point">학생이 자신의 진로와 적성에 따라 과목을 선택하여 수강</span>
-              <span class="sub">(개인별 시간표)</span></p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== 어떤 과목들이 있나요? ===== -->
-  <section id="subjects">
-    <div class="wrap">
-      <span class="eyebrow">SUBJECT TYPES</span>
-      <h2>어떤 과목들이 있나요?</h2>
-      <p class="lead">2022 개정 교육과정 기준으로 다음과 같은 과목들 중 원하는 과목을 선택할 수 있습니다.</p>
-
-      <div class="type-table">
-        <div class="type-row">
-          <div class="type-cell-tag"><span class="ttag common">공통 과목</span></div>
-          <div class="type-cell-desc">기초 소양 및 기본 학력 함양을 위한 과목 <span class="req">※ 모든 학생 필수 수강</span></div>
-        </div>
-        <div class="type-row">
-          <div class="type-cell-tag"><span class="ttag general">일반 선택 과목</span></div>
-          <div class="type-cell-desc">교과별 학문의 분화된 주요 학습 내용을 이해하고 탐구하는 과목</div>
-        </div>
-        <div class="type-row">
-          <div class="type-cell-tag"><span class="ttag career">진로 선택 과목</span></div>
-          <div class="type-cell-desc">교과별 심화 학습 및 진로 관련 과목</div>
-        </div>
-        <div class="type-row">
-          <div class="type-cell-tag"><span class="ttag fusion">융합 선택 과목</span></div>
-          <div class="type-cell-desc">교과 내 / 교과 간 주제 융합 과목, 실생활 체험 및 응용 관련 과목</div>
-        </div>
-      </div>
-
-      <div class="center-cta">
-        <a class="btn btn-primary" href="#guide">교과(군)별 과목 안내에서 과목별 상세 정보 보기 <span class="arr">→</span></a>
-      </div>
-
-      <p class="etc-lead">
-        이 밖에도 과학·체육·예술 계열 선택과목이나 특성화고의 전문교과 과목,
-        교육감 승인 과목 등 다양한 과목이 개설될 수 있습니다.
-      </p>
-      <div class="etc-title">개설 과목 예시</div>
-      <div class="etc-grid">
-        <div class="etc-card etc-1">
-          <h3>과학·체육·예술 계열<br>선택과목</h3>
-          <div class="dots">•••</div>
-          <p>전문 수학, 고급 물리학,<br>스포츠 개론, 소설 창작,<br>연극과 몸 등</p>
-        </div>
-        <div class="etc-card etc-2">
-          <h3>특성화 고등학교<br>전문교과 과목</h3>
-          <div class="dots">•••</div>
-          <p>상업 경제, 보육 과정,<br>문화 콘텐츠 산업 일반,<br>미용의 기초 등</p>
-        </div>
-        <div class="etc-card etc-3">
-          <h3>교육감 승인 과목</h3>
-          <div class="dots">•••</div>
-          <p>스마트 농업의 이해,<br>에너지 환경과학,<br>데이터 과학과 인공지능 등</p>
-        </div>
-      </div>
-      <p class="ref-note">
-        과학·체육·예술 계열 선택과목 및 특성화고 전문교과 과목 종류는 2022 개정 교육과정 참고
-        (<a href="https://ncic.re.kr/" target="_blank" rel="noopener">https://ncic.re.kr</a>)
-      </p>
     </div>
   </section>
 
@@ -2414,7 +2476,7 @@ vdList.addEventListener("click",e=>{
 vdRenderList(); vdRenderPlayer();
 
 /* ===== 페이지 전환 (해시 라우팅) ===== */
-const HOME_ANCHORS = ["what","why","changes","subjects"];
+const HOME_ANCHORS = ["what"];
 function route(){
   const hash = location.hash.replace("#","") || "home";
   const PAGES = {guide:"page-guide", video:"page-video", checklist:"page-checklist", univ:"page-univ", field:"page-field"};
@@ -2423,7 +2485,6 @@ function route(){
   Object.entries(PAGES).forEach(([k,id])=>
     document.getElementById(id).classList.toggle("show", hash===k));
   let navKey = isSub ? hash : (HOME_ANCHORS.includes(hash) ? hash : "home");
-  if(navKey==="why"||navKey==="subjects"||navKey==="changes") navKey="what";
   document.querySelectorAll("[data-nav]").forEach(a=>
     a.classList.toggle("active", a.dataset.nav===navKey));
   if(hash!=="video" && vdPlaying){ vdPlaying=false; vdRenderPlayer(); }
