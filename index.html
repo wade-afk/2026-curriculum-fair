@@ -2187,7 +2187,7 @@ const sResult = document.getElementById("submitResult");
 const sWarn = document.getElementById("submitWarn");
 document.getElementById("ckSubmit").addEventListener("click",()=>{
   sWarn.classList.add("show");
-  sWarn.textContent = "📋 수요조사 안내: 현재 1학년은 [2학년] 탭, 현재 2학년은 [3학년] 탭의 선택과목만 선택하면 됩니다.";
+  sWarn.textContent = "📋 수요조사 안내: 현재 1학년은 [2학년] 탭, 현재 2학년은 [3학년] 탭의 선택과목만 선택하면 됩니다. 이미 제출한 적이 있다면, 다시 제출 시 마지막 제출 내용이 최종 버전으로 저장됩니다.";
   sResult.className = "sresult"; sResult.textContent="";
   sOverlay.classList.add("open");
   document.body.style.overflow="hidden";
@@ -2241,8 +2241,14 @@ document.getElementById("submitSend").addEventListener("click",async ()=>{
   if(!v.ok){
     const parts = [];
     if(v.missing.length) parts.push(`<p><b>아직 선택이 완료되지 않았습니다.</b></p><ul>${v.missing.map(m=>`<li>• ${m}</li>`).join("")}</ul>`);
-    if(v.wrongTab.length) parts.push(`<p><b>대상이 아닌 학기에 선택된 과목이 있습니다:</b> ${v.wrongTab.join(", ")}</p>
-      <p>현재 ${gradeNum}학년은 <b>[${v.rule.tabName}] 탭</b>의 선택과목만 선택하면 됩니다. 대상이 아닌 학기의 선택은 해제해 주세요.</p>`);
+    if(v.wrongTab.length){
+      /* 대상이 아닌 학기의 선택과목을 자동으로 초기화 (일일이 해제할 필요 없음) */
+      v.rule.others.forEach(id=>{ ckState[id] = {}; });
+      ckSave();
+      renderTabs(); renderView(); /* 화면의 체크 표시도 즉시 해제 반영 */
+      parts.push(`<p><b>대상이 아닌 학기에 선택된 과목이 있었습니다:</b> ${v.wrongTab.join(", ")}</p>
+      <p>현재 ${gradeNum}학년은 <b>[${v.rule.tabName}] 탭</b>의 선택과목만 선택하면 됩니다. 대상이 아닌 학기의 선택은 <b>자동으로 모두 해제(초기화)</b>되었어요.</p>`);
+    }
     closeSubmit();
     ckAlert({
       tone:"danger", ico:"✋",
@@ -2267,14 +2273,36 @@ document.getElementById("submitSend").addEventListener("click",async ()=>{
     selected: allSems().flatMap(s => semSelected(s).map(o => o[0]))
   };
   const btn = document.getElementById("submitSend");
-  btn.disabled = true; btn.textContent = "제출 중…";
+  btn.disabled = true;
+
+  /* 1) 기존 제출 여부 확인 (학번 기준) — 실패해도 제출은 계속 진행 */
+  btn.textContent = "기존 제출 확인 중…";
+  let alreadySubmitted = false;
+  try{
+    const chk = await fetch(`${CK_SUBMIT_URL}?action=check&studentId=${encodeURIComponent(sid)}`,{ method:"GET" });
+    if(chk.ok){
+      const info = await chk.json();
+      alreadySubmitted = !!(info && info.exists);
+    }
+  }catch(err){ /* 확인 실패 시에도 서버 측에서 자동으로 덮어쓰기 처리됨 */ }
+
+  if(alreadySubmitted){
+    sResult.className="sresult";
+    sResult.textContent="ℹ️ 이미 제출된 기록이 있어요. 지금 제출하는 내용이 최종 버전으로 저장되며, 기존 기록은 자동으로 교체됩니다.";
+  }
+
+  /* 2) 제출 (서버에서 동일 학번의 기존 행을 삭제 후 새 행으로 기록) */
+  btn.textContent = "제출 중…";
   try{
     await fetch(CK_SUBMIT_URL,{
       method:"POST", mode:"no-cors",
       headers:{"Content-Type":"text/plain;charset=utf-8"},
       body: JSON.stringify(payload)
     });
-    sResult.className="sresult ok"; sResult.textContent="✅ 제출이 완료되었습니다!";
+    sResult.className="sresult ok";
+    sResult.textContent = alreadySubmitted
+      ? "✅ 최종 버전으로 제출이 완료되었습니다! (기존 제출 기록은 자동으로 교체되었어요.)"
+      : "✅ 제출이 완료되었습니다! (다시 제출하면 마지막 제출 내용이 최종 버전으로 저장됩니다.)";
   }catch(err){
     sResult.className="sresult err"; sResult.textContent="제출에 실패했어요. 인터넷 연결을 확인하고 다시 시도해 주세요.";
   }
