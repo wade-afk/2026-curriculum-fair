@@ -2275,36 +2275,62 @@ document.getElementById("submitSend").addEventListener("click",async ()=>{
   const btn = document.getElementById("submitSend");
   btn.disabled = true;
 
-  /* 1) 기존 제출 여부 확인 (학번 기준) — 실패해도 제출은 계속 진행 */
-  btn.textContent = "기존 제출 확인 중…";
-  let alreadySubmitted = false;
-  try{
-    const chk = await fetch(`${CK_SUBMIT_URL}?action=check&studentId=${encodeURIComponent(sid)}`,{ method:"GET" });
-    if(chk.ok){
-      const info = await chk.json();
-      alreadySubmitted = !!(info && info.exists);
-    }
-  }catch(err){ /* 확인 실패 시에도 서버 측에서 자동으로 덮어쓰기 처리됨 */ }
+  /* 서버에 저장된 제출 상태 조회 (실패 시 null) */
+  async function fetchCheck(){
+    try{
+      const r = await fetch(`${CK_SUBMIT_URL}?action=check&studentId=${encodeURIComponent(sid)}&t=${Date.now()}`);
+      if(!r.ok) return null;
+      return await r.json();
+    }catch(e){ return null; }
+  }
+  const sleep = ms => new Promise(r=>setTimeout(r, ms));
 
+  /* 1) 기존 제출 여부 확인 (학번 기준) — 확인이 실패해도 제출은 계속 진행 */
+  btn.textContent = "기존 제출 확인 중…";
+  const before = await fetchCheck();
+  const alreadySubmitted = !!(before && before.exists);
   if(alreadySubmitted){
     sResult.className="sresult";
     sResult.textContent="ℹ️ 이미 제출된 기록이 있어요. 지금 제출하는 내용이 최종 버전으로 저장되며, 기존 기록은 자동으로 교체됩니다.";
   }
 
-  /* 2) 제출 (서버에서 동일 학번의 기존 행을 삭제 후 새 행으로 기록) */
-  btn.textContent = "제출 중…";
-  try{
-    await fetch(CK_SUBMIT_URL,{
-      method:"POST", mode:"no-cors",
-      headers:{"Content-Type":"text/plain;charset=utf-8"},
-      body: JSON.stringify(payload)
-    });
-    sResult.className="sresult ok";
+  /* 2) 제출 후 실제로 시트에 저장됐는지 서버에서 재확인, 실패 시 자동 재시도 (최대 3회)
+     ─ no-cors POST는 성공/실패를 알 수 없으므로, 확인 없이는 절대 '완료'라고 표시하지 않음 */
+  let saved = false, verifyUnavailable = false;
+  for(let attempt = 1; attempt <= 3 && !saved; attempt++){
+    btn.textContent = attempt === 1 ? "제출 중…" : `저장 재시도 중… (${attempt}/3)`;
+    try{
+      await fetch(CK_SUBMIT_URL,{
+        method:"POST", mode:"no-cors",
+        headers:{"Content-Type":"text/plain;charset=utf-8"},
+        body: JSON.stringify(payload)
+      });
+    }catch(err){ /* 재시도 루프에서 처리 */ }
+    btn.textContent = "저장 확인 중…";
+    await sleep(1500);
+    const after = await fetchCheck();
+    if(after === null){ verifyUnavailable = true; continue; }
+    verifyUnavailable = false;
+    /* 저장 성공 판정: ① 방금(3분 이내) 기록됨 ② 제출 시각이 이전 기록과 달라짐 ③ 이전에 없던 기록이 새로 생김 */
+    if(after.exists && (
+        (typeof after.ageSec === "number" && after.ageSec <= 180) ||
+        (before && before.exists && after.lastSubmitted !== before.lastSubmitted) ||
+        (before && !before.exists)
+      )){ saved = true; }
+    else if(attempt < 3){ await sleep(1200 * attempt); }
+  }
+
+  if(saved){
+    sResult.className = "sresult ok";
     sResult.textContent = alreadySubmitted
-      ? "✅ 최종 버전으로 제출이 완료되었습니다! (기존 제출 기록은 자동으로 교체되었어요.)"
-      : "✅ 제출이 완료되었습니다! (다시 제출하면 마지막 제출 내용이 최종 버전으로 저장됩니다.)";
-  }catch(err){
-    sResult.className="sresult err"; sResult.textContent="제출에 실패했어요. 인터넷 연결을 확인하고 다시 시도해 주세요.";
+      ? "✅ 최종 버전으로 제출·저장이 확인되었습니다! (기존 제출 기록은 자동으로 교체되었어요.)"
+      : "✅ 제출·저장이 확인되었습니다! (다시 제출하면 마지막 제출 내용이 최종 버전으로 저장됩니다.)";
+  }else if(verifyUnavailable){
+    sResult.className = "sresult err";
+    sResult.textContent = "⚠️ 제출은 시도했지만 저장 여부를 확인하지 못했어요. 인터넷 연결을 확인한 뒤 [제출하기]를 다시 눌러 주세요. (다시 제출해도 중복되지 않아요.)";
+  }else{
+    sResult.className = "sresult err";
+    sResult.textContent = "❌ 저장이 확인되지 않았습니다. 잠시 후 [제출하기]를 다시 눌러 주세요. 계속 실패하면 선생님께 알려 주세요.";
   }
   btn.disabled = false; btn.textContent = "제출하기";
 });
