@@ -697,6 +697,59 @@ td.p-sum{font-weight:700}
 .h-arrow{color:#AEB5C9;font-weight:700}
 .h-tag{font-size:11px;font-weight:700;color:var(--ink-soft)}
 
+/* ---------- 학년별 시작 가이드 ---------- */
+.jn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:860px){.jn-grid{grid-template-columns:1fr}}
+.jn-card{
+  display:block;background:var(--card);border:1.5px solid var(--line);border-radius:18px;
+  padding:24px;text-decoration:none;color:var(--ink);transition:.16s;position:relative;
+}
+.jn-card:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(31,43,77,.13);border-color:var(--blue)}
+.jn-card .jic{font-size:26px}
+.jn-card b{display:block;font-size:16.5px;margin:10px 0 6px}
+.jn-card p{font-size:13px;color:var(--ink-soft);line-height:1.6}
+.jn-card .go{position:absolute;right:20px;top:22px;font-weight:800;color:var(--blue)}
+
+/* ---------- 진로 계열 하이라이트 ---------- */
+.career-bar{
+  margin-top:22px;background:var(--card);border:1.5px solid var(--line);border-radius:14px;
+  padding:13px 16px;display:flex;align-items:center;gap:9px;flex-wrap:wrap;
+}
+.career-bar .cb-lb{font-size:13px;font-weight:800}
+.cb-chip{
+  font-family:inherit;font-size:12.5px;font-weight:700;padding:7px 14px;border-radius:999px;
+  border:1.5px solid var(--line);background:#fff;color:var(--ink-soft);cursor:pointer;transition:.14s;
+}
+.cb-chip:hover{border-color:var(--blue);color:var(--blue)}
+.cb-chip.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.career-bar .cb-note{flex-basis:100%;font-size:11.5px;color:var(--ink-soft);margin-top:2px}
+.rec-star{font-size:11px;margin-left:5px;cursor:help}
+
+/* ---------- 전역 과목 검색 ---------- */
+.gs-btn{
+  font-family:inherit;border:1.5px solid var(--line);background:#fff;border-radius:999px;
+  font-size:13px;font-weight:700;padding:7px 14px;cursor:pointer;white-space:nowrap;transition:.15s;color:var(--ink);
+}
+.gs-btn:hover{border-color:var(--blue);color:var(--blue)}
+.gs-overlay{
+  position:fixed;inset:0;background:rgba(23,30,50,.5);backdrop-filter:blur(3px);
+  z-index:300;display:none;padding:9vh 18px 18px;justify-content:center;align-items:flex-start;
+}
+.gs-overlay.open{display:flex}
+.gs-box{background:#fff;border-radius:18px;width:min(560px,100%);max-height:76vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.28)}
+.gs-box input{
+  font-family:inherit;font-size:16px;padding:17px 20px;border:0;border-bottom:1.5px solid var(--line);outline:none;
+}
+.gs-list{overflow-y:auto;padding:8px}
+.gs-item{
+  display:flex;align-items:center;gap:10px;width:100%;text-align:left;font-family:inherit;
+  border:0;background:transparent;border-radius:11px;padding:11px 13px;cursor:pointer;font-size:14px;
+}
+.gs-item:hover,.gs-item.sel{background:var(--blue-soft)}
+.gs-item b{flex:1;font-weight:600}
+.gs-item .gg{font-size:11.5px;color:var(--ink-soft)}
+.gs-empty{padding:26px;text-align:center;font-size:13.5px;color:var(--ink-soft)}
+
 /* ---------- 미설정 안내 배너 ---------- */
 .setup-banner{
   display:none;background:#FFF3D6;border-bottom:1.5px solid #EBCD8C;color:#7A5A00;
@@ -782,6 +835,7 @@ footer{border-top:1.5px solid var(--line);background:#fff}
       <a href="#checklist" data-nav="checklist">과목 선택 체크리스트</a>
       <a href="#univ" data-nav="univ">대학별 권장과목</a>
       <a href="#field" data-nav="field">계열별 권장과목</a>
+      <button class="gs-btn" id="gsBtn" title="과목 검색 (155개 과목)">🔍 과목 검색</button>
     </nav>
   </div>
 </header>
@@ -839,6 +893,29 @@ footer{border-top:1.5px solid var(--line);background:#fff}
           <span><i class="dot" style="background:var(--c-career)"></i>진로 선택</span>
           <span><i class="dot" style="background:var(--c-fusion)"></i>융합 선택</span>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 학년별 시작 가이드 ===== -->
+  <section style="padding-top:26px;padding-bottom:10px">
+    <div class="wrap">
+      <div class="jn-grid">
+        <a class="jn-card" href="#what">
+          <span class="jic">🧭</span><span class="go">→</span>
+          <b>고교학점제가 처음이라면</b>
+          <p>편제·학점·성적 산출부터 우리 학교 편성표까지, 차근차근 이해해 보세요.</p>
+        </a>
+        <a class="jn-card" href="#guide">
+          <span class="jic">📚</span><span class="go">→</span>
+          <b>과목이 궁금하다면</b>
+          <p>155개 과목의 내용·성적산출·수능 여부를 확인하고, 길라잡이 영상도 함께 보세요.</p>
+        </a>
+        <a class="jn-card" href="#checklist">
+          <span class="jic">✅</span><span class="go">→</span>
+          <b>수요조사 기간이라면</b>
+          <p>희망 계열 ⭐추천을 참고해 과목을 선택하고, 결과를 바로 제출하세요.</p>
+        </a>
       </div>
     </div>
   </section>
@@ -1275,6 +1352,7 @@ footer{border-top:1.5px solid var(--line);background:#fff}
       <span class="eyebrow">MY CHOICE</span>
       <h1>🏫 <span id="cfgCkName">작전고등학교</span> 과목 선택 체크리스트</h1>
       <p class="sub" id="cfgCkSub">2026학년도 입학생 · 학기당 29학점 (창체 3학점 포함 32학점)</p>
+      <div class="career-bar" id="careerBar"><!-- JS --></div>
       <div class="ck-tabs" role="tablist" id="ckTabs"><!-- JS 렌더링 --></div>
     </div>
   </section>
@@ -1293,6 +1371,7 @@ footer{border-top:1.5px solid var(--line);background:#fff}
         <div><span class="lbl">선택 완료 학기</span><span class="val" id="ckDone">0 <small>/ 6학기</small></span></div>
       </div>
       <div class="ck-actions">
+        <button class="btn btn-sm btn-reset" id="ckSaveImg" style="background:#E8F0FF;color:#1D3FAE">📷 이미지 저장</button>
         <button class="btn btn-sm btn-reset" id="ckReset">↺ 전체 초기화</button>
         <button class="btn btn-sm btn-submit" id="ckSubmit">📩 결과 제출</button>
       </div>
@@ -1475,6 +1554,14 @@ footer{border-top:1.5px solid var(--line);background:#fff}
     </div>
   </section>
 </main>
+
+<!-- 전역 과목 검색 -->
+<div class="gs-overlay" id="gsOverlay" role="dialog" aria-modal="true" aria-label="과목 검색">
+  <div class="gs-box">
+    <input id="gsInput" type="search" placeholder="과목명을 입력하세요 (예: 미적분, 생명과학)" autocomplete="off">
+    <div class="gs-list" id="gsList"></div>
+  </div>
+</div>
 
 <!-- =================== 관리자 설정 =================== -->
 <main id="page-setup" class="page">
@@ -1893,6 +1980,36 @@ const CK_SUBMIT_URL = SITE.submitUrl || "https://script.google.com/macros/s/AKfy
 const CK_PER_SEM = 29, CK_TOTAL = SITE.totalCredits || 174;
 const semTarget = s => s.target || CK_PER_SEM;
 
+/* ── 진로 계열별 권장과목 (과목선택워크북 · 계열별 과목선택 안내 예시) ── */
+const _KOR=["화법과 언어","독서와 작문","문학","주제 탐구 독서","문학과 영상","직무 의사소통","독서 토론과 글쓰기","매체 의사소통","언어생활 탐구"];
+const _ENG=["영어Ⅰ","영어Ⅱ","영어 독해와 작문","영미 문학 읽기","영어 발표와 토론","심화 영어","심화 영어 독해와 작문","직무 영어","실생활 영어 회화","미디어 영어","세계 문화와 영어"];
+const _PE=["운동과 건강","스포츠 문화","스포츠 과학","스포츠 생활1","스포츠 생활2"];
+const _ART=["음악","미술","연극","음악 연주와 창작","음악 감상과 비평","미술 창작","미술 감상과 비평","음악과 미디어","미술과 매체"];
+const _TEC=["기술·가정","로봇과 공학세계","생활과학 탐구","창의 공학 설계","지식 재산 일반","생애 설계와 자립","아동발달과 부모","정보","인공지능 기초","데이터 과학","소프트웨어와 생활"];
+const _LIB=["진로와 직업","생태와 환경","인간과 철학","논리와 사고","인간과 심리","교육의 이해","삶과 종교","보건","인간과 경제활동","논술"];
+const _M_BAS=["대수","미적분Ⅰ","확률과 통계","수학과 문화","실용 통계","수학과제 탐구"];
+const _M_FULL=[..._M_BAS,"기하","미적분Ⅱ","경제 수학","인공지능 수학","직무 수학"];
+const _SOC_ALL=["세계시민과 지리","세계사","사회와 문화","현대사회와 윤리","한국지리 탐구","도시의 미래 탐구","동아시아 역사 기행","정치","법과 사회","경제","윤리와 사상","인문학과 윤리","국제 관계의 이해","여행지리","역사로 탐구하는 현대 세계","사회문제 탐구","금융과 경제생활","윤리문제 탐구","기후변화와 지속가능한 세계"];
+const _SOC_GF=["세계시민과 지리","세계사","사회와 문화","현대사회와 윤리","여행지리","역사로 탐구하는 현대 세계","사회문제 탐구","금융과 경제생활","윤리문제 탐구","기후변화와 지속가능한 세계"];
+const _SCI_BAS=["물리학","화학","생명과학","지구과학","과학의 역사와 문화","기후변화와 환경생태","융합과학 탐구"];
+const _SCI_FULL=["물리학","화학","생명과학","지구과학","역학과 에너지","전자기와 양자","물질과 에너지","화학 반응의 세계","세포와 물질대사","생물의 유전","지구시스템과학","행성우주과학","과학의 역사와 문화","기후변화와 환경생태","융합과학 탐구"];
+const _L_CJ=["중국어","일본어","중국어 회화","일본어 회화","중국 문화","일본 문화"];
+const _L_ALL=["독일어","프랑스어","스페인어","중국어","일본어","러시아어","아랍어","베트남어","독일어 회화","프랑스어 회화","스페인어 회화","중국어 회화","일본어 회화","러시아어 회화","아랍어 회화","베트남어 회화","심화 독일어","심화 프랑스어","심화 스페인어","심화 중국어","심화 일본어","심화 러시아어","심화 아랍어","심화 베트남어","독일어권 문화","프랑스어권 문화","스페인어권 문화","중국 문화","일본 문화","러시아 문화","아랍 문화","베트남 문화"];
+const _COMMON=[..._KOR,..._ENG,..._PE,..._ART,..._TEC,..._LIB];
+const CAREER_REC = {
+  "인문":  new Set([..._COMMON,..._M_BAS,..._SOC_ALL,..._SCI_BAS,..._L_ALL]),
+  "사회":  new Set([..._COMMON,..._M_FULL,..._SOC_ALL,..._SCI_BAS,..._L_CJ]),
+  "자연":  new Set([..._COMMON,..._M_FULL,..._SOC_GF,..._SCI_FULL,..._L_CJ]),
+  "공학":  new Set([..._COMMON,..._M_FULL,..._SOC_GF,..._SCI_FULL,"정보과학",..._L_CJ]),
+  "보건":  new Set([..._COMMON,..._M_FULL,..._SOC_GF,..._SCI_FULL,..._L_CJ]),
+  "예체능":new Set([..._COMMON,..._M_BAS,..._SOC_GF,..._SCI_BAS,..._L_CJ]),
+};
+let ckCareer = "";
+try{ ckCareer = localStorage.getItem("jj_career")||""; }catch(e){}
+const recStar = name =>
+  (ckCareer && CAREER_REC[ckCareer] && CAREER_REC[ckCareer].has(name))
+    ? `<span class="rec-star" title="${ckCareer}계열 권장과목 (계열별 과목선택 안내 예시 기준)">⭐</span>` : "";
+
 const CK_GRADES = SITE.checklist || [
  {name:"1학년", semesters:[
    {id:"s11", name:"1학년 1학기",
@@ -2190,14 +2307,14 @@ function renderView(){
               return `
             <label class="ck-row ${isAI?'sel lockon':'lockdim'}" data-lockmsg="${AUTO_LINKS.indexOf(lk)}">
               <input type="checkbox" disabled ${isAI?'checked':''}>
-              <span class="nm">${o[0]}</span>
+              <span class="nm">${o[0]}${recStar(o[0])}</span>
               <span class="meta">${isAI?`<span class="lock-badge">🔒 ${lk.fromSub} 연계 고정</span>`:''}<span class="mini-tag ${TYPE_CLASS[o[1]]||'etc'}">${o[1]}</span>${o[2]}<span class="cr">${o[3]}학점</span></span>
             </label>`;
             }
             return `
             <label class="ck-row ${sel.includes(o[0])?'sel':''}">
               <input type="checkbox" data-sem="${sem.id}" data-grp="${g.name}" data-name="${o[0]}" ${sel.includes(o[0])?'checked':''}>
-              <span class="nm">${o[0]}</span>
+              <span class="nm">${o[0]}${recStar(o[0])}</span>
               <span class="meta"><span class="mini-tag ${TYPE_CLASS[o[1]]||'etc'}">${o[1]}</span>${o[2]}<span class="cr">${o[3]}학점</span></span>
             </label>`;
           }).join("")}`;
@@ -2471,6 +2588,108 @@ ckLoad();
   if(t1 && t2 && t1!==t2){ ckState.s22[SCISOC_GRP] = []; ckSave(); }
 })();
 renderTabs(); renderView();
+
+/* ── 진로 계열 선택 바 ── */
+const careerBarEl = document.getElementById("careerBar");
+function renderCareerBar(){
+  if(!careerBarEl) return;
+  const chips = ["인문","사회","자연","공학","보건","예체능"].map(c=>
+    `<button class="cb-chip ${ckCareer===c?'on':''}" data-c="${c}">${c}</button>`).join("");
+  careerBarEl.innerHTML =
+    `<span class="cb-lb">🎯 희망 계열</span>${chips}
+     <button class="cb-chip ${ckCareer===''?'on':''}" data-c="">선택 안 함</button>
+     <span class="cb-note">${ckCareer
+       ? `⭐ = ${ckCareer}계열 권장과목이에요. (교육부 계열별 과목선택 안내 '예시' 기준 — 최종 선택은 선생님과 상담하세요)`
+       : `계열을 고르면 아래 선택과목에 ⭐ 권장 표시가 붙어요.`}</span>`;
+}
+careerBarEl && careerBarEl.addEventListener("click",e=>{
+  const b=e.target.closest("[data-c]"); if(!b) return;
+  ckCareer = b.dataset.c;
+  try{ localStorage.setItem("jj_career", ckCareer); }catch(err){}
+  renderCareerBar(); renderView();
+});
+renderCareerBar();
+
+/* ── 전역 과목 검색 ── */
+(function globalSearch(){
+  const ov=document.getElementById("gsOverlay"), inp=document.getElementById("gsInput"),
+        list=document.getElementById("gsList"), btn=document.getElementById("gsBtn");
+  if(!ov||!btn) return;
+  const IDX = Object.entries(SUBJECT_DATA).map(([key,d])=>({key, name:d.name, group:d.group, type:d.type}));
+  const CLS = {"공통":"common","일반":"general","진로":"career","융합":"fusion"};
+  function open(){ ov.classList.add("open"); document.body.style.overflow="hidden"; inp.value=""; render(""); setTimeout(()=>inp.focus(),30); }
+  function close(){ ov.classList.remove("open"); document.body.style.overflow=""; }
+  function render(q){
+    q=q.trim();
+    const hits = q ? IDX.filter(s=>s.name.includes(q)||s.group.includes(q)).slice(0,30) : [];
+    list.innerHTML = q
+      ? (hits.length ? hits.map((s,i)=>`
+          <button class="gs-item ${i===0?'sel':''}" data-k="${s.key}" data-t="${CLS[s.type]||'general'}">
+            <span class="mini-tag ${CLS[s.type]||'general'}">${s.type}</span><b>${s.name}</b><span class="gg">${s.group}</span>
+          </button>`).join("")
+        : `<p class="gs-empty">"${q}"에 해당하는 과목이 없어요.</p>`)
+      : `<p class="gs-empty">과목 이름이나 교과(군)으로 검색하세요. 총 ${IDX.length}개 과목의 상세 정보를 볼 수 있어요.</p>`;
+  }
+  btn.addEventListener("click",open);
+  inp.addEventListener("input",()=>render(inp.value));
+  inp.addEventListener("keydown",e=>{
+    if(e.key==="Enter"){ const f=list.querySelector(".gs-item"); if(f) f.click(); }
+    if(e.key==="Escape") close();
+  });
+  list.addEventListener("click",e=>{
+    const it=e.target.closest(".gs-item"); if(!it) return;
+    close(); openModal(it.dataset.k, it.dataset.t);
+  });
+  ov.addEventListener("click",e=>{ if(e.target===ov) close(); });
+})();
+
+/* ── 체크리스트 결과 이미지 저장 ── */
+document.getElementById("ckSaveImg").addEventListener("click",()=>{
+  const btn=document.getElementById("ckSaveImg");
+  btn.textContent="⏳ 생성 중…"; btn.disabled=true;
+  const done=()=>{ btn.textContent="📷 이미지 저장"; btn.disabled=false; };
+  const load=cb=>{
+    if(window.html2canvas) return cb();
+    const s=document.createElement("script");
+    s.src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js";
+    s.onload=cb; s.onerror=()=>{ alert("이미지 도구를 불러오지 못했어요. 인터넷 연결을 확인해 주세요."); done(); };
+    document.head.appendChild(s);
+  };
+  load(()=>{
+    const total = allSems().reduce((a,s)=>a+semCredits(s),0);
+    const school = document.getElementById("cfgCkName")?.textContent || "우리 학교";
+    const today = new Date().toLocaleDateString("ko-KR");
+    const semBlock = s=>{
+      const c=semCredits(s), ok=c>=semTarget(s);
+      const picks = semSelected(s).map(o=>
+        `<div style="display:flex;justify-content:space-between;padding:3px 0;font-size:13px">
+           <span>☑ ${o[0]}${ckCareer&&CAREER_REC[ckCareer].has(o[0])?" ⭐":""}</span><span style="color:#6B7280">${o[1]} · ${o[3]}학점</span></div>`).join("")
+        || `<div style="font-size:12.5px;color:#9AA1B5;padding:3px 0">${s.groups.length? "선택한 과목이 없어요" : "전체 지정과목 학기"}</div>`;
+      return `<div style="background:#fff;border:1.5px solid #E3E6EF;border-radius:12px;padding:14px 16px">
+        <div style="display:flex;justify-content:space-between;font-weight:800;font-size:14px;margin-bottom:6px">
+          <span>${s.name}</span><span style="color:${ok?'#0E7A4C':'#C0398C'}">${c} / ${semTarget(s)}학점</span></div>
+        <div style="font-size:12px;color:#6B7280;margin-bottom:4px">지정과목 ${s.req.length}개 (${s.req.reduce((a,r)=>a+r[3],0)}학점) 포함</div>
+        ${picks}</div>`;
+    };
+    const node=document.createElement("div");
+    node.style.cssText="position:fixed;left:-9999px;top:0;width:840px;background:#FDFBF7;padding:30px;font-family:'IBM Plex Sans KR',sans-serif;color:#1F2B4D";
+    node.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2.5px solid #1F2B4D;padding-bottom:12px;margin-bottom:16px">
+        <div><div style="font-size:21px;font-weight:900">📋 ${school} 과목 선택 결과</div>
+        <div style="font-size:12.5px;color:#6B7280;margin-top:4px">${today} · ${ckCareer?`희망 계열: ${ckCareer} (⭐=계열 권장과목)`:"희망 계열 미선택"}</div></div>
+        <div style="font-size:15px;font-weight:900">교과 ${total} / ${CK_TOTAL}학점</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">${allSems().map(semBlock).join("")}</div>
+      <div style="margin-top:14px;font-size:11.5px;color:#9AA1B5">※ 본 결과는 상담 참고용이며, 실제 편성·개설 여부는 학교 안내를 따릅니다. — ${school} 교육과정 박람회</div>`;
+    document.body.appendChild(node);
+    html2canvas(node,{scale:2,backgroundColor:"#FDFBF7"}).then(cv=>{
+      const a=document.createElement("a");
+      a.href=cv.toDataURL("image/png");
+      a.download=`과목선택결과_${school}_${new Date().toISOString().slice(0,10)}.png`;
+      a.click(); node.remove(); done();
+    }).catch(()=>{ node.remove(); alert("이미지 생성에 실패했어요."); done(); });
+  });
+});
 
 /* =====================================================================
    대학별 권장과목 (2028학년도)
