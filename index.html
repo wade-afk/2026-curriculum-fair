@@ -3,8 +3,46 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>작전고등학교 2026 교육과정 박람회</title>
-<meta name="description" content="작전고등학교 교육과정 박람회 - 고교학점제 한눈에 보기, 교과(군)별 과목 안내">
+<title>작전고등학교 2026 교육과정 박람회 | 고교학점제 과목 선택 안내</title>
+<meta name="description" content="작전고등학교 2026 교육과정 박람회 — 고교학점제 완벽 안내, 2022 개정 교육과정 155개 과목 상세 정보, 학기별 과목 선택 체크리스트, 대학별·계열별 권장과목, 선택과목 길라잡이 영상, 2028 대입 전형까지 한곳에서 확인하세요.">
+<meta name="keywords" content="작전고등학교, 교육과정 박람회, 고교학점제, 과목 선택, 선택과목, 2022 개정 교육과정, 진로선택과목, 융합선택과목, 대학별 권장과목, 계열별 권장과목, 2028 대입, 인천 고등학교">
+<meta name="robots" content="index, follow">
+<meta name="author" content="작전고등학교 교육과정부">
+<link rel="canonical" href="https://wade-afk.github.io/2026-curriculum-fair/">
+<!-- 검색엔진 소유 확인: 발급받은 코드를 넣고 주석(<)을 해제하세요.
+<meta name="google-site-verification" content="구글_서치콘솔에서_발급받은_코드">
+<meta name="naver-site-verification" content="네이버_서치어드바이저에서_발급받은_코드">
+-->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="작전고등학교 2026 교육과정 박람회">
+<meta property="og:title" content="작전고등학교 2026 교육과정 박람회">
+<meta property="og:description" content="고교학점제 안내 · 155개 과목 정보 · 과목 선택 체크리스트 · 대학별/계열별 권장과목 · 2028 대입">
+<meta property="og:url" content="https://wade-afk.github.io/2026-curriculum-fair/">
+<meta property="og:image" content="https://wade-afk.github.io/2026-curriculum-fair/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "name": "작전고등학교 2026 교육과정 박람회",
+      "url": "https://wade-afk.github.io/2026-curriculum-fair/",
+      "inLanguage": "ko",
+      "description": "고교학점제 안내, 2022 개정 교육과정 과목 정보, 과목 선택 체크리스트, 대학별·계열별 권장과목을 제공하는 교육과정 박람회 사이트"
+    },
+    {
+      "@type": "EducationalOrganization",
+      "name": "작전고등학교",
+      "url": "https://wade-afk.github.io/2026-curriculum-fair/",
+      "address": { "@type": "PostalAddress", "addressLocality": "인천광역시 계양구", "addressCountry": "KR" }
+    }
+  ]
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Nanum+Pen+Script&display=swap" rel="stylesheet">
@@ -3317,7 +3355,13 @@ function buildPlanInner(plan){
   T("cfgPlanTitle",SITE.planTitle||(SITE.name&&SITE.name+" 3개년 교육과정 편성표"));
   T("cfgFootName",SITE.name&&`${SITE.name} ${SITE.subtitle||"교육과정 박람회"}`);
   T("cfgFootDesc",SITE.footDesc);
-  if(SITE.name) document.title = `${SITE.name} ${SITE.subtitle||"교육과정 박람회"}`;
+  if(SITE.name){
+    document.title = `${SITE.name} ${SITE.subtitle||"교육과정 박람회"} | 고교학점제 과목 선택 안내`;
+    const md=document.querySelector('meta[name="description"]');
+    if(md) md.content = `${SITE.name} ${SITE.subtitle||"교육과정 박람회"} — 고교학점제 안내, 과목 정보, 과목 선택 체크리스트, 대학별·계열별 권장과목을 한곳에서 확인하세요.`;
+    const ogt=document.querySelector('meta[property="og:title"]');
+    if(ogt) ogt.content = `${SITE.name} ${SITE.subtitle||"교육과정 박람회"}`;
+  }
   if(SITE.plan){
     const w=document.getElementById("planWrap");
     if(w) w.innerHTML = buildPlanInner(SITE.plan);
