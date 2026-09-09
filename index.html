@@ -697,6 +697,23 @@ td.p-sum{font-weight:700}
 .h-arrow{color:#AEB5C9;font-weight:700}
 .h-tag{font-size:11px;font-weight:700;color:var(--ink-soft)}
 
+/* ---------- 2028 대입 ---------- */
+.adm-tabs{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:22px}
+@media(max-width:720px){.adm-tabs{grid-template-columns:1fr}}
+.adm-tab{
+  font-family:inherit;text-align:left;background:var(--card);border:2px solid var(--line);border-radius:16px;
+  padding:18px 20px;cursor:pointer;transition:.15s;
+}
+.adm-tab:hover{border-color:#C9CFDE;transform:translateY(-2px)}
+.adm-tab.on{border-color:var(--blue);background:var(--blue-soft)}
+.adm-tab b{display:block;font-size:15.5px;margin-bottom:5px}
+.adm-tab span{font-size:12.5px;color:var(--ink-soft);line-height:1.55;display:block}
+.adm-frame-wrap{border:1.5px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+.adm-frame-wrap iframe{display:block;width:100%;height:79vh;border:0}
+.adm-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:12px 0 0}
+.adm-bar .src{font-size:12.5px;color:var(--ink-soft)}
+.adm-loading{padding:60px;text-align:center;color:var(--ink-soft);font-size:14px}
+
 /* ---------- 학년별 시작 가이드 ---------- */
 .jn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 @media(max-width:860px){.jn-grid{grid-template-columns:1fr}}
@@ -835,6 +852,7 @@ footer{border-top:1.5px solid var(--line);background:#fff}
       <a href="#checklist" data-nav="checklist">과목 선택 체크리스트</a>
       <a href="#univ" data-nav="univ">대학별 권장과목</a>
       <a href="#field" data-nav="field">계열별 권장과목</a>
+      <a href="#adm" data-nav="adm">2028 대입</a>
       <button class="gs-btn" id="gsBtn" title="과목 검색 (155개 과목)">🔍 과목 검색</button>
     </nav>
   </div>
@@ -1551,6 +1569,43 @@ footer{border-top:1.5px solid var(--line);background:#fff}
         <div class="vd-list" id="vdList"><!-- JS: 영상 목록 --></div>
       </div>
       <p class="vd-tip">💡 영상이 재생되지 않으면 "유튜브에서 보기"를 눌러 유튜브 앱/사이트에서 시청하세요.</p>
+    </div>
+  </section>
+</main>
+
+<!-- =================== 2028 대입 =================== -->
+<main id="page-adm" class="page">
+  <section class="guide-hero">
+    <div class="wrap">
+      <span class="eyebrow">ADMISSION 2028</span>
+      <h1>🎓 2028 대입 살펴보기</h1>
+      <p class="lead">
+        2028학년도 대입(현 고1 이하 적용)의 전형 구조와 지원 가능 대학을
+        <span class="hl">직접 탐색해 볼 수 있는 도구</span> 두 가지를 준비했어요.
+        과목 선택과 내신 관리 방향을 잡는 데 활용해 보세요.
+      </p>
+    </div>
+  </section>
+  <section style="padding-top:0">
+    <div class="wrap">
+      <div class="adm-tabs" id="admTabs">
+        <button class="adm-tab on" data-src="./adm_overview.html" data-name="2028 전형 한눈에 보기">
+          <b>🗺 2028 전형 한눈에 보기</b>
+          <span>수시·정시 전형별 구조와 반영 요소를 대학 필터로 비교하며 한눈에 파악해요.</span>
+        </button>
+        <button class="adm-tab" data-src="./adm_cut70.html" data-name="교과전형 70% 컷 대학 찾기">
+          <b>🔎 교과전형 70% 컷 대학 찾기</b>
+          <span>내신 등급대를 입력하면 교과전형 70% 컷 기준으로 지원 가능한 대학을 찾아줘요.</span>
+        </button>
+      </div>
+      <div class="adm-frame-wrap" id="admWrap">
+        <p class="adm-loading">불러오는 중…</p>
+      </div>
+      <div class="adm-bar">
+        <p class="src">📖 자료 출처: <b>대입전략연구회</b> · 컷 수치는 참고용 추정치이며,
+          실제 지원 전 반드시 각 대학 입학처의 <b>최신 모집요강</b>을 확인하세요.</p>
+        <a class="btn btn-ghost btn-sm" id="admNewTab" href="./adm_overview.html" target="_blank" rel="noopener">↗ 새 창에서 크게 보기</a>
+      </div>
     </div>
   </section>
 </main>
@@ -2610,6 +2665,29 @@ careerBarEl && careerBarEl.addEventListener("click",e=>{
 });
 renderCareerBar();
 
+/* ── 2028 대입 도구 (지연 로드 iframe) ── */
+(function admPage(){
+  const tabs=document.getElementById("admTabs"), wrap=document.getElementById("admWrap"),
+        newTab=document.getElementById("admNewTab");
+  if(!tabs) return;
+  let loaded=false;
+  function show(btn){
+    tabs.querySelectorAll(".adm-tab").forEach(b=>b.classList.toggle("on",b===btn));
+    wrap.innerHTML = `<iframe src="${btn.dataset.src}" title="${btn.dataset.name}" loading="lazy"></iframe>`;
+    newTab.href = btn.dataset.src;
+    loaded=true;
+  }
+  tabs.addEventListener("click",e=>{
+    const b=e.target.closest(".adm-tab"); if(!b) return;
+    show(b);
+  });
+  /* 페이지 최초 진입 시에만 로드 (사이트 초기 로딩 부담 없음) */
+  window.addEventListener("hashchange",()=>{
+    if(location.hash==="#adm" && !loaded) show(tabs.querySelector(".adm-tab.on"));
+  });
+  if(location.hash==="#adm") show(tabs.querySelector(".adm-tab.on"));
+})();
+
 /* ── 전역 과목 검색 ── */
 (function globalSearch(){
   const ov=document.getElementById("gsOverlay"), inp=document.getElementById("gsInput"),
@@ -2879,7 +2957,7 @@ vdRenderList(); vdRenderPlayer();
 const HOME_ANCHORS = ["what"];
 function route(){
   const hash = location.hash.replace("#","") || "home";
-  const PAGES = {guide:"page-guide", video:"page-video", checklist:"page-checklist", univ:"page-univ", field:"page-field", setup:"page-setup"};
+  const PAGES = {guide:"page-guide", video:"page-video", checklist:"page-checklist", univ:"page-univ", field:"page-field", adm:"page-adm", setup:"page-setup"};
   const isSub = hash in PAGES;
   document.getElementById("page-home").classList.toggle("show", !isSub);
   Object.entries(PAGES).forEach(([k,id])=>
