@@ -998,6 +998,15 @@ table.cur{font-size:15px}table.cur thead th{font-size:14px}table.cur td.gname{fo
 .topbar{position:static}
 body.snap,html:has(body.snap){scroll-padding-top:108px}
 .slide{min-height:calc(100vh - 108px)}
+
+.btn-pro{background:#EEF0F5;color:#8A93A8;border:1.5px dashed #C9CFDB;opacity:.85;position:relative}
+.btn-pro:hover{opacity:1;color:var(--ink);border-color:var(--ink)}
+.btn-pro .pro-tag{display:inline-block;font-size:10px;font-weight:900;letter-spacing:.06em;background:#8A93A8;color:#fff;border-radius:6px;padding:2px 6px;margin-right:4px;vertical-align:1px}
+.btn-pro:hover .pro-tag{background:var(--ink)}
+.btn-pro.on{background:#E6F4EA;color:#1E7B3A;border-style:solid;border-color:#B7E0C3;opacity:1}
+.btn-pro.on .pro-tag{background:#1E7B3A}
+.slink{font-size:13px;margin:-4px 0 12px;color:var(--ink-soft)}
+.slink.ok{color:#1E7B3A}.slink.err{color:#C0392B}
 </style>
 </head>
 <body>
@@ -1591,7 +1600,7 @@ body.snap,html:has(body.snap){scroll-padding-top:108px}
         <button class="btn btn-sm btn-reset" id="ckSaveImg" style="background:#E8F0FF;color:#1D3FAE">📷 이미지 저장</button>
         <button class="btn btn-sm btn-reset" id="ckReset">↺ 전체 초기화</button>
         <button class="btn btn-sm btn-submit" id="ckSubmit">📩 결과 제출</button>
-        <button class="btn btn-sm btn-reset" id="ckRegister" style="display:none;background:#FFF4CC;color:#7A5A00">🏫 결과 수집 신청</button>
+        <button class="btn btn-sm btn-pro" id="ckRegister" title="선생님용 · 결과 수집(Pro) 신청"><span class="pro-tag">PRO</span> 결과 수집 신청</button>
       </div>
     </div>
   </div>
@@ -1607,6 +1616,7 @@ body.snap,html:has(body.snap){scroll-padding-top:108px}
     </div>
     <div class="modal-body">
       <p class="swarn" id="submitWarn"></p>
+      <p class="slink" id="submitLink"></p>
       <div class="sfield">
         <label for="sId">학번 (5자리 · 예: 10315 = 1학년 3반 15번)</label>
         <input id="sId" type="text" inputmode="numeric" maxlength="5" placeholder="학번 5자리를 입력하세요" autocomplete="off">
@@ -2929,7 +2939,15 @@ document.getElementById("ckReset").addEventListener("click",()=>{
 const sOverlay = document.getElementById("submitOverlay");
 const sResult = document.getElementById("submitResult");
 const sWarn = document.getElementById("submitWarn");
+function renderSubmitLink(){
+  const el=document.getElementById("submitLink"); if(!el) return;
+  const url=ckSubmitUrl();
+  if(url){ el.className="slink ok"; el.textContent = SITE.submitUrl ? "🔗 제출 연결: 학교 자체 시트" : (SITE.sheetId ? "🔗 제출 연결: 학교 시트(접수 대행)" : (COLLECT_OK ? "🔗 제출 연결: 운영자 접수 (승인됨)" : "🔗 제출 연결됨")); }
+  else { el.className="slink err"; el.textContent = "⚠ 이 학교는 아직 결과 수집이 연결되지 않았어요. 담당 선생님이 [결과 수집 신청]을 해 주세요." + (COLLECT_ERR ? " ("+COLLECT_ERR+")" : ""); }
+}
 document.getElementById("ckSubmit").addEventListener("click",()=>{
+  const el=document.getElementById("submitLink"); if(el){ el.className="slink"; el.textContent="🔄 제출 연결 확인 중…"; }
+  checkCollect(renderSubmitLink);
   sWarn.classList.add("show");
   sWarn.textContent = "📋 수요조사 안내: 현재 1학년은 [2학년] 탭, 현재 2학년은 [3학년] 탭의 선택과목만 선택하면 됩니다.";
   sResult.className = "sresult"; sResult.textContent="";
@@ -3002,7 +3020,7 @@ document.getElementById("submitSend").addEventListener("click",async ()=>{
   const grade = String(gradeNum);
   if(!ckSubmitUrl()){
     sResult.className="sresult err";
-    sResult.textContent="제출 주소가 아직 설정되지 않았어요. 관리자(선생님)에게 문의하세요.";
+    sResult.textContent="이 학교는 아직 결과 수집이 연결되지 않았어요. 담당 선생님께 [결과 수집 신청]을 요청해 주세요." + (COLLECT_ERR ? " ("+COLLECT_ERR+")" : "");
     return;
   }
   const payload = {
@@ -3897,25 +3915,28 @@ function buildPlanInner(plan){
    결과 수집: 승인 상태 조회 · 제출 버튼 표시 · 선생님 신청 폼
 ===================================================================== */
 function updateSubmitUI(){
-  const b=document.getElementById("ckSubmit"), r=document.getElementById("ckRegister");
-  if(!b) return;
-  const can = !!ckSubmitUrl();
-  b.style.display = can ? "" : "none";
-  if(r) r.style.display = can ? "none" : "";
+  const r=document.getElementById("ckRegister"); if(!r) return;
+  const viaOperator = COLLECT_OK && OPERATOR_URL && !SITE.submitUrl && !SITE.sheetId;
+  r.classList.toggle("on", !!viaOperator);
+  r.innerHTML = viaOperator ? '<span class="pro-tag">PRO</span> 결과 수집 연결됨' : '<span class="pro-tag">PRO</span> 결과 수집 신청';
+}
+let COLLECT_ERR = "";
+/* 운영자 접수 승인 여부를 즉시 조회 (제출 창을 열 때도 다시 확인) */
+function checkCollect(cb){
+  if(!OPERATOR_URL || SITE.submitUrl || SITE.sheetId){ if(cb) cb(); return; }
+  const id = SITE.schoolId || "jakjeon";
+  fetch(OPERATOR_URL+"?action=status&school="+encodeURIComponent(id)+"&_="+Date.now(), {method:"GET", cache:"no-store", redirect:"follow"})
+    .then(r=>r.json()).then(j=>{ COLLECT_OK = !!(j && j.collect); COLLECT_ERR = (j&&j.error)||""; })
+    .catch(e=>{ COLLECT_ERR = "상태 조회 실패: "+e.message; })
+    .finally(()=>{ updateSubmitUI(); if(cb) cb(); });
 }
 (function collectStatus(){
   const url = window.SCHOOLS_OPERATOR_URL_LATER || null;
-  function check(op){
-    if(!op){ updateSubmitUI(); return; }
-    const id = SITE.schoolId || "jakjeon";
-    fetch(op+"?action=status&school="+encodeURIComponent(id)+"&_="+Date.now(), {method:"GET", cache:"no-store"})
-      .then(r=>r.json()).then(j=>{ COLLECT_OK = !!(j && j.collect); updateSubmitUI(); })
-      .catch(()=>{ updateSubmitUI(); });
-  }
+  function check(op){ checkCollect(); }
   // schools.json을 읽은 뒤(학교 선택기) operatorUrl을 알려줌; 못 읽으면 내장값 사용
   window.__setOperatorUrl = function(op){
     try{ localStorage.setItem("jj_operator_url", JSON.stringify(op||"")); }catch(e){}
-    check(op || OPERATOR_URL);
+    checkCollect();
   };
   updateSubmitUI();
 })();
