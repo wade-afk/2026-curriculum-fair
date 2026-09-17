@@ -1,0 +1,45 @@
+{
+  "version": "2026-09-17b",
+  "note": "학교를 추가하려면 schools/ 폴더에 학교알리미 '재학생의 3개년 교육과정 편성표' 엑셀을 올리고 아래 목록에 한 줄 추가하세요. id는 영문·숫자만 사용. file이 없으면 사이트에 내장된 기본(작전고) 편성표를 씁니다.",
+  "regions": [
+    {
+      "name": "인천",
+      "districts": [
+        {
+          "name": "계양구",
+          "schools": [
+            {
+              "id": "jakjeon",
+              "name": "작전고등학교",
+              "short": "작전고",
+              "file": "schools/jakjeon.xlsx"
+            },
+            {
+              "id": "hyosung",
+              "name": "인천효성고등학교",
+              "short": "효성고",
+              "file": "schools/hyosung.xlsx"
+            }
+          ]
+        },
+        {
+          "name": "연수구",
+          "schools": [
+            {
+              "id": "sinsong",
+              "name": "신송고등학교",
+              "short": "신송고",
+              "file": "schools/sinsong.xlsx"
+            },
+            {
+              "id": "haesong",
+              "name": "인천해송고등학교",
+              "short": "해송고",
+              "file": "schools/haesong.xlsx"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
