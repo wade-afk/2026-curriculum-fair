@@ -2546,6 +2546,23 @@ let ckState = {};   // {semId: {"그룹명": ["과목1","과목2"]}}
 const CK_KEY = SCHOOL_ID==="jakjeon" ? "jj_checklist" : "jj_checklist_"+SCHOOL_ID;   // 학교별로 따로 저장
 function ckLoad(){
   try{ ckState = JSON.parse(localStorage.getItem(CK_KEY)||"{}"); }catch(e){ ckState = {}; }
+  ckPrune();
+}
+/* 저장된 선택 중 현재 편제에 없는 학기·선택군·과목은 버림 (편성표가 바뀐 뒤 남은 옛 선택이 택N을 막는 문제 방지) */
+function ckPrune(){
+  if(!ckState || typeof ckState!=="object"){ ckState={}; return; }
+  const sems = allSems();
+  Object.keys(ckState).forEach(semId=>{
+    const sem = sems.find(s=>s.id===semId);
+    if(!sem){ delete ckState[semId]; return; }
+    const st = ckState[semId]; if(!st || typeof st!=="object"){ delete ckState[semId]; return; }
+    Object.keys(st).forEach(gname=>{
+      const g = sem.groups.find(x=>x.name===gname);
+      if(!g){ delete st[gname]; return; }
+      const names = new Set(g.options.map(o=>o[0]));
+      st[gname] = (Array.isArray(st[gname])?st[gname]:[]).filter(n=>names.has(n)).slice(0, g.pick||99);
+    });
+  });
 }
 function ckSave(){
   try{ localStorage.setItem(CK_KEY, JSON.stringify(ckState)); }catch(e){}
@@ -2724,8 +2741,8 @@ ckTabsEl.addEventListener("click",e=>{
 const ckView = document.getElementById("ckView");
 function renderView(){
   if(ckTab===3){ renderGrad(); updateTotals(); return; }
-  /* 연계 고정 상태 보정 */
-  AUTO_LINKS.forEach(l=>{
+  /* 연계 고정 상태 보정 (작전고 전용 규칙이 켜진 경우에만) */
+  if(RULES_ON) AUTO_LINKS.forEach(l=>{
     if(((ckState[l.fromSem]||{})[l.fromGrp]||[]).includes(l.fromSub)){
       ckState[l.toSem] = ckState[l.toSem]||{};
       const cur = ckState[l.toSem][l.toGrp]||[];
@@ -2791,7 +2808,8 @@ ckView.addEventListener("change",e=>{
   const sem = allSems().find(s=>s.id===semId);
   const grp = sem.groups.find(g=>g.name===grpName);
   ckState[semId] = ckState[semId]||{};
-  let sel = ckState[semId][grpName]||[];
+  const validNames = new Set(grp.options.map(o=>o[0]));
+  let sel = (ckState[semId][grpName]||[]).filter(n=>validNames.has(n));
   if(cb.checked){
     if(sel.length>=grp.pick){
       cb.checked = false;
@@ -3774,137 +3792,6 @@ function buildPlanInner(plan){
   // 창을 열 때 안내 문구 (schools.json 없이 내장 목록으로 도는 경우 알려줌)
   const _open=open;
   open=function(){ _open(); if(usingFallback) note("", "schools.json을 찾지 못해 사이트에 내장된 학교 목록을 쓰고 있어요. 깃허브에 schools.json과 schools/ 폴더를 올리면 목록을 자유롭게 고칠 수 있어요."); };
-})();
-
-
-/* =====================================================================
-   홈: 지금 고를 과목 (학년별 학교지정 · 선택 묶음)
-===================================================================== */
-(function nowSection(){
-  const tabs=document.getElementById("nowTabs"), grid=document.getElementById("nowGrid");
-  if(!tabs||!grid) return;
-  let cur = Math.min(1, CK_GRADES.length-1);   // 기본 2학년
-  const tc = t => TYPE_CLASS[t] || "general";
-  const chip = (name,type,cls) => {
-    const key=normName(name), has=!!SUBJECT_DATA[key];
-    return `<button type="button" class="${cls||"chip "+tc(type)}" data-name="${esc(name)}" data-type="${tc(type)}" ${has?"":'title="상세 설명이 없는 과목이에요"'}>${esc(name)}</button>`;
-  };
-  function render(){
-    tabs.innerHTML = CK_GRADES.map((g,i)=>`<button type="button" class="now-tab ${i===cur?"on":""}" role="tab" aria-selected="${i===cur}" data-i="${i}">${esc(g.name)}</button>`).join("");
-    grid.innerHTML = CK_GRADES[cur].semesters.map(sem=>{
-      const reqCr = sem.req.reduce((a,r)=>a+r[3],0);
-      const selCr = sem.groups.reduce((a,g)=>a+g.pick*(g.options[0]?g.options[0][3]:0),0);
-      const req = sem.req.length ? `<div class="now-lab">📌 학교가 정해 주는 과목 <span style="font-weight:600">· ${reqCr}학점</span></div>
-        <div class="now-req">${sem.req.map(r=>chip(r[0],r[1],"rq")).join("")}</div>` : "";
-      const grps = sem.groups.length ? sem.groups.map(g=>`
-        <div class="now-grp">
-          <div class="now-grp-h"><b>${esc(g.name)}</b><span class="now-pick">${g.options.length}개 중 ${g.pick}개 선택 · ${g.pick*(g.options[0]?g.options[0][3]:0)}학점</span></div>
-          <div class="now-chips">${g.options.map(o=>chip(o[0],o[1])).join("")}</div>
-        </div>`).join("")
-        : `<div class="now-none">이 학기는 고르는 과목이 없어요. 모두 학교가 정해 주는 과목이에요.</div>`;
-      return `<div class="now-card">
-        <div class="now-head"><h3>${esc(sem.name)}</h3><span class="cr">${reqCr+selCr}학점${sem.groups.length?` · 선택 ${selCr}학점`:""}</span></div>
-        <div class="now-body">${req}${grps}</div></div>`;
-    }).join("");
-  }
-  tabs.addEventListener("click",e=>{ const b=e.target.closest("[data-i]"); if(!b) return; cur=+b.dataset.i; render(); });
-  grid.addEventListener("click",e=>{ const b=e.target.closest("[data-name]"); if(!b) return; openModal(normName(b.dataset.name), b.dataset.type, b.dataset.name); });
-  render();
-})();
-
-/* =====================================================================
-   진로별 과목 찾기 (#pick): 대학 권장과목 × 우리 학교 편성표
-===================================================================== */
-(function pickPage(){
-  const $ = id => document.getElementById(id);
-  if(!$("pkList")) return;
-  if(SITE.name) $("pkSchoolName").textContent = SITE.name;
-  const FIELDS=[
-    {name:"인문·어문", kw:["국어국문","국문","영어영문","영문","어문","불어","독어","노어","서어","일어","일본","중어","중국언어","언어","철학","사학","역사","고고","종교","미학","문화","인문","한국어","동아시아"]},
-    {name:"사회·경영", kw:["경영","경제","무역","통상","행정","정치","외교","사회","심리","법","미디어","언론","광고","홍보","복지","국제","세무","회계","금융","관광","부동산","아동","소비자","지리학","도시행정","도시사회"]},
-    {name:"교육", kw:["교육","사범"]},
-    {name:"자연과학", kw:["수학","물리","화학","생명","생물","지구","천문","통계","식품","영양","해양","환경학","환경원예","과학","자연","의류","산림","농","동물","식물","원예"]},
-    {name:"공학·IT", kw:["공학","공과","컴퓨터","소프트웨어","전자","전기","기계","건축","토목","반도체","AI","인공지능","데이터","정보","로봇","드론","항공","조선","에너지","신소재","재료","산업","보안","모빌리티","디스플레이","통신","ICT","시스템","기술"]},
-    {name:"의약·보건", kw:["의예","의학","의과","간호","약학","약과","치의","한의","보건","바이오메디컬","의생명","의료","안경"]},
-    {name:"예체능", kw:["체육","스포츠","디자인","음악","미술","연극","영화","공연","예술","태권도","무용"]},
-  ];
-  let field="전체", q="";
-  /* 우리 학교 개설 과목: 체크리스트 편제(학교지정+선택 묶음)에서 추출 */
-  const offered=new Map();
-  CK_GRADES.forEach(g=>g.semesters.forEach(sem=>{
-    const add=(o,sel,grp)=>{ const k=o[0]; if(!offered.has(k)) offered.set(k,{name:k,type:o[1],grp:o[2],sems:[],sel:false,grpNames:[]});
-      const x=offered.get(k); x.sems.push(sem.name.replace("학년 ","-").replace("학기","")); if(sel){x.sel=true; if(grp&&!x.grpNames.includes(grp)) x.grpNames.push(grp);} };
-    sem.req.forEach(o=>add(o,false));
-    sem.groups.forEach(gr=>gr.options.forEach(o=>add(o,true,gr.name)));
-  }));
-  /* 전체 과목명(안내서) — 우리 학교에 없는 과목도 찾기 위해 */
-  const ALL_NAMES=[...new Set(Object.values(SUBJECT_DATA).map(d=>d.name))];
-  const romanize = s => s.replace(/Ⅱ|II/g,"2").replace(/Ⅰ|I/g,"1");
-  const rxCache={};
-  function mentions(text,name){
-    if(!text) return false;
-    const n=romanize(name).replace(/\s+/g,""); const t=romanize(text).replace(/\s+/g,"");
-    if(!rxCache[n]) rxCache[n]=new RegExp("(^|[^가-힣A-Za-z0-9])"+n.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"($|[^가-힣A-Za-z0-9])");
-    return rxCache[n].test(t);
-  }
-  function matchRows(){
-    const f=FIELDS.find(x=>x.name===field);
-    const out=[];
-    UNIV_DATA.forEach(u=>u.rows.forEach(r=>{
-      const label=(r[0]||"")+" "+(r[1]||"");
-      if(f && !f.kw.some(k=>label.includes(k))) return;
-      if(q && !label.includes(q) && !u.univ.includes(q)) return;
-      out.push({univ:u.univ, dept:(r[1]||r[0]||"").replace(/\n/g," "), core:r[2]||"", rec:r[3]||"", note:r[4]||""});
-    }));
-    return out;
-  }
-  function tc(t){ return TYPE_CLASS[t]||"general"; }
-  function render(){
-    $("pkFields").innerHTML=["전체",...FIELDS.map(f=>f.name)].map(n=>`<button type="button" class="uv-rbtn ${field===n?"on":""}" data-f="${n}">${n}</button>`).join("");
-    const rows=matchRows();
-    const stat=new Map();   // name -> {core:Set, rec:Set}
-    const bump=(name,kind,who)=>{ if(!stat.has(name)) stat.set(name,{core:new Set(),rec:new Set()}); stat.get(name)[kind].add(who); };
-    rows.forEach(r=>{
-      const who=`${r.univ} ${r.dept}`.trim();
-      ALL_NAMES.forEach(n=>{
-        if(mentions(r.core,n)) bump(n,"core",who);
-        else if(mentions(r.rec,n)||mentions(r.note,n)) bump(n,"rec",who);
-      });
-    });
-    const score=s=>s.core.size*2+s.rec.size;
-    const hit=[...stat.entries()].filter(([n])=>offered.has(n)).sort((a,b)=>score(b[1])-score(a[1]));
-    const miss=[...stat.entries()].filter(([n])=>!offered.has(n)).sort((a,b)=>score(b[1])-score(a[1])).filter(([,s])=>s.core.size>=2).slice(0,12);
-    const label = field==="전체" ? "모든 계열" : field+" 계열";
-    $("pkSum").innerHTML = rows.length
-      ? `<b>${label}</b>${q?` · "${esc(q)}" 검색`:""} — 모집단위 <b>${rows.length}개</b>가 밝힌 권장과목 중, 우리 학교에서 개설하는 과목은 <b>${hit.length}개</b>예요. 위에 있을수록 많은 학과가 요구하는 과목입니다.`
-      : `<b>${label}</b>${q?` · "${esc(q)}" 검색`:""} — 맞는 모집단위가 없어요. 검색어를 줄이거나 다른 계열을 골라 보세요.`;
-    $("pkList").innerHTML = hit.length ? hit.map(([n,s])=>{
-      const o=offered.get(n);
-      const sems=[...new Set(o.sems)].join(", ");
-      const depts=[...s.core].map(d=>`<b>${esc(d)}</b>`).concat([...s.rec].map(d=>esc(d)));
-      return `<div class="pk-row">
-        <div class="pk-name"><button type="button" class="chip ${tc(o.type)}" data-name="${esc(n)}" data-type="${tc(o.type)}">${esc(n)}</button></div>
-        <div class="pk-meta"><span class="tag ${o.sel?"":"req"}">${o.sel?"내가 고르는 과목":"학교 지정 과목"}</span><span class="tag">${esc(sems)}</span>${o.grpNames.length?`<span>${esc(o.grpNames.join(" / "))} 묶음</span>`:""}</div>
-        <div class="pk-cnt">${s.core.size?`<span class="core">핵심 ${s.core.size}</span>`:""}${s.rec.size?`<span class="rec">권장 ${s.rec.size}</span>`:""}<button type="button" data-toggle>어느 학과?</button></div>
-        <div class="pk-depts">${depts.join(" · ")}</div>
-      </div>`;
-    }).join("") : (rows.length ? `<div class="pk-empty">이 조건의 학과들은 과목 이름을 따로 밝히지 않았거나, 밝힌 과목이 우리 학교에 없어요. 아래 안내를 참고하세요.</div>` : "");
-    const m=$("pkMiss");
-    if(miss.length){
-      m.style.display="block";
-      m.innerHTML=`<h3>이 계열 학과들이 자주 요구하지만 우리 학교 편성표에는 없는 과목</h3>
-        <p>공동교육과정, 온라인학교, 학교 밖 이수로 들을 수 있는지 담당 선생님께 물어보세요. 과목 이름을 누르면 설명이 열려요.</p>
-        <div class="now-chips">${miss.map(([n,s])=>{ const d=SUBJECT_DATA[normName(n)]; const t=d?(TYPE_CLASS[d.type.slice(0,2)]||"general"):"general";
-          return `<button type="button" class="chip ${t}" data-name="${esc(n)}" data-type="${t}">${esc(n)} <small style="opacity:.75">${s.core.size}곳</small></button>`; }).join("")}</div>`;
-    } else m.style.display="none";
-  }
-  $("pkFields").addEventListener("click",e=>{ const b=e.target.closest("[data-f]"); if(!b) return; field=b.dataset.f; render(); });
-  $("pkSearch").addEventListener("input",e=>{ q=e.target.value.trim(); if(q) field="전체"; render(); });
-  document.getElementById("page-pick").addEventListener("click",e=>{
-    const t=e.target.closest("[data-toggle]"); if(t){ t.closest(".pk-row").classList.toggle("open"); return; }
-    const b=e.target.closest("[data-name]"); if(b) openModal(normName(b.dataset.name), b.dataset.type, b.dataset.name);
-  });
-  render();
 })();
 
 
