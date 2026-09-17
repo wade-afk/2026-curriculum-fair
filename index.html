@@ -2427,6 +2427,7 @@ document.addEventListener("keydown",e=>{ if(e.key==="Escape" && overlay.classLis
 /* 제출 주소: ① 학교 자체 앱스크립트(submitUrl) ② 운영자 접수(승인된 학교) ③ 작전고 내장 기본값 */
 const OPERATOR_URL = (function(){ try{ return (JSON.parse(localStorage.getItem("jj_operator_url"))||""); }catch(e){ return ""; } })() || "https://script.google.com/macros/s/AKfycbw4qPV2TOzy8bcjiLn_LxLQS8miCY0EmacuRdksmw6vi_kxm807v66SuslGrJxjpNCYAw/exec";
 let COLLECT_OK = false;   // 운영자 접수 승인 여부 (schools.json operatorUrl에 ?action=list로 조회)
+let COLLECT_ERR = "";     // 승인 조회 실패 사유
 function ckSubmitUrl(){
   if(COLLECT_OK && OPERATOR_URL) return OPERATOR_URL;   // 운영자 승인이 있으면 최우선
   if(SITE.submitUrl) return SITE.submitUrl;
@@ -3817,7 +3818,6 @@ function updateSubmitUI(){
   r.innerHTML = viaOperator ? '<span class="pro-tag">PRO</span> 결과 수집 연결됨'
     : (COLLECT_ERR ? '<span class="pro-tag">PRO</span> 연결 확인 실패 · 다시 시도' : '<span class="pro-tag">PRO</span> 결과 수집 신청');
 }
-let COLLECT_ERR = "";
 /* 운영자 접수 승인 여부를 즉시 조회 (제출 창을 열 때도 다시 확인) */
 function checkCollect(cb){
   if(!OPERATOR_URL){ if(cb) cb(); return; }
