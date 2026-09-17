@@ -1,5 +1,6 @@
 {
-  "version": "2026-09-17c",
+  "version": "2026-09-17d",
+  "operatorUrl": "https://script.google.com/macros/s/AKfycbw_q9yJeu9P_eNX53vGTz3vwqjyyz2ju7lMMRgbNJCKmMa6VTLpFxDaaZEwuhHyOVn5Iw/exec",
   "note": "학교를 추가하려면 schools/ 폴더에 학교알리미 '재학생의 3개년 교육과정 편성표' 엑셀을 올리고 아래 목록에 한 줄 추가하세요. id는 영문·숫자만 사용. file이 없으면 사이트에 내장된 기본(작전고) 편성표를 씁니다.",
   "regions": [
     {

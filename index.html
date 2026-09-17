@@ -1591,6 +1591,7 @@ body.snap,html:has(body.snap){scroll-padding-top:108px}
         <button class="btn btn-sm btn-reset" id="ckSaveImg" style="background:#E8F0FF;color:#1D3FAE">📷 이미지 저장</button>
         <button class="btn btn-sm btn-reset" id="ckReset">↺ 전체 초기화</button>
         <button class="btn btn-sm btn-submit" id="ckSubmit">📩 결과 제출</button>
+        <button class="btn btn-sm btn-reset" id="ckRegister" style="display:none;background:#FFF4CC;color:#7A5A00">🏫 결과 수집 신청</button>
       </div>
     </div>
   </div>
@@ -1616,6 +1617,27 @@ body.snap,html:has(body.snap){scroll-padding-top:108px}
       </div>
       <button class="btn btn-submit btn-full" id="submitSend">제출하기</button>
       <p class="sresult" id="submitResult"></p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 결과 수집 신청 모달 (선생님용) ===== -->
+<div class="modal-overlay" id="regOverlay" role="dialog" aria-modal="true" aria-labelledby="regTitle">
+  <div class="modal smodal">
+    <div class="modal-head general">
+      <div class="mtags"><span class="mtag" style="background:var(--blue)">선생님용</span></div>
+      <h3 id="regTitle">우리 학교 결과 수집 신청</h3>
+      <button class="modal-close" id="regClose" aria-label="닫기">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="swarn show" style="display:block">신청 후 운영자가 승인하면 <b>학교 전용 구글 시트</b>가 만들어져 아래 이메일로 공유되고, 학생들의 [결과 제출]이 그 시트에 실시간으로 쌓입니다. 학교에서 따로 설정할 것은 없어요.</p>
+      <div class="sfield"><label for="rgSchool">학교</label><input id="rgSchool" type="text" readonly></div>
+      <div class="sfield"><label for="rgTeacher">담당 선생님 이름</label><input id="rgTeacher" type="text" placeholder="예: 홍길동" autocomplete="off"></div>
+      <div class="sfield"><label for="rgEmail">이메일 (시트를 공유받을 구글 계정)</label><input id="rgEmail" type="email" placeholder="예: teacher@school.kr" autocomplete="off"></div>
+      <div class="sfield"><label for="rgPhone">연락처 (선택)</label><input id="rgPhone" type="tel" placeholder="예: 032-000-0000" autocomplete="off"></div>
+      <div class="sfield"><label for="rgNote">메모 (선택)</label><input id="rgNote" type="text" placeholder="수요조사 기간 등" autocomplete="off"></div>
+      <button class="btn btn-submit btn-full" id="rgSend">신청하기</button>
+      <p class="sresult" id="rgResult"></p>
     </div>
   </div>
 </div>
@@ -2391,7 +2413,17 @@ document.addEventListener("keydown",e=>{ if(e.key==="Escape" && overlay.classLis
    ─ req: 학교지정과목 [과목명, 유형, 교과군, 학점]
    ─ groups: 선택군 {name, pick(선택 수), options:[[과목명,유형,교과군,학점],...]}
 ===================================================================== */
-const CK_SUBMIT_URL = SITE.submitUrl || "https://script.google.com/macros/s/AKfycbwvWJLA9xgQ7bYJjcjAI2ESryn6njw5JOyEWrE9r9Nboxc-lsNA7TQsiT4VlOkljgeMeA/exec";
+/* 제출 주소: ① 학교 자체 앱스크립트(submitUrl) ② 운영자 접수(승인된 학교) ③ 작전고 내장 기본값 */
+const OPERATOR_URL = (function(){ try{ return (JSON.parse(localStorage.getItem("jj_operator_url"))||""); }catch(e){ return ""; } })() || "https://script.google.com/macros/s/AKfycbw_q9yJeu9P_eNX53vGTz3vwqjyyz2ju7lMMRgbNJCKmMa6VTLpFxDaaZEwuhHyOVn5Iw/exec";
+let COLLECT_OK = false;   // 운영자 접수 승인 여부 (schools.json operatorUrl에 ?action=list로 조회)
+function ckSubmitUrl(){
+  if(SITE.submitUrl) return SITE.submitUrl;
+  if(SITE.sheetId) return "https://script.google.com/macros/s/AKfycbwvWJLA9xgQ7bYJjcjAI2ESryn6njw5JOyEWrE9r9Nboxc-lsNA7TQsiT4VlOkljgeMeA/exec";
+  if(COLLECT_OK && OPERATOR_URL) return OPERATOR_URL;
+  if(!SITE.schoolId || SITE.schoolId==="jakjeon") return "https://script.google.com/macros/s/AKfycbwvWJLA9xgQ7bYJjcjAI2ESryn6njw5JOyEWrE9r9Nboxc-lsNA7TQsiT4VlOkljgeMeA/exec";
+  return "";
+}
+const CK_SUBMIT_URL = ckSubmitUrl();
 const CK_PER_SEM = 29, CK_TOTAL = SITE.totalCredits || 174;
 const semTarget = s => s.target || CK_PER_SEM;
 
@@ -2968,7 +3000,7 @@ document.getElementById("submitSend").addEventListener("click",async ()=>{
     return;
   }
   const grade = String(gradeNum);
-  if(!CK_SUBMIT_URL){
+  if(!ckSubmitUrl()){
     sResult.className="sresult err";
     sResult.textContent="제출 주소가 아직 설정되지 않았어요. 관리자(선생님)에게 문의하세요.";
     return;
@@ -2976,13 +3008,14 @@ document.getElementById("submitSend").addEventListener("click",async ()=>{
   const payload = {
     name, grade, classNo: cls, number: num, studentId: sid,
     // 학생이 체크한 선택과목 이름 목록 (학교지정과목은 제외)
-    selected: allSems().flatMap(s => semSelected(s).map(o => o[0]))
+    selected: allSems().flatMap(s => semSelected(s).map(o => o[0])),
+    schoolId: SITE.schoolId || "jakjeon", schoolName: SITE.name || ""
   };
   if(SITE.sheetId && !SITE.submitUrl) payload.sheetId = SITE.sheetId;   // 접수 대행(방법 A)
   const btn = document.getElementById("submitSend");
   btn.disabled = true; btn.textContent = "제출 중…";
   try{
-    await fetch(CK_SUBMIT_URL,{
+    await fetch(ckSubmitUrl(),{
       method:"POST", mode:"no-cors",
       headers:{"Content-Type":"text/plain;charset=utf-8"},
       body: JSON.stringify(payload)
@@ -3591,10 +3624,7 @@ function buildPlanInner(plan){
     const w=document.getElementById("planWrap");
     if(w) w.innerHTML = buildPlanInner(SITE.plan);
   }
-  // 학교 선택기로 불러온 학교에 제출용 주소가 없으면 '결과 제출' 버튼 숨김 (다른 학교 시트로 전송 방지)
-  if(SITE.schoolId && !SITE.submitUrl && !SITE.sheetId){
-    const b=document.getElementById("ckSubmit"); if(b) b.style.display="none";
-  }
+  updateSubmitUI();
   /* school-config.js가 없으면 관리자용 안내 배너 표시 (닫으면 이 브라우저에서 숨김) */
   try{
     if(!window.SCHOOL_CONFIG && !localStorage.getItem("jj_cfg_preview") && !localStorage.getItem("jj_setup_banner_off")){
@@ -3686,12 +3716,14 @@ function buildPlanInner(plan){
   }
 
   /* 목록 불러오기: schools.json이 있으면 그것을, 없으면 아래 내장 목록을 사용 */
-  const SCHOOLS_FALLBACK = {"version": "2026-09-17c", "note": "학교를 추가하려면 schools/ 폴더에 학교알리미 '재학생의 3개년 교육과정 편성표' 엑셀을 올리고 아래 목록에 한 줄 추가하세요. id는 영문·숫자만 사용. file이 없으면 사이트에 내장된 기본(작전고) 편성표를 씁니다.", "regions": [{"name": "인천", "districts": [{"name": "계양구", "schools": [{"id": "jakjeon", "name": "작전고등학교", "short": "작전고", "file": "schools/jakjeon.xlsx", "submitUrl": "https://script.google.com/macros/s/AKfycbwvWJLA9xgQ7bYJjcjAI2ESryn6njw5JOyEWrE9r9Nboxc-lsNA7TQsiT4VlOkljgeMeA/exec"}, {"id": "hyosung", "name": "인천효성고등학교", "short": "효성고", "file": "schools/hyosung.xlsx"}]}, {"name": "연수구", "schools": [{"id": "sinsong", "name": "신송고등학교", "short": "신송고", "file": "schools/sinsong.xlsx"}, {"id": "haesong", "name": "인천해송고등학교", "short": "해송고", "file": "schools/haesong.xlsx"}]}]}]};
+  const SCHOOLS_FALLBACK = {"version": "2026-09-17d", "operatorUrl": "https://script.google.com/macros/s/AKfycbw_q9yJeu9P_eNX53vGTz3vwqjyyz2ju7lMMRgbNJCKmMa6VTLpFxDaaZEwuhHyOVn5Iw/exec", "note": "학교를 추가하려면 schools/ 폴더에 학교알리미 '재학생의 3개년 교육과정 편성표' 엑셀을 올리고 아래 목록에 한 줄 추가하세요. id는 영문·숫자만 사용. file이 없으면 사이트에 내장된 기본(작전고) 편성표를 씁니다.", "regions": [{"name": "인천", "districts": [{"name": "계양구", "schools": [{"id": "jakjeon", "name": "작전고등학교", "short": "작전고", "file": "schools/jakjeon.xlsx", "submitUrl": "https://script.google.com/macros/s/AKfycbwvWJLA9xgQ7bYJjcjAI2ESryn6njw5JOyEWrE9r9Nboxc-lsNA7TQsiT4VlOkljgeMeA/exec"}, {"id": "hyosung", "name": "인천효성고등학교", "short": "효성고", "file": "schools/hyosung.xlsx"}]}, {"name": "연수구", "schools": [{"id": "sinsong", "name": "신송고등학교", "short": "신송고", "file": "schools/sinsong.xlsx"}, {"id": "haesong", "name": "인천해송고등학교", "short": "해송고", "file": "schools/haesong.xlsx"}]}]}]};
   let usingFallback=false;
   fetch("schools.json",{cache:"no-cache"}).then(r=>{ if(!r.ok) throw new Error(r.status); return r.json(); })
     .catch(()=>{ usingFallback=true; return SCHOOLS_FALLBACK; })
     .then(j=>{
       REG=j; crumb();
+      { const f=findSchool(SCHOOL_ID); window.__schoolInfo = f ? {region:f.r.name, district:f.d.name} : {}; }
+      if(window.__setOperatorUrl) window.__setOperatorUrl(j.operatorUrl||"");
       $("sbChange").onclick=()=>open(); $("smClose").onclick=close;
       ov.addEventListener("click",e=>{ if(e.target===ov) close(); });
       document.addEventListener("keydown",e=>{ if(e.key==="Escape" && ov.classList.contains("open")) close(); });
@@ -3858,6 +3890,71 @@ function buildPlanInner(plan){
   const b=document.getElementById("planToggle"), c=document.getElementById("planCollapse");
   if(!b||!c) return;
   b.addEventListener("click",()=>{ const o=c.classList.toggle("open"); b.textContent=o?"편성표 접기":"전체 편성표 펼치기"; b.setAttribute("aria-expanded",o); });
+})();
+
+
+/* =====================================================================
+   결과 수집: 승인 상태 조회 · 제출 버튼 표시 · 선생님 신청 폼
+===================================================================== */
+function updateSubmitUI(){
+  const b=document.getElementById("ckSubmit"), r=document.getElementById("ckRegister");
+  if(!b) return;
+  const can = !!ckSubmitUrl();
+  b.style.display = can ? "" : "none";
+  if(r) r.style.display = can ? "none" : "";
+}
+(function collectStatus(){
+  const url = window.SCHOOLS_OPERATOR_URL_LATER || null;
+  function check(op){
+    if(!op){ updateSubmitUI(); return; }
+    const id = SITE.schoolId || "jakjeon";
+    fetch(op+"?action=status&school="+encodeURIComponent(id)+"&_="+Date.now(), {method:"GET", cache:"no-store"})
+      .then(r=>r.json()).then(j=>{ COLLECT_OK = !!(j && j.collect); updateSubmitUI(); })
+      .catch(()=>{ updateSubmitUI(); });
+  }
+  // schools.json을 읽은 뒤(학교 선택기) operatorUrl을 알려줌; 못 읽으면 내장값 사용
+  window.__setOperatorUrl = function(op){
+    try{ localStorage.setItem("jj_operator_url", JSON.stringify(op||"")); }catch(e){}
+    check(op || OPERATOR_URL);
+  };
+  updateSubmitUI();
+})();
+(function registerForm(){
+  const ov=document.getElementById("regOverlay"), open=document.getElementById("ckRegister");
+  if(!ov||!open) return;
+  const $=id=>document.getElementById(id);
+  open.addEventListener("click",()=>{
+    $("rgSchool").value = SITE.name || "";
+    $("rgResult").className="sresult"; $("rgResult").textContent="";
+    ov.classList.add("open"); document.body.style.overflow="hidden"; setTimeout(()=>$("rgTeacher").focus(),50);
+  });
+  const close=()=>{ ov.classList.remove("open"); document.body.style.overflow=""; };
+  $("regClose").addEventListener("click",close);
+  ov.addEventListener("click",e=>{ if(e.target===ov) close(); });
+  $("rgSend").addEventListener("click", async ()=>{
+    const email=$("rgEmail").value.trim(), teacher=$("rgTeacher").value.trim();
+    const res=$("rgResult");
+    if(!teacher){ res.className="sresult err"; res.style.display="block"; res.textContent="담당 선생님 이름을 입력해 주세요."; return; }
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ res.className="sresult err"; res.style.display="block"; res.textContent="이메일 형식을 확인해 주세요."; return; }
+    if(!OPERATOR_URL){ res.className="sresult err"; res.style.display="block"; res.textContent="운영자 접수 주소가 설정되지 않았어요."; return; }
+    const f=(window.__schoolInfo||{});
+    const payload={ action:"register", schoolId: SITE.schoolId||"jakjeon", schoolName: SITE.name||"", region:f.region||"", district:f.district||"",
+      teacher, email, phone:$("rgPhone").value.trim(), note:$("rgNote").value.trim() };
+    const btn=$("rgSend"); btn.disabled=true; btn.textContent="보내는 중…";
+    try{
+      let j=null;
+      try{
+        const r=await fetch(OPERATOR_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)});
+        j=await r.json();
+      }catch(e){
+        await fetch(OPERATOR_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(payload)});
+      }
+      if(j && j.ok===false) throw new Error(j.error||"접수 실패");
+      res.className="sresult ok"; res.style.display="block";
+      res.textContent = (j && j.message) || "✅ 신청이 접수됐어요. 승인되면 입력한 이메일로 시트 링크가 갑니다.";
+    }catch(err){ res.className="sresult err"; res.style.display="block"; res.textContent="⚠ "+err.message; }
+    btn.disabled=false; btn.textContent="신청하기";
+  });
 })();
 
 document.getElementById("topBtn").addEventListener("click",e=>{
