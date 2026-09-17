@@ -3027,7 +3027,12 @@ document.getElementById("submitSend").addEventListener("click",async ()=>{
     name, grade, classNo: cls, number: num, studentId: sid,
     // 학생이 체크한 선택과목 이름 목록 (학교지정과목은 제외)
     selected: allSems().flatMap(s => semSelected(s).map(o => o[0])),
-    schoolId: SITE.schoolId || "jakjeon", schoolName: SITE.name || ""
+    schoolId: SITE.schoolId || "jakjeon", schoolName: SITE.name || "",
+    // 학교의 선택 구조(학년→학기→선택군→과목). 시트 헤더를 이 순서대로 만들고, 선택 안 한 과목도 모두 열로 표시
+    structure: CK_GRADES.flatMap(g => g.semesters.flatMap(sem => sem.groups.map(gr => ({
+      grade: g.name, sem: sem.name, group: gr.name, pick: gr.pick,
+      subjects: gr.options.map(o => o[0]), types: gr.options.map(o => o[1]||"")
+    }))))
   };
   if(SITE.sheetId && !SITE.submitUrl) payload.sheetId = SITE.sheetId;   // 접수 대행(방법 A)
   const btn = document.getElementById("submitSend");
