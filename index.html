@@ -1003,6 +1003,7 @@ body.snap,html:has(body.snap){scroll-padding-top:108px}
 .btn-pro:hover{opacity:1;color:var(--ink);border-color:var(--ink)}
 .btn-pro .pro-tag{display:inline-block;font-size:10px;font-weight:900;letter-spacing:.06em;background:#8A93A8;color:#fff;border-radius:6px;padding:2px 6px;margin-right:4px;vertical-align:1px}
 .btn-pro:hover .pro-tag{background:var(--ink)}
+.btn-pro.err{background:#FDECEC;color:#C0392B;border-color:#F3B4B4;opacity:1}
 .btn-pro.on{background:#E6F4EA;color:#1E7B3A;border-style:solid;border-color:#B7E0C3;opacity:1}
 .btn-pro.on .pro-tag{background:#1E7B3A}
 .slink{font-size:13px;margin:-4px 0 12px;color:var(--ink-soft)}
@@ -2427,6 +2428,7 @@ document.addEventListener("keydown",e=>{ if(e.key==="Escape" && overlay.classLis
 const OPERATOR_URL = (function(){ try{ return (JSON.parse(localStorage.getItem("jj_operator_url"))||""); }catch(e){ return ""; } })() || "https://script.google.com/macros/s/AKfycbw4qPV2TOzy8bcjiLn_LxLQS8miCY0EmacuRdksmw6vi_kxm807v66SuslGrJxjpNCYAw/exec";
 let COLLECT_OK = false;   // 운영자 접수 승인 여부 (schools.json operatorUrl에 ?action=list로 조회)
 function ckSubmitUrl(){
+  if(COLLECT_OK && OPERATOR_URL) return OPERATOR_URL;   // 운영자 승인이 있으면 최우선
   if(SITE.submitUrl) return SITE.submitUrl;
   if(SITE.sheetId) return "https://script.google.com/macros/s/AKfycbwvWJLA9xgQ7bYJjcjAI2ESryn6njw5JOyEWrE9r9Nboxc-lsNA7TQsiT4VlOkljgeMeA/exec";
   if(COLLECT_OK && OPERATOR_URL) return OPERATOR_URL;
@@ -2960,7 +2962,7 @@ const sWarn = document.getElementById("submitWarn");
 function renderSubmitLink(){
   const el=document.getElementById("submitLink"); if(!el) return;
   const url=ckSubmitUrl();
-  if(url){ el.className="slink ok"; el.textContent = SITE.submitUrl ? "🔗 제출 연결: 학교 자체 시트" : (SITE.sheetId ? "🔗 제출 연결: 학교 시트(접수 대행)" : (COLLECT_OK ? "🔗 제출 연결: 운영자 접수 (승인됨)" : "🔗 제출 연결됨")); }
+  if(url){ el.className="slink ok"; el.textContent = (COLLECT_OK && OPERATOR_URL) ? "🔗 제출 연결: 운영자 접수 (승인됨)" : (SITE.submitUrl ? "🔗 제출 연결: 학교 자체 시트" : (SITE.sheetId ? "🔗 제출 연결: 학교 시트(접수 대행)" : "🔗 제출 연결: 기본 시트")); }
   else { el.className="slink err"; el.textContent = "⚠ 이 학교는 아직 결과 수집이 연결되지 않았어요. 담당 선생님이 [결과 수집 신청]을 해 주세요." + (COLLECT_ERR ? " ("+COLLECT_ERR+")" : ""); }
 }
 document.getElementById("ckSubmit").addEventListener("click",()=>{
@@ -3052,7 +3054,7 @@ document.getElementById("submitSend").addEventListener("click",async ()=>{
       subjects: gr.options.map(o => o[0]), types: gr.options.map(o => o[1]||"")
     }))))
   };
-  if(SITE.sheetId && !SITE.submitUrl) payload.sheetId = SITE.sheetId;   // 접수 대행(방법 A)
+  if(SITE.sheetId && !SITE.submitUrl && !(COLLECT_OK && OPERATOR_URL)) payload.sheetId = SITE.sheetId;   // 접수 대행(방법 A)
   const btn = document.getElementById("submitSend");
   btn.disabled = true; btn.textContent = "제출 중…";
   try{
@@ -3757,7 +3759,7 @@ function buildPlanInner(plan){
   }
 
   /* 목록 불러오기: schools.json이 있으면 그것을, 없으면 아래 내장 목록을 사용 */
-  const SCHOOLS_FALLBACK = {"version": "2026-09-17f", "operatorUrl": "https://script.google.com/macros/s/AKfycbw4qPV2TOzy8bcjiLn_LxLQS8miCY0EmacuRdksmw6vi_kxm807v66SuslGrJxjpNCYAw/exec", "note": "학교를 추가하려면 schools/ 폴더에 학교알리미 '재학생의 3개년 교육과정 편성표' 엑셀을 올리고 아래 목록에 한 줄 추가하세요. id는 영문·숫자만 사용. file이 없으면 사이트에 내장된 기본(작전고) 편성표를 씁니다.", "regions": [{"name": "인천", "districts": [{"name": "계양구", "schools": [{"id": "jakjeon", "name": "작전고등학교", "short": "작전고", "file": "schools/jakjeon.xlsx", "submitUrl": "https://script.google.com/macros/s/AKfycbwvWJLA9xgQ7bYJjcjAI2ESryn6njw5JOyEWrE9r9Nboxc-lsNA7TQsiT4VlOkljgeMeA/exec"}, {"id": "hyosung", "name": "인천효성고등학교", "short": "효성고", "file": "schools/hyosung.xlsx"}]}, {"name": "연수구", "schools": [{"id": "sinsong", "name": "신송고등학교", "short": "신송고", "file": "schools/sinsong.xlsx"}, {"id": "haesong", "name": "인천해송고등학교", "short": "해송고", "file": "schools/haesong.xlsx"}]}]}]};
+  const SCHOOLS_FALLBACK = {"version": "2026-09-17g", "operatorUrl": "https://script.google.com/macros/s/AKfycbw4qPV2TOzy8bcjiLn_LxLQS8miCY0EmacuRdksmw6vi_kxm807v66SuslGrJxjpNCYAw/exec", "note": "학교를 추가하려면 schools/ 폴더에 학교알리미 '재학생의 3개년 교육과정 편성표' 엑셀을 올리고 아래 목록에 한 줄 추가하세요. id는 영문·숫자만 사용. file이 없으면 사이트에 내장된 기본(작전고) 편성표를 씁니다.", "regions": [{"name": "인천", "districts": [{"name": "계양구", "schools": [{"id": "jakjeon", "name": "작전고등학교", "short": "작전고", "file": "schools/jakjeon.xlsx"}, {"id": "hyosung", "name": "인천효성고등학교", "short": "효성고", "file": "schools/hyosung.xlsx"}]}, {"name": "연수구", "schools": [{"id": "sinsong", "name": "신송고등학교", "short": "신송고", "file": "schools/sinsong.xlsx"}, {"id": "haesong", "name": "인천해송고등학교", "short": "해송고", "file": "schools/haesong.xlsx"}]}]}]};
   let usingFallback=false;
   fetch("schools.json",{cache:"no-cache"}).then(r=>{ if(!r.ok) throw new Error(r.status); return r.json(); })
     .catch(()=>{ usingFallback=true; return SCHOOLS_FALLBACK; })
@@ -3808,19 +3810,32 @@ function buildPlanInner(plan){
 ===================================================================== */
 function updateSubmitUI(){
   const r=document.getElementById("ckRegister"); if(!r) return;
-  const viaOperator = COLLECT_OK && OPERATOR_URL && !SITE.submitUrl && !SITE.sheetId;
+  const viaOperator = COLLECT_OK && OPERATOR_URL;
   r.classList.toggle("on", !!viaOperator);
-  r.innerHTML = viaOperator ? '<span class="pro-tag">PRO</span> 결과 수집 연결됨' : '<span class="pro-tag">PRO</span> 결과 수집 신청';
+  r.classList.toggle("err", !viaOperator && !!COLLECT_ERR);
+  r.title = COLLECT_ERR ? COLLECT_ERR : "선생님용 · 결과 수집(Pro) 신청";
+  r.innerHTML = viaOperator ? '<span class="pro-tag">PRO</span> 결과 수집 연결됨'
+    : (COLLECT_ERR ? '<span class="pro-tag">PRO</span> 연결 확인 실패 · 다시 시도' : '<span class="pro-tag">PRO</span> 결과 수집 신청');
 }
 let COLLECT_ERR = "";
 /* 운영자 접수 승인 여부를 즉시 조회 (제출 창을 열 때도 다시 확인) */
 function checkCollect(cb){
-  if(!OPERATOR_URL || SITE.submitUrl || SITE.sheetId){ if(cb) cb(); return; }
+  if(!OPERATOR_URL){ if(cb) cb(); return; }
   const id = SITE.schoolId || "jakjeon";
+  const done = j => { COLLECT_OK = !!(j && j.collect); COLLECT_ERR = (j&&j.error)||""; updateSubmitUI(); if(cb) cb(); };
+  const jsonp = () => {   // fetch가 막히면(CORS 등) <script> 방식으로 재시도
+    const name = "__ckcb"+Date.now();
+    const s = document.createElement("script");
+    let finished=false;
+    window[name] = j => { finished=true; delete window[name]; s.remove(); done(j); };
+    s.onerror = () => { if(finished) return; delete window[name]; s.remove(); COLLECT_ERR = "상태 조회 실패: 스크립트 주소에 접근할 수 없어요 (배포 액세스 '모든 사용자'인지, 주소가 최신인지 확인)"; updateSubmitUI(); if(cb) cb(); };
+    s.src = OPERATOR_URL+"?action=status&school="+encodeURIComponent(id)+"&callback="+name+"&_="+Date.now();
+    document.head.appendChild(s);
+    setTimeout(()=>{ if(!finished && window[name]){ s.onerror(); } }, 12000);
+  };
   fetch(OPERATOR_URL+"?action=status&school="+encodeURIComponent(id)+"&_="+Date.now(), {method:"GET", cache:"no-store", redirect:"follow"})
-    .then(r=>r.json()).then(j=>{ COLLECT_OK = !!(j && j.collect); COLLECT_ERR = (j&&j.error)||""; })
-    .catch(e=>{ COLLECT_ERR = "상태 조회 실패: "+e.message; })
-    .finally(()=>{ updateSubmitUI(); if(cb) cb(); });
+    .then(r=>r.json()).then(done)
+    .catch(()=>jsonp());
 }
 (function collectStatus(){
   const url = window.SCHOOLS_OPERATOR_URL_LATER || null;
@@ -3837,6 +3852,7 @@ function checkCollect(cb){
   if(!ov||!open) return;
   const $=id=>document.getElementById(id);
   open.addEventListener("click",()=>{
+    if(COLLECT_ERR && !COLLECT_OK){ open.innerHTML='<span class="pro-tag">PRO</span> 확인 중…'; checkCollect(()=>{ if(COLLECT_ERR && !COLLECT_OK) alert("운영자 스크립트에 연결할 수 없어요.\n"+COLLECT_ERR); }); return; }
     $("rgSchool").value = SITE.name || "";
     $("rgResult").className="sresult"; $("rgResult").textContent="";
     ov.classList.add("open"); document.body.style.overflow="hidden"; setTimeout(()=>$("rgTeacher").focus(),50);
