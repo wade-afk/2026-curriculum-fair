@@ -1115,6 +1115,57 @@ body.locked .slide{min-height:calc(100vh - 64px)}
   /* 계열별 표·편성표는 가로 스크롤 + 첫 열 고정 */
   table.fd td:first-child, table.fd th:first-child{position:sticky;left:0;z-index:2;background:#fff;box-shadow:2px 0 0 var(--line)}
 }
+
+/* ---------- 헤더: 과목 선택 CTA + 더 알아보기 드롭다운 (모든 화면) ---------- */
+.hdr-actions{display:flex;align-items:center;gap:8px;margin-left:auto}
+.hdr-cta{text-decoration:none;font-size:14.5px;font-weight:800;color:var(--ink);background:var(--yellow);padding:9px 16px;border-radius:12px;white-space:nowrap;box-shadow:0 6px 16px rgba(255,210,63,.35)}
+.hdr-cta:hover{filter:brightness(.96)}
+.hdr-cta.active{background:var(--ink);color:#fff;box-shadow:none}
+.nav-toggle{display:inline-flex}
+.topbar .wrap{position:relative}
+nav.menu{display:none;position:absolute;right:20px;left:auto;top:calc(100% + 6px);min-width:260px;background:#fff;border:1.5px solid var(--line);border-radius:16px;box-shadow:0 18px 40px rgba(31,43,77,.18);flex-direction:column;align-items:stretch;padding:8px;gap:2px;overflow:visible;z-index:60}
+nav.menu.open{display:flex}
+nav.menu .menu-title{font-size:11.5px;font-weight:800;color:#9AA1B5;letter-spacing:.06em;padding:8px 14px 4px}
+nav.menu a{font-size:15.5px;padding:12px 14px;border-radius:10px;white-space:normal}
+nav.menu a.active{background:var(--ink);color:#fff}
+nav.menu .gs-btn{margin:6px 4px 2px;justify-content:center}
+@media(max-width:820px){ nav.menu{left:12px;right:12px} .hdr-cta{font-size:13.5px;padding:8px 12px} .nav-toggle #navCur{max-width:26vw} }
+@media(max-width:480px){ .nav-toggle #navCur{display:none} }
+
+/* ---------- 학년 선택 게이트 · 진행 바 · 도움 카드 ---------- */
+.gd-gate{margin:18px 0 6px;background:#fff;border:1.5px solid var(--line);border-radius:20px;padding:22px 22px 16px}
+.gd-q{font-size:clamp(20px,3vw,26px);font-weight:800;margin-bottom:14px}
+.gd-btns{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:640px){.gd-btns{grid-template-columns:1fr}}
+.gd-btn{font-family:inherit;text-align:left;border:2px solid var(--line);background:#fff;border-radius:16px;padding:16px 18px;cursor:pointer;display:flex;flex-direction:column;gap:4px;transition:.15s}
+.gd-btn b{font-size:20px}.gd-btn span{font-size:13.5px;color:var(--ink-soft)}
+.gd-btn:hover{border-color:var(--ink);transform:translateY(-2px)}
+.gd-btn.ghost{background:#F7F8FB}
+.gd-steps{margin:14px 0 0;font-size:13.5px;color:var(--ink-soft);line-height:1.6}
+.gd-bar.done{background:#1E7B3A}
+.gd-bar{margin:18px 0 6px;background:var(--ink);color:#fff;border-radius:16px;padding:12px 18px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.gd-who{font-size:15.5px}.gd-who b{color:var(--yellow);font-size:18px}.gd-who span{opacity:.8}
+.gd-prog{display:flex;align-items:center;gap:10px;flex:1;min-width:200px}
+.gd-track{flex:1;height:10px;border-radius:999px;background:rgba(255,255,255,.18);overflow:hidden}
+.gd-track span{display:block;height:100%;width:0;background:var(--yellow);border-radius:999px;transition:width .3s}
+.gd-prog b{font-size:14px;white-space:nowrap}
+.gd-acts{display:flex;gap:6px}
+.gd-link{font-family:inherit;font-size:12.5px;font-weight:700;color:#fff;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:6px 12px;cursor:pointer}
+.gd-link:hover{background:rgba(255,255,255,.22)}
+.ck-help{margin-top:40px;padding-top:28px;border-top:1.5px dashed var(--line)}
+.ck-help h3{font-size:18px;margin-bottom:14px}
+.ck-help-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:860px){.ck-help-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.ck-help-grid{grid-template-columns:1fr}}
+.ck-help a{display:block;text-decoration:none;color:var(--ink);background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:14px 16px;transition:.15s}
+.ck-help a:hover{border-color:var(--ink);transform:translateY(-2px)}
+.ck-help a b{display:block;font-size:15px;margin-bottom:4px}.ck-help a span{font-size:13px;color:var(--ink-soft);line-height:1.5}
+.ck-info{font-family:inherit;border:0;background:transparent;color:#9AA1B5;font-size:15px;line-height:1;padding:2px 6px;cursor:pointer;border-radius:50%;vertical-align:-1px}
+.ck-info:hover{color:var(--blue);background:var(--blue-soft)}
+body.ck-hide-hero .ck-hero .eyebrow, body.ck-hide-hero .ck-hero .sub{display:none}
+body.ck-hide-hero .ck-hero h1{font-size:clamp(22px,3.4vw,30px);margin-bottom:4px}
+
+body.gd-pending #ckView, body.gd-pending #ckTabs, body.gd-pending #careerBar, body.gd-pending .ck-note, body.gd-pending .ck-footbar{display:none!important}
 </style>
 </head>
 <body>
@@ -1140,13 +1191,16 @@ body.locked .slide{min-height:calc(100vh - 64px)}
       <span class="brand-mark" id="cfgMark">작</span>
       <span class="brand-text"><span id="cfgName">작전고등학교</span><small id="cfgSub">2026 교육과정 박람회</small></span>
     </a>
-    <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="mainMenu"><span class="bars">☰</span><span id="navCur">메뉴</span></button>
-    <nav class="menu" id="mainMenu" aria-label="주 메뉴">
+    <div class="hdr-actions">
+      <a class="hdr-cta" id="hdrPick" href="#checklist">✅ 과목 선택</a>
+      <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="mainMenu"><span class="bars">☰</span><span id="navCur">더 알아보기</span></button>
+    </div>
+    <nav class="menu" id="mainMenu" aria-label="더 알아보기">
+      <div class="menu-title">더 알아보기</div>
       <a href="#home" data-nav="home" class="active">홈</a>
       <a href="#what" data-nav="what">고교학점제란?</a>
       <a href="#guide" data-nav="guide">교과(군)별 과목 안내</a>
       <a href="#video" data-nav="video">선택과목 길라잡이 영상</a>
-      <a href="#checklist" data-nav="checklist">과목 선택 체크리스트</a>
       <a href="#univ" data-nav="univ">대학별 권장과목</a>
       <a href="#field" data-nav="field">계열별 권장과목</a>
       <a href="#adm" data-nav="adm">2028 대입</a>
@@ -1687,6 +1741,20 @@ body.locked .slide{min-height:calc(100vh - 64px)}
       <span class="eyebrow">MY CHOICE</span>
       <h1>🏫 <span id="cfgCkName">작전고등학교</span> 과목 선택 체크리스트</h1>
       <p class="sub" id="cfgCkSub">2026학년도 입학생 · 학기당 29학점 (창체 3학점 포함 32학점)</p>
+      <div class="gd-gate" id="gradeGate">
+        <div class="gd-q">나는 지금 몇 학년인가요?</div>
+        <div class="gd-btns">
+          <button type="button" class="gd-btn" data-g="1"><b>1학년</b><span>2학년 과목을 고릅니다</span></button>
+          <button type="button" class="gd-btn" data-g="2"><b>2학년</b><span>3학년 과목을 고릅니다</span></button>
+          <button type="button" class="gd-btn ghost" data-g="0"><b>둘러보기</b><span>선생님·학부모·3학년</span></button>
+        </div>
+        <p class="gd-steps">① 학년 선택 → ② 묶음마다 정해진 수만큼 체크 → ③ 아래 [결과 제출]. 과목이 궁금하면 이름 옆 ⓘ 를 누르세요.</p>
+      </div>
+      <div class="gd-bar" id="gradeBar" style="display:none">
+        <div class="gd-who">🎓 <b id="gdWho">1학년</b> <span id="gdTarget">→ 2학년 과목 선택</span></div>
+        <div class="gd-prog"><div class="gd-track"><span id="gdFill"></span></div><b id="gdProg">0 / 0 묶음</b></div>
+        <div class="gd-acts"><button type="button" class="gd-link" id="gdChange">학년 바꾸기</button><button type="button" class="gd-link" id="gdAll">모든 학년 보기</button></div>
+      </div>
       <div class="career-bar" id="careerBar"><!-- JS --></div>
       <div class="ck-tabs" role="tablist" id="ckTabs"><!-- JS 렌더링 --></div>
     </div>
@@ -1696,6 +1764,18 @@ body.locked .slide{min-height:calc(100vh - 64px)}
     <div class="wrap">
       <div id="ckView"><!-- JS 렌더링: 학년 카드 또는 졸업요건 --></div>
       <p class="ck-note">✏️ 선택 내용은 이 브라우저에 자동 저장됩니다. 편제표는 학교 사정에 따라 변경될 수 있으니 담임·교육과정 담당 선생님의 안내를 따르세요.</p>
+
+      <div class="ck-help">
+        <h3>선택이 어렵다면 — 더 알아보기</h3>
+        <div class="ck-help-grid">
+          <a href="#guide"><b>📖 교과(군)별 과목 안내</b><span>과목마다 무엇을 배우는지, 성적은 어떻게 나오는지</span></a>
+          <a href="#univ"><b>🎓 대학별 권장과목</b><span>가고 싶은 대학·학과가 반영하는 과목</span></a>
+          <a href="#field"><b>🧭 계열별 권장과목</b><span>계열별로 어떤 과목을 들어야 하는지 한눈에</span></a>
+          <a href="#video"><b>▶ 선택과목 길라잡이 영상</b><span>과목별 안내 영상 모음</span></a>
+          <a href="#what"><b>📘 고교학점제란?</b><span>학점·이수 기준·졸업 요건 등 기본 개념</span></a>
+          <a href="#adm"><b>🏛 2028 대입</b><span>새 입시 제도와 성적 산출 방식</span></a>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -2858,11 +2938,56 @@ function blockCrossRequirement(name){
 /* ----- 탭 ----- */
 let ckTab = 0; // 0~2 학년, 3 졸업요건
 const ckTabsEl = document.getElementById("ckTabs");
+/* ----- 학년 게이트 ----- */
+const GD_KEY = "jj_grade_"+SCHOOL_ID;
+let myGrade = (function(){ const raw=localStorage.getItem(GD_KEY); if(raw===null||raw==="") return null; const v=+raw; return [0,1,2].includes(v) ? v : null; })();   // null=미선택, 0=둘러보기
+let gdShowAll = false;
+function gdTargetTab(){ return myGrade===1 ? 1 : myGrade===2 ? 2 : null; }
+function gdVisibleTabs(){ const t=gdTargetTab(); return (t===null || gdShowAll) ? [0,1,2,3] : [t]; }
 function renderTabs(){
-  ckTabsEl.innerHTML = CK_GRADES.map((g,i)=>
-    `<button class="ck-tab ${ckTab===i?'on':''}" role="tab" data-tab="${i}">${g.name}</button>`).join("") +
-    `<button class="ck-tab grad ${ckTab===3?'on':''}" role="tab" data-tab="3">🎓 졸업요건</button>`;
+  const vis = gdVisibleTabs();
+  ckTabsEl.innerHTML = CK_GRADES.map((g,i)=> vis.includes(i) ?
+    `<button class="ck-tab ${ckTab===i?'on':''}" role="tab" data-tab="${i}">${g.name}${gdTargetTab()===i?' 과목 선택':''}</button>` : "").join("") +
+    (vis.includes(3) ? `<button class="ck-tab grad ${ckTab===3?'on':''}" role="tab" data-tab="3">🎓 졸업요건</button>` : "");
+  ckTabsEl.style.display = (vis.length===1) ? "none" : "";
 }
+function gdApply(){
+  const gate=document.getElementById("gradeGate"), bar=document.getElementById("gradeBar");
+  const chosen = myGrade!==null;
+  if(gate) gate.style.display = chosen ? "none" : "";
+  if(bar) bar.style.display = chosen ? "" : "none";
+  document.body.classList.toggle("ck-hide-hero", chosen);
+  document.body.classList.toggle("gd-pending", !chosen);
+  if(chosen){
+    const t=gdTargetTab();
+    document.getElementById("gdWho").textContent = myGrade ? `${myGrade}학년` : "둘러보기";
+    document.getElementById("gdTarget").textContent = t!==null ? `→ ${CK_GRADES[t].name} 과목을 고르세요` : "· 모든 학년을 볼 수 있어요";
+    document.getElementById("gdAll").style.display = t!==null ? "" : "none";
+    document.getElementById("gdAll").textContent = gdShowAll ? "내 학년만 보기" : "모든 학년 보기";
+  }
+  gdUpdateProgress();
+}
+function gdUpdateProgress(){
+  const t=gdTargetTab(); const el=document.getElementById("gdProg"), fill=document.getElementById("gdFill"); if(!el) return;
+  const grades = t!==null ? [CK_GRADES[t]] : CK_GRADES;
+  const groups = grades.flatMap(g=>g.semesters.flatMap(s=>s.groups.map(gr=>({s,gr}))));
+  const done = groups.filter(x=>((ckState[x.s.id]||{})[x.gr.name]||[]).length>=x.gr.pick).length;
+  el.textContent = `${done} / ${groups.length} 묶음 완료`;
+  if(fill) fill.style.width = groups.length ? Math.round(done/groups.length*100)+"%" : "0%";
+  const ok = groups.length && done===groups.length;
+  document.getElementById("gradeBar").classList.toggle("done", !!ok);
+  if(ok) el.textContent += " · 이제 [결과 제출]을 누르세요 ✓";
+}
+(function gdInit(){
+  const gate=document.getElementById("gradeGate"); if(!gate) return;
+  gate.addEventListener("click",e=>{ const b=e.target.closest("[data-g]"); if(!b) return;
+    myGrade=+b.dataset.g; localStorage.setItem(GD_KEY, myGrade); gdShowAll=false;
+    const t=gdTargetTab(); ckTab = t!==null ? t : 1; gdApply(); renderTabs(); renderView(); });
+  document.getElementById("gdChange").addEventListener("click",()=>{ myGrade=null; localStorage.removeItem(GD_KEY); gdShowAll=false; gdApply(); renderTabs(); renderView(); window.scrollTo({top:0,behavior:"smooth"}); });
+  document.getElementById("gdAll").addEventListener("click",()=>{ gdShowAll=!gdShowAll; if(!gdShowAll){ const t=gdTargetTab(); if(t!==null) ckTab=t; } gdApply(); renderTabs(); renderView(); });
+  const t=gdTargetTab(); if(t!==null) ckTab=t;
+  gdApply();
+})();
 function gradeIncomplete(tabIdx){
   const g = CK_GRADES[tabIdx]; if(!g) return [];
   return g.semesters.flatMap(sem => sem.groups
@@ -2940,7 +3065,7 @@ function renderView(){
             return `
             <label class="ck-row ${sel.includes(o[0])?'sel':''}">
               <input type="checkbox" data-sem="${sem.id}" data-grp="${g.name}" data-name="${o[0]}" ${sel.includes(o[0])?'checked':''}>
-              <span class="nm">${o[0]}${recStar(o[0])}</span>
+              <span class="nm">${o[0]}${recStar(o[0])}<button type="button" class="ck-info" data-info="${o[0]}" data-itype="${TYPE_CLASS[o[1]]||'general'}" title="${o[0]} 설명 보기" aria-label="${o[0]} 설명 보기">ⓘ</button></span>
               <span class="meta"><span class="mini-tag ${TYPE_CLASS[o[1]]||'etc'}">${o[1]}</span>${o[2]}<span class="cr">${o[3]}학점</span></span>
             </label>`;
           }).join("")}`;
@@ -2948,7 +3073,7 @@ function renderView(){
       </div>
     </div>`;
   }).join("")}</div>`;
-  updateTotals();
+  updateTotals(); gdUpdateProgress();
 }
 
 /* 체크박스 동작 (선택 수 제한) */
@@ -3032,6 +3157,8 @@ ckView.addEventListener("change",e=>{
 
 /* 잠금(연계 고정)된 선택군 클릭 시 안내 */
 ckView.addEventListener("click",e=>{
+  const inf = e.target.closest(".ck-info");
+  if(inf){ e.preventDefault(); e.stopPropagation(); openModal(normName(inf.dataset.info), inf.dataset.itype, inf.dataset.info); return; }
   const lkEl = e.target.closest("[data-lockmsg]");
   if(!lkEl) return;
   const l = AUTO_LINKS[+lkEl.dataset.lockmsg] || AUTO_LINKS[0];
@@ -3560,7 +3687,8 @@ vdRenderList(); vdRenderPlayer();
 /* ===== 페이지 전환 (해시 라우팅) ===== */
 const HOME_ANCHORS = ["what","start"];
 function route(){
-  const hash = location.hash.replace("#","") || "home";
+  let hash = location.hash.replace("#","") || "home";
+  if(LOCKED && hash==="home"){ hash="checklist"; }      // 학교 전용 주소: 첫 화면 = 과목 선택
   const PAGES = {guide:"page-guide", video:"page-video", checklist:"page-checklist", univ:"page-univ", field:"page-field", adm:"page-adm", setup:"page-setup"};
   const isSub = hash in PAGES;
   document.getElementById("page-home").classList.toggle("show", !isSub);
@@ -4080,7 +4208,7 @@ function showToast(msg, ms){
 (function(){
   const t=document.getElementById("navToggle"), m=document.getElementById("mainMenu"); if(!t||!m) return;
   const cur=document.getElementById("navCur");
-  function sync(){ const a=m.querySelector("a.active"); if(cur) cur.textContent = a ? a.textContent.trim() : "메뉴"; }
+  function sync(){ const a=m.querySelector("a.active"); if(cur) cur.textContent = a ? a.textContent.trim() : "더 알아보기"; const c=document.getElementById("hdrPick"); if(c) c.classList.toggle("active", location.hash.replace("#","")==="checklist"); }
   t.addEventListener("click",e=>{ e.stopPropagation(); const o=m.classList.toggle("open"); t.setAttribute("aria-expanded",o); });
   m.addEventListener("click",e=>{ if(e.target.closest("a")||e.target.closest("button")) { m.classList.remove("open"); t.setAttribute("aria-expanded","false"); } });
   document.addEventListener("click",e=>{ if(!m.contains(e.target) && !t.contains(e.target)){ m.classList.remove("open"); t.setAttribute("aria-expanded","false"); } });
