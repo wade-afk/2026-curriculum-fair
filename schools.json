@@ -1,5 +1,5 @@
 {
-  "version": "2026-09-17g",
+  "version": "2026-09-18-ice",
   "operatorUrl": "https://script.google.com/macros/s/AKfycbw4qPV2TOzy8bcjiLn_LxLQS8miCY0EmacuRdksmw6vi_kxm807v66SuslGrJxjpNCYAw/exec",
   "note": "학교를 추가하려면 schools/ 폴더에 학교알리미 '재학생의 3개년 교육과정 편성표' 엑셀을 올리고 아래 목록에 한 줄 추가하세요. id는 영문·숫자만 사용. file이 없으면 사이트에 내장된 기본(작전고) 편성표를 씁니다.",
   "regions": [
@@ -7,19 +7,506 @@
       "name": "인천",
       "districts": [
         {
+          "name": "강화군",
+          "schools": [
+            {
+              "id": "ganghwa",
+              "name": "강화고등학교",
+              "short": "강화고",
+              "file": "schools/ganghwa.xlsx",
+              "updated": "2026-01-05 09:17"
+            },
+            {
+              "id": "ganghwayeoja",
+              "name": "강화여자고등학교",
+              "short": "강화여자고",
+              "file": "schools/ganghwayeoja.xlsx",
+              "updated": "2026-03-25 11:13"
+            },
+            {
+              "id": "gyodong",
+              "name": "교동고등학교",
+              "short": "교동고",
+              "file": "schools/gyodong.xlsx",
+              "updated": "2026-01-05 10:11"
+            },
+            {
+              "id": "deoksin",
+              "name": "덕신고등학교",
+              "short": "덕신고",
+              "file": "schools/deoksin.xlsx",
+              "updated": "2025-12-30 08:22"
+            },
+            {
+              "id": "seodo",
+              "name": "서도고등학교",
+              "short": "서도고",
+              "file": "schools/seodo.xlsx",
+              "updated": "2026-01-05 10:49"
+            }
+          ]
+        },
+        {
           "name": "계양구",
           "schools": [
             {
-              "id": "jakjeon",
-              "name": "작전고등학교",
-              "short": "작전고",
-              "file": "schools/jakjeon.xlsx"
+              "id": "gyesan",
+              "name": "계산고등학교",
+              "short": "계산고",
+              "file": "schools/gyesan.xlsx",
+              "updated": "2026-01-05 09:25"
+            },
+            {
+              "id": "gyesanyeoja",
+              "name": "계산여자고등학교",
+              "short": "계산여자고",
+              "file": "schools/gyesanyeoja.xlsx",
+              "updated": "2026-02-05 12:37"
+            },
+            {
+              "id": "gyeyang",
+              "name": "계양고등학교",
+              "short": "계양고",
+              "file": "schools/gyeyang.xlsx",
+              "updated": "2026-01-05 09:45"
+            },
+            {
+              "id": "seoun",
+              "name": "서운고등학교",
+              "short": "서운고",
+              "file": "schools/seoun.xlsx",
+              "updated": "2026-01-05 09:28"
+            },
+            {
+              "id": "annam",
+              "name": "안남고등학교",
+              "short": "안남고",
+              "file": "schools/annam.xlsx",
+              "updated": "2026-01-05 10:20"
+            },
+            {
+              "id": "sewon",
+              "name": "인천세원고등학교",
+              "short": "세원고",
+              "file": "schools/sewon.xlsx",
+              "updated": "2026-03-25 11:11"
+            },
+            {
+              "id": "yeil",
+              "name": "인천예일고등학교",
+              "short": "예일고",
+              "file": "schools/yeil.xlsx",
+              "updated": "2026-01-05 09:21"
+            },
+            {
+              "id": "jinsangwahak",
+              "name": "인천진산과학고등학교",
+              "short": "진산과학고",
+              "file": "schools/jinsangwahak.xlsx",
+              "updated": "2026-01-05 09:56"
+            },
+            {
+              "id": "cheyuk",
+              "name": "인천체육고등학교",
+              "short": "체육고",
+              "file": "schools/cheyuk.xlsx",
+              "updated": "2026-08-01 23:57"
             },
             {
               "id": "hyosung",
               "name": "인천효성고등학교",
               "short": "효성고",
-              "file": "schools/hyosung.xlsx"
+              "file": "schools/hyosung.xlsx",
+              "updated": "2026-01-05 10:10"
+            },
+            {
+              "id": "jakjeon",
+              "name": "작전고등학교",
+              "short": "작전고",
+              "file": "schools/jakjeon.xlsx",
+              "updated": "2026-01-05 10:11"
+            }
+          ]
+        },
+        {
+          "name": "남동구",
+          "schools": [
+            {
+              "id": "munilyeoja",
+              "name": "문일여자고등학교",
+              "short": "문일여자고",
+              "file": "schools/munilyeoja.xlsx",
+              "updated": "2026-01-05 10:55"
+            },
+            {
+              "id": "seokjeongyeoja",
+              "name": "석정여자고등학교",
+              "short": "석정여자고",
+              "file": "schools/seokjeongyeoja.xlsx",
+              "updated": "2026-01-05 10:10"
+            },
+            {
+              "id": "sungdeokyeoja",
+              "name": "숭덕여자고등학교",
+              "short": "숭덕여자고",
+              "file": "schools/sungdeokyeoja.xlsx",
+              "updated": "2026-01-05 10:53"
+            },
+            {
+              "id": "sinmyeongyeoja",
+              "name": "신명여자고등학교",
+              "short": "신명여자고",
+              "file": "schools/sinmyeongyeoja.xlsx",
+              "updated": "2026-01-05 09:27"
+            },
+            {
+              "id": "inje",
+              "name": "인제고등학교",
+              "short": "인제고",
+              "file": "schools/inje.xlsx",
+              "updated": "2026-01-05 09:53"
+            },
+            {
+              "id": "gojan",
+              "name": "인천고잔고등학교",
+              "short": "고잔고",
+              "file": "schools/gojan.xlsx",
+              "updated": "2026-01-05 09:42"
+            },
+            {
+              "id": "namdong",
+              "name": "인천남동고등학교",
+              "short": "남동고",
+              "file": "schools/namdong.xlsx",
+              "updated": "2026-01-05 09:58"
+            },
+            {
+              "id": "nonhyeon",
+              "name": "인천논현고등학교",
+              "short": "논현고",
+              "file": "schools/nonhyeon.xlsx",
+              "updated": "2026-01-05 09:52"
+            },
+            {
+              "id": "mansu",
+              "name": "인천만수고등학교",
+              "short": "만수고",
+              "file": "schools/mansu.xlsx",
+              "updated": "2026-01-05 10:55"
+            },
+            {
+              "id": "songcheon",
+              "name": "인천송천고등학교",
+              "short": "송천고",
+              "file": "schools/songcheon.xlsx",
+              "updated": "2026-02-20 15:50"
+            },
+            {
+              "id": "inhwayeoja",
+              "name": "인화여자고등학교",
+              "short": "인화여자고",
+              "file": "schools/inhwayeoja.xlsx",
+              "updated": "2026-01-05 09:54"
+            }
+          ]
+        },
+        {
+          "name": "동구",
+          "schools": [
+            {
+              "id": "dongsan",
+              "name": "동산고등학교",
+              "short": "동산고",
+              "file": "schools/dongsan.xlsx",
+              "updated": "2026-01-05 09:17"
+            }
+          ]
+        },
+        {
+          "name": "미추홀구",
+          "schools": [
+            {
+              "id": "michuholoegukeo",
+              "name": "미추홀외국어고등학교",
+              "short": "미추홀외국어고",
+              "file": "schools/michuholoegukeo.xlsx",
+              "updated": "2025-12-30 08:25"
+            },
+            {
+              "id": "seonin",
+              "name": "선인고등학교",
+              "short": "선인고",
+              "file": "schools/seonin.xlsx",
+              "updated": "2026-01-05 09:49"
+            },
+            {
+              "id": "inmyeongyeoja",
+              "name": "인명여자고등학교",
+              "short": "인명여자고",
+              "file": "schools/inmyeongyeoja.xlsx",
+              "updated": "2026-03-25 11:10"
+            },
+            {
+              "id": "school",
+              "name": "인천고등학교",
+              "short": "고",
+              "file": "schools/school.xlsx",
+              "updated": "2026-01-05 09:34"
+            },
+            {
+              "id": "nam",
+              "name": "인천남고등학교",
+              "short": "남고",
+              "file": "schools/nam.xlsx",
+              "updated": "2026-01-07 10:35"
+            },
+            {
+              "id": "sangjeong",
+              "name": "인천상정고등학교",
+              "short": "상정고",
+              "file": "schools/sangjeong.xlsx",
+              "updated": "2026-01-05 09:48"
+            },
+            {
+              "id": "inhadaehakgyosabeomdaehakbusok",
+              "name": "인하대학교사범대학부속고등학교",
+              "short": "인하대학교사범대학부속고",
+              "file": "schools/inhadaehakgyosabeomdaehakbusok.xlsx",
+              "updated": "2026-06-26 10:35"
+            },
+            {
+              "id": "inhang",
+              "name": "인항고등학교",
+              "short": "인항고",
+              "file": "schools/inhang.xlsx",
+              "updated": "2026-01-05 09:45"
+            },
+            {
+              "id": "hakik",
+              "name": "학익고등학교",
+              "short": "학익고",
+              "file": "schools/hakik.xlsx",
+              "updated": "2026-01-05 10:19"
+            },
+            {
+              "id": "hakikyeoja",
+              "name": "학익여자고등학교",
+              "short": "학익여자고",
+              "file": "schools/hakikyeoja.xlsx",
+              "updated": "2026-04-20 14:57"
+            }
+          ]
+        },
+        {
+          "name": "부평구",
+          "schools": [
+            {
+              "id": "myeongsinyeoja",
+              "name": "명신여자고등학교",
+              "short": "명신여자고",
+              "file": "schools/myeongsinyeoja.xlsx",
+              "updated": "2026-08-12 16:08"
+            },
+            {
+              "id": "bugae",
+              "name": "부개고등학교",
+              "short": "부개고",
+              "file": "schools/bugae.xlsx",
+              "updated": "2026-01-05 10:22"
+            },
+            {
+              "id": "bugaeyeoja",
+              "name": "부개여자고등학교",
+              "short": "부개여자고",
+              "file": "schools/bugaeyeoja.xlsx",
+              "updated": "2026-01-05 10:07"
+            },
+            {
+              "id": "bugwang",
+              "name": "부광고등학교",
+              "short": "부광고",
+              "file": "schools/bugwang.xlsx",
+              "updated": "2026-01-05 10:09"
+            },
+            {
+              "id": "bugwangyeoja",
+              "name": "부광여자고등학교",
+              "short": "부광여자고",
+              "file": "schools/bugwangyeoja.xlsx",
+              "updated": "2026-01-05 09:29"
+            },
+            {
+              "id": "bupyeong",
+              "name": "부평고등학교",
+              "short": "부평고",
+              "file": "schools/bupyeong.xlsx",
+              "updated": "2026-01-05 10:22"
+            },
+            {
+              "id": "bupyeongyeoja",
+              "name": "부평여자고등학교",
+              "short": "부평여자고",
+              "file": "schools/bupyeongyeoja.xlsx",
+              "updated": "2026-01-05 10:13"
+            },
+            {
+              "id": "samsan",
+              "name": "삼산고등학교",
+              "short": "삼산고",
+              "file": "schools/samsan.xlsx",
+              "updated": "2026-07-13 09:51"
+            },
+            {
+              "id": "seil",
+              "name": "세일고등학교",
+              "short": "세일고",
+              "file": "schools/seil.xlsx",
+              "updated": "2026-01-05 10:49"
+            },
+            {
+              "id": "buheung",
+              "name": "인천부흥고등학교",
+              "short": "부흥고",
+              "file": "schools/buheung.xlsx",
+              "updated": "2026-01-05 09:57"
+            },
+            {
+              "id": "sangok",
+              "name": "인천산곡고등학교",
+              "short": "산곡고",
+              "file": "schools/sangok.xlsx",
+              "updated": "2026-01-05 10:08"
+            },
+            {
+              "id": "yeongseon",
+              "name": "인천영선고등학교",
+              "short": "영선고",
+              "file": "schools/yeongseon.xlsx",
+              "updated": "2026-01-05 10:14"
+            },
+            {
+              "id": "oegukeo",
+              "name": "인천외국어고등학교",
+              "short": "외국어고",
+              "file": "schools/oegukeo.xlsx",
+              "updated": "2025-12-30 08:25"
+            },
+            {
+              "id": "oegukeogodeunghakgyogukjegyeyeol",
+              "name": "인천외국어고등학교(국제계열)",
+              "short": "외국어고등학교(국제계열)",
+              "file": "schools/oegukeogodeunghakgyogukjegyeyeol.xlsx",
+              "updated": "2026-01-05 09:18"
+            },
+            {
+              "id": "jeil",
+              "name": "제일고등학교",
+              "short": "제일고",
+              "file": "schools/jeil.xlsx",
+              "updated": "2026-01-05 10:13"
+            }
+          ]
+        },
+        {
+          "name": "서구",
+          "schools": [
+            {
+              "id": "garim",
+              "name": "가림고등학교",
+              "short": "가림고",
+              "file": "schools/garim.xlsx",
+              "updated": "2026-02-19 11:51"
+            },
+            {
+              "id": "gajeong",
+              "name": "가정고등학교",
+              "short": "가정고",
+              "file": "schools/gajeong.xlsx",
+              "updated": "2026-01-05 09:28"
+            },
+            {
+              "id": "gajwa",
+              "name": "가좌고등학교",
+              "short": "가좌고",
+              "file": "schools/gajwa.xlsx",
+              "updated": "2026-04-09 13:49"
+            },
+            {
+              "id": "daein",
+              "name": "대인고등학교",
+              "short": "대인고",
+              "file": "schools/daein.xlsx",
+              "updated": "2026-01-05 10:08"
+            },
+            {
+              "id": "baekseok",
+              "name": "백석고등학교",
+              "short": "백석고",
+              "file": "schools/baekseok.xlsx",
+              "updated": "2026-01-05 10:14"
+            },
+            {
+              "id": "seoincheon",
+              "name": "서인천고등학교",
+              "short": "서인천고",
+              "file": "schools/seoincheon.xlsx",
+              "updated": "2026-01-05 09:29"
+            },
+            {
+              "id": "majeon",
+              "name": "인천마전고등학교",
+              "short": "마전고",
+              "file": "schools/majeon.xlsx",
+              "updated": "2026-01-05 10:20"
+            },
+            {
+              "id": "sinhyeon",
+              "name": "인천신현고등학교",
+              "short": "신현고",
+              "file": "schools/sinhyeon.xlsx",
+              "updated": "2026-01-05 10:56"
+            },
+            {
+              "id": "ara",
+              "name": "인천아라고등학교",
+              "short": "아라고",
+              "file": "schools/ara.xlsx",
+              "updated": "2026-05-29 14:52"
+            },
+            {
+              "id": "wondang",
+              "name": "인천원당고등학교",
+              "short": "원당고",
+              "file": "schools/wondang.xlsx",
+              "updated": "2025-12-30 08:26"
+            },
+            {
+              "id": "ieum",
+              "name": "인천이음고등학교",
+              "short": "이음고",
+              "file": "schools/ieum.xlsx",
+              "updated": "2026-01-05 10:23"
+            },
+            {
+              "id": "cheongra",
+              "name": "인천청라고등학교",
+              "short": "청라고",
+              "file": "schools/cheongra.xlsx",
+              "updated": "2026-01-05 10:12"
+            },
+            {
+              "id": "choeun",
+              "name": "인천초은고등학교",
+              "short": "초은고",
+              "file": "schools/choeun.xlsx",
+              "updated": "2026-01-05 10:56"
+            },
+            {
+              "id": "haewon",
+              "name": "인천해원고등학교",
+              "short": "해원고",
+              "file": "schools/haewon.xlsx",
+              "updated": "2026-08-30 14:45"
             }
           ]
         },
@@ -27,16 +514,175 @@
           "name": "연수구",
           "schools": [
             {
+              "id": "bakmunyeoja",
+              "name": "박문여자고등학교",
+              "short": "박문여자고",
+              "file": "schools/bakmunyeoja.xlsx",
+              "updated": "2026-01-05 10:20"
+            },
+            {
+              "id": "songdo",
+              "name": "송도고등학교",
+              "short": "송도고",
+              "file": "schools/songdo.xlsx",
+              "updated": "2026-01-05 09:40"
+            },
+            {
               "id": "sinsong",
               "name": "신송고등학교",
               "short": "신송고",
-              "file": "schools/sinsong.xlsx"
+              "file": "schools/sinsong.xlsx",
+              "updated": "2026-01-05 10:11"
+            },
+            {
+              "id": "yeonsuyeoja",
+              "name": "연수여자고등학교",
+              "short": "연수여자고",
+              "file": "schools/yeonsuyeoja.xlsx",
+              "updated": "2026-01-05 10:09"
+            },
+            {
+              "id": "okryeonyeoja",
+              "name": "옥련여자고등학교",
+              "short": "옥련여자고",
+              "file": "schools/okryeonyeoja.xlsx",
+              "updated": "2026-01-05 09:57"
+            },
+            {
+              "id": "daegeon",
+              "name": "인천대건고등학교",
+              "short": "대건고",
+              "file": "schools/daegeon.xlsx",
+              "updated": "2026-02-03 09:23"
+            },
+            {
+              "id": "yeoja",
+              "name": "인천여자고등학교",
+              "short": "여자고",
+              "file": "schools/yeoja.xlsx",
+              "updated": "2026-02-05 12:43"
+            },
+            {
+              "id": "yeonsong",
+              "name": "인천연송고등학교",
+              "short": "연송고",
+              "file": "schools/yeonsong.xlsx",
+              "updated": "2026-01-05 09:54"
+            },
+            {
+              "id": "poseuko",
+              "name": "인천포스코고등학교",
+              "short": "포스코고",
+              "file": "schools/poseuko.xlsx",
+              "updated": "2026-02-19 11:50"
             },
             {
               "id": "haesong",
               "name": "인천해송고등학교",
               "short": "해송고",
-              "file": "schools/haesong.xlsx"
+              "file": "schools/haesong.xlsx",
+              "updated": "2026-01-05 10:00"
+            }
+          ]
+        },
+        {
+          "name": "옹진군",
+          "schools": [
+            {
+              "id": "daecheong",
+              "name": "대청고등학교",
+              "short": "대청고",
+              "file": "schools/daecheong.xlsx",
+              "updated": "2026-01-05 10:14"
+            },
+            {
+              "id": "deokjeok",
+              "name": "덕적고등학교",
+              "short": "덕적고",
+              "file": "schools/deokjeok.xlsx",
+              "updated": "2026-01-05 09:59"
+            },
+            {
+              "id": "baekryeong",
+              "name": "백령고등학교",
+              "short": "백령고",
+              "file": "schools/baekryeong.xlsx",
+              "updated": "2026-01-05 09:58"
+            },
+            {
+              "id": "yeonpyeong",
+              "name": "연평고등학교",
+              "short": "연평고",
+              "file": "schools/yeonpyeong.xlsx",
+              "updated": "2025-12-30 08:24"
+            },
+            {
+              "id": "yeongheung",
+              "name": "인천영흥고등학교",
+              "short": "영흥고",
+              "file": "schools/yeongheung.xlsx",
+              "updated": "2026-01-05 09:57"
+            }
+          ]
+        },
+        {
+          "name": "중구",
+          "schools": [
+            {
+              "id": "inseongyeoja",
+              "name": "인성여자고등학교",
+              "short": "인성여자고",
+              "file": "schools/inseongyeoja.xlsx",
+              "updated": "2026-02-05 12:37"
+            },
+            {
+              "id": "inilyeoja",
+              "name": "인일여자고등학교",
+              "short": "인일여자고",
+              "file": "schools/inilyeoja.xlsx",
+              "updated": "2026-01-05 09:26"
+            },
+            {
+              "id": "gwahak",
+              "name": "인천과학고등학교",
+              "short": "과학고",
+              "file": "schools/gwahak.xlsx",
+              "updated": "2026-03-10 20:45"
+            },
+            {
+              "id": "gukje",
+              "name": "인천국제고등학교",
+              "short": "국제고",
+              "file": "schools/gukje.xlsx",
+              "updated": "2026-01-05 10:13"
+            },
+            {
+              "id": "yeongjong",
+              "name": "인천영종고등학교",
+              "short": "영종고",
+              "file": "schools/yeongjong.xlsx",
+              "updated": "2026-01-05 09:28"
+            },
+            {
+              "id": "unnam",
+              "name": "인천운남고등학교",
+              "short": "운남고",
+              "file": "schools/unnam.xlsx",
+              "updated": "2026-01-05 09:24"
+            },
+            {
+              "id": "haneul",
+              "name": "인천하늘고등학교",
+              "short": "하늘고",
+              "file": "schools/haneul.xlsx",
+              "updated": "2025-12-30 08:23"
+            },
+            {
+              "id": "jemulpo",
+              "name": "제물포고등학교",
+              "short": "제물포고",
+              "file": "schools/jemulpo.xlsx",
+              "updated": "2026-03-25 11:01"
             }
           ]
         }
