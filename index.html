@@ -1014,6 +1014,9 @@ body.locked .slide{min-height:calc(100vh - 64px)}
 .ssch{background:var(--ink);color:#fff;border-radius:12px;padding:12px 16px;font-size:15px;margin:0 0 14px;display:flex;align-items:center;gap:10px}
 .ssch b{font-size:18px;color:var(--yellow)}
 .ssch small{margin-left:auto;opacity:.7;font-size:12px}
+
+.jj-toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:14px 22px;border-radius:14px;font-size:15px;font-weight:700;box-shadow:0 12px 30px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:.25s;z-index:9999;max-width:calc(100vw - 32px);text-align:center}
+.jj-toast.show{opacity:1;transform:translate(-50%,0)}
 </style>
 </head>
 <body>
@@ -3082,6 +3085,7 @@ document.getElementById("submitSend").addEventListener("click",async ()=>{
       body: JSON.stringify(payload)
     });
     sResult.className="sresult ok"; sResult.textContent="✅ 제출이 완료되었습니다!";
+    setTimeout(()=>{ closeSubmit(); showToast(`✅ ${SITE.name||"우리 학교"} 과목 선택 결과가 제출되었습니다.`); }, 1200);
   }catch(err){
     sResult.className="sresult err"; sResult.textContent="제출에 실패했어요. 인터넷 연결을 확인하고 다시 시도해 주세요.";
   }
@@ -3900,11 +3904,20 @@ function checkCollect(cb){
       if(j && j.ok===false) throw new Error(j.error||"접수 실패");
       res.className="sresult ok"; res.style.display="block";
       res.textContent = (j && j.message) || "✅ 신청이 접수됐어요. 승인되면 입력한 이메일로 시트 링크가 갑니다.";
+      setTimeout(()=>{ close(); showToast("✅ 결과 수집 신청이 접수되었습니다. 승인되면 이메일로 안내드려요."); }, 1500);
     }catch(err){ res.className="sresult err"; res.style.display="block"; res.textContent="⚠ "+err.message; }
     btn.disabled=false; btn.textContent="신청하기";
   });
 })();
 
+
+/* 화면 하단 알림(토스트) */
+function showToast(msg, ms){
+  let t=document.getElementById("jjToast");
+  if(!t){ t=document.createElement("div"); t.id="jjToast"; t.className="jj-toast"; t.setAttribute("role","status"); document.body.appendChild(t); }
+  t.textContent=msg; t.classList.add("show");
+  clearTimeout(t._tm); t._tm=setTimeout(()=>t.classList.remove("show"), ms||3500);
+}
 document.getElementById("topBtn").addEventListener("click",e=>{
   e.preventDefault(); window.scrollTo({top:0,behavior:"smooth"});
 });
