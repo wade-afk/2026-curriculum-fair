@@ -1008,6 +1008,12 @@ body.snap,html:has(body.snap){scroll-padding-top:108px}
 .btn-pro.on .pro-tag{background:#1E7B3A}
 .slink{font-size:13px;margin:-4px 0 12px;color:var(--ink-soft)}
 .slink.ok{color:#1E7B3A}.slink.err{color:#C0392B}
+
+body.locked.snap,html:has(body.locked.snap){scroll-padding-top:64px}
+body.locked .slide{min-height:calc(100vh - 64px)}
+.ssch{background:var(--ink);color:#fff;border-radius:12px;padding:12px 16px;font-size:15px;margin:0 0 14px;display:flex;align-items:center;gap:10px}
+.ssch b{font-size:18px;color:var(--yellow)}
+.ssch small{margin-left:auto;opacity:.7;font-size:12px}
 </style>
 </head>
 <body>
@@ -1617,6 +1623,7 @@ body.snap,html:has(body.snap){scroll-padding-top:108px}
     </div>
     <div class="modal-body">
       <p class="swarn" id="submitWarn"></p>
+      <p class="ssch" id="submitSchool">🏫 <span><b id="submitSchoolName">작전고등학교</b>로 제출합니다</span><small>학교가 다르면 담당 선생님이 준 링크로 다시 접속하세요</small></p>
       <p class="slink" id="submitLink"></p>
       <div class="sfield">
         <label for="sId">학번 (5자리 · 예: 10315 = 1학년 3반 15번)</label>
@@ -2000,7 +2007,16 @@ body.snap,html:has(body.snap){scroll-padding-top:108px}
 <script>
 /* ===== 학교별 설정 (school-config.js가 있으면 그 값을, 없으면 작전고 기본값 사용) ===== */
 /* 학교 선택(상단 학교 선택기)으로 불러온 설정이 있으면 최우선, 그다음 school-config.js, 그다음 관리자 미리보기 */
-const SCHOOL_SEL = (function(){ try{ return JSON.parse(localStorage.getItem("jj_school_cfg")) || null; }catch(e){ return null; } })();
+/* 주소의 ?school= 이 항상 우선. 주소에 학교가 없으면(기본 주소) 기억하지 않고 기본 학교(작전고)로 연다.
+   ?lock=1 이 붙은 '학교 전용 링크'로 들어오면 학교 선택 바를 숨기고 전환을 막는다. */
+const URL_PARAMS = new URLSearchParams(location.search);
+const URL_SCHOOL = (URL_PARAMS.get("school")||"").trim().toLowerCase();
+const LOCKED = URL_PARAMS.get("lock")==="1" && !!URL_SCHOOL;
+const SCHOOL_SEL = (function(){
+  try{ const s = JSON.parse(localStorage.getItem("jj_school_cfg")) || null;
+       return (s && URL_SCHOOL && s.id===URL_SCHOOL) ? s : null;      // 저장된 학교는 주소와 같을 때만 사용
+  }catch(e){ return null; }
+})();
 const SITE = (SCHOOL_SEL && SCHOOL_SEL.cfg) || window.SCHOOL_CONFIG || (function(){
   try{ return JSON.parse(localStorage.getItem("jj_cfg_preview")) || {}; }catch(e){ return {}; }
 })();
@@ -2967,6 +2983,7 @@ function renderSubmitLink(){
   else { el.className="slink err"; el.textContent = "⚠ 이 학교는 아직 결과 수집이 연결되지 않았어요. 담당 선생님이 [결과 수집 신청]을 해 주세요." + (COLLECT_ERR ? " ("+COLLECT_ERR+")" : ""); }
 }
 document.getElementById("ckSubmit").addEventListener("click",()=>{
+  { const n=document.getElementById("submitSchoolName"); if(n) n.textContent = SITE.name || "작전고등학교"; }
   const el=document.getElementById("submitLink"); if(el){ el.className="slink"; el.textContent="🔄 제출 연결 확인 중…"; }
   checkCollect(renderSubmitLink);
   sWarn.classList.add("show");
@@ -3690,8 +3707,8 @@ function buildPlanInner(plan){
   const $ = id => document.getElementById(id);
   const ov=$("schoolOverlay"); if(!ov) return;
   let REG=null, curRegion=null, curDist=null, busy=false;
-  const params=new URLSearchParams(location.search);
-  const wanted=params.get("school");
+  const wanted=URL_SCHOOL || null;
+  if(LOCKED){ document.body.classList.add("locked"); const bar=$("schoolBar"); if(bar) bar.style.display="none"; }
 
   function findSchool(id){
     for(const r of REG.regions) for(const d of r.districts) for(const s of d.schools)
@@ -3753,6 +3770,7 @@ function buildPlanInner(plan){
   function go(id){
     const u=new URL(location.href);
     u.searchParams.set("school",id);
+    if(LOCKED) u.searchParams.set("lock","1");
     if(!u.hash || u.hash==="#setup") u.hash="#home";
     const same = (u.pathname+u.search) === (location.pathname+location.search);
     if(same){ if(u.hash!==location.hash) location.hash=u.hash; location.reload(); }
@@ -3768,12 +3786,13 @@ function buildPlanInner(plan){
       REG=j; crumb();
       { const f=findSchool(SCHOOL_ID); window.__schoolInfo = f ? {region:f.r.name, district:f.d.name} : {}; }
       if(window.__setOperatorUrl) window.__setOperatorUrl(j.operatorUrl||"");
-      $("sbChange").onclick=()=>open(); $("smClose").onclick=close;
+      if(!LOCKED) $("sbChange").onclick=()=>open(); $("smClose").onclick=close;
       ov.addEventListener("click",e=>{ if(e.target===ov) close(); });
       document.addEventListener("keydown",e=>{ if(e.key==="Escape" && ov.classList.contains("open")) close(); });
       // 주소로 학교가 지정됐는데 현재 보는 학교와 다르면 자동 전환
       if(wanted && wanted!==SCHOOL_ID && findSchool(wanted)){
-        open(); select(wanted);
+        if(LOCKED){ ov.classList.add("open"); note("", `<span class="spin"></span>${findSchool(wanted).s.name} 편성표를 불러오는 중…`); select(wanted); }
+        else { open(); select(wanted); }
       }
       // 저장된 학교 설정이 목록의 파일 버전과 다르면(엑셀 교체 등) 조용히 갱신
       else if(SCHOOL_SEL && SCHOOL_SEL.id===SCHOOL_ID && findSchool(SCHOOL_ID) && !findSchool(SCHOOL_ID).s.builtin

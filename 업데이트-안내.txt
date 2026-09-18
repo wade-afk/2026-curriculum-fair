@@ -1,0 +1,14 @@
+2026 교육과정 박람회 — 저장소 전체 (2026-09-18)
+
+이 폴더 내용을 깃허브 저장소에 그대로 덮어쓰면 됩니다.
+(Add file → Upload files → 폴더 안 파일·폴더를 전부 드래그 → Commit)
+
+새로 추가/변경된 것
+  index.html            학교 전용 링크 잠금 모드, 제출 창 학교 표시, 오류 수정
+  schools.json          운영자 주소 포함 (변경 없음)
+  jakjeon/ hyosung/ sinsong/ haesong/   학교 전용 짧은 주소용 폴더 (각 index.html 1개)
+  schools/*.xlsx        학교별 편성표 (변경 없음)
+  operator-script/Code.gs   앱스크립트 v4 — 별도로 Apps Script 편집기에 붙여넣고
+                            [배포 관리 → ✏ → 새 버전 → 배포] 후, 시트 메뉴 [1. 초기 설정] 1회 실행
+
+그대로 두는 것: adm_*.html, og-image.png, school-config*.js, README.md, 2028학년도 엑셀

@@ -24,7 +24,7 @@ const CONFIG = {
   SHEET_LOG: "로그",
 };
 
-const SCHOOL_COLS = ["학교ID","학교명","지역","구·군","담당자","이메일","연락처","상태","시트URL","신청시각","승인시각","제출수","메모"];
+const SCHOOL_COLS = ["학교ID","학교명","지역","구·군","담당자","이메일","연락처","상태","시트URL","신청시각","승인시각","제출수","메모","전용주소","QR이미지"];
 const STATUS = { WAIT:"대기", OK:"승인", STOP:"중지" };
 
 // ===================== 메뉴 =====================
@@ -36,6 +36,7 @@ function onOpen(){
     .addSeparator()
     .addItem("승인 자동 처리 켜기 (편집 시 자동 실행)", "installEditTrigger")
     .addItem("제출 수 새로고침", "refreshCounts")
+    .addItem("안내 메일 다시 보내기 (주소·QR 포함, 선택한 행)", "resendApprovalMail")
     .addToUi();
 }
 
@@ -43,6 +44,10 @@ function onOpen(){
 function setup(){
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   let sh = ss.getSheetByName(CONFIG.SHEET_SCHOOLS);
+  if(sh){ // 기존 탭이면 새 열 머리글 보강
+    sh.getRange(1,1,1,SCHOOL_COLS.length).setValues([SCHOOL_COLS]).setFontWeight("bold").setBackground("#F2F4F9");
+    sh.setColumnWidth(14, 320);
+  }
   if(!sh){
     sh = ss.insertSheet(CONFIG.SHEET_SCHOOLS);
     sh.getRange(1,1,1,SCHOOL_COLS.length).setValues([SCHOOL_COLS]).setFontWeight("bold").setBackground("#F2F4F9");
@@ -129,11 +134,16 @@ function processApprovals(){
   rows.forEach(r=>{
     if(r.status!==STATUS.OK || r.sheetUrl) return;
     const file = createSchoolSheet_(r);
+    const links = schoolLinks_(r.id);
+    const qr = makeQr_(r, links.lock);                      // {blob, fileUrl} 또는 null
     sh.getRange(r.row, 9).setValue(file.getUrl());
     sh.getRange(r.row, 11).setValue(new Date());
+    sh.getRange(r.row, 14).setValue(links.short);
+    if(qr) sh.getRange(r.row, 15).setValue(qr.fileUrl);
+    addLinksToSheet_(file, r, links, qr);
     if(r.email){
       shareSheet_(file, r.email);
-      sendApprovalMail_(r, file.getUrl());
+      sendApprovalMail_(r, file.getUrl(), links, qr);
     }
     log_("승인", r.id, r.name+" → "+file.getUrl());
     done++;
@@ -206,24 +216,91 @@ function shareSheet_(file, email){
   }catch(e){ log_("공유실패","",email+" "+e); }
 }
 
-function sendApprovalMail_(r, url){
-  const subject = `[${CONFIG.SITE_NAME}] ${r.name} 과목 선택 결과 시트가 준비됐어요`;
-  const body =
+/** 학교 전용 주소: lock = 잠금 링크(학교 전환 불가), short = 짧은 폴더 주소(저장소에 <id>/index.html 이 있을 때 동작) */
+function schoolLinks_(id){
+  const base = CONFIG.SITE_URL.replace(/\/+$/,"") + "/";
+  return { lock: base + "?school=" + encodeURIComponent(id) + "&lock=1", short: base + encodeURIComponent(id) + "/" , student: base + "?school=" + encodeURIComponent(id) + "&lock=1#checklist" };
+}
+/** QR 이미지(PNG) 생성 → 학교 폴더에 저장. 실패하면 null (메일은 주소만으로 발송) */
+function makeQr_(r, link){
+  try{
+    const api = "https://api.qrserver.com/v1/create-qr-code/?size=700x700&margin=12&format=png&data=" + encodeURIComponent(link);
+    const res = UrlFetchApp.fetch(api, { muteHttpExceptions:true });
+    if(res.getResponseCode()!==200) throw new Error("QR API "+res.getResponseCode());
+    const blob = res.getBlob().setName(`[${r.name}] 교육과정박람회 QR.png`);
+    const folder = getFolder_();
+    const f = folder.createFile(blob);
+    f.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+    return { blob, fileUrl: f.getUrl(), fileId: f.getId() };
+  }catch(e){ log_("QR실패", r.id, String(e)); return null; }
+}
+/** 학교 결과 시트 '안내' 탭에 전용 주소와 QR 삽입 */
+function addLinksToSheet_(file, r, links, qr){
+  try{
+    const ss = SpreadsheetApp.openById(file.getId());
+    const info = ss.getSheetByName("안내"); if(!info) return;
+    const row = info.getLastRow() + 2;
+    info.getRange(row,1,4,1).setValues([["▶ 학생 배포용 학교 전용 주소 (이 주소로만 안내하세요 — 다른 학교로 바뀌지 않도록 잠겨 있습니다)"],[links.short],[links.lock],["   QR 이미지는 아래에 있고, 드라이브 파일: " + (qr ? qr.fileUrl : "(생성 실패)")]]);
+    info.getRange(row,1).setFontWeight("bold");
+    if(qr) info.insertImage(qr.blob, 1, row+5).setWidth(220).setHeight(220);
+  }catch(e){ log_("안내탭실패", r.id, String(e)); }
+}
+
+function sendApprovalMail_(r, url, links, qr){
+  links = links || schoolLinks_(r.id);
+  const subject = `[${CONFIG.SITE_NAME}] ${r.name} 결과 수집이 승인됐어요 — 결과 시트 · 학생 배포용 주소 · QR`;
+  const text =
 `${r.teacher||"선생님"}께,
 
 ${r.name}의 과목 선택 결과 수집이 승인되었습니다.
-학생들이 사이트에서 [결과 제출]을 누르면 아래 시트에 실시간으로 쌓입니다.
 
 ▶ 결과 시트 (편집자 권한으로 공유됨)
 ${url}
 
-▶ 학생 안내용 사이트 주소
-${CONFIG.SITE_URL}?school=${r.id}#checklist
+▶ 학생에게 배포할 학교 전용 주소 (이 주소만 안내하세요)
+${links.short}
+(같은 주소) ${links.lock}
+※ 이 주소로 접속하면 ${r.name} 페이지로 고정되어 다른 학교로 바뀌지 않고, 제출도 이 학교 시트로만 들어갑니다.
+※ QR 이미지가 첨부되어 있습니다. 가정통신문·게시판에 그대로 쓰세요.
 
-시트의 '안내' 탭에 사용법이 있습니다. 궁금한 점은 이 메일로 회신해 주세요.
+시트의 '안내' 탭에 사용법과 같은 주소·QR이 들어 있습니다. 궁금한 점은 이 메일로 회신해 주세요.
 
 ${CONFIG.OPERATOR_NAME} 드림`;
-  MailApp.sendEmail({ to:r.email, subject, body, name:CONFIG.OPERATOR_NAME });
+  const html =
+`<div style="font-family:Apple SD Gothic Neo,Malgun Gothic,sans-serif;font-size:15px;line-height:1.7;color:#1f2b4d;max-width:640px">
+<p>${esc_(r.teacher||"선생님")}께,</p>
+<p><b>${esc_(r.name)}</b>의 과목 선택 결과 수집이 승인되었습니다.</p>
+<h3 style="margin:22px 0 6px">📄 결과 시트</h3>
+<p><a href="${url}">${url}</a><br><span style="color:#667">편집자 권한으로 공유되었습니다. 학생이 제출하면 실시간으로 쌓입니다.</span></p>
+<h3 style="margin:22px 0 6px">🔗 학생에게 배포할 학교 전용 주소</h3>
+<p style="font-size:18px"><a href="${links.short}"><b>${links.short}</b></a></p>
+<p style="color:#667;font-size:13px">같은 주소: <a href="${links.lock}">${links.lock}</a><br>이 주소로 접속하면 <b>${esc_(r.name)}</b> 페이지로 고정되어 다른 학교로 바뀌지 않고, 제출도 이 학교 시트로만 들어갑니다.</p>
+${qr ? `<h3 style="margin:22px 0 6px">📱 QR 코드</h3><p><img src="cid:qr" width="220" height="220" style="border:1px solid #ddd;border-radius:12px"><br><span style="color:#667;font-size:13px">첨부 파일로도 들어 있습니다. 가정통신문·학급 게시판에 그대로 쓰세요.</span></p>` : ""}
+<p style="margin-top:22px;color:#667;font-size:13px">시트의 '안내' 탭에 사용법과 같은 주소·QR이 들어 있습니다. 궁금한 점은 이 메일로 회신해 주세요.</p>
+<p>${esc_(CONFIG.OPERATOR_NAME)} 드림</p></div>`;
+  const opt = { to:r.email, subject, body:text, htmlBody:html, name:CONFIG.OPERATOR_NAME };
+  if(qr){ opt.inlineImages = { qr: qr.blob }; opt.attachments = [qr.blob]; }
+  MailApp.sendEmail(opt);
+}
+function esc_(s){ return String(s==null?"":s).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+
+/** 메뉴용: 선택한 행(또는 승인된 모든 학교)의 안내 메일을 다시 보냄 (주소·QR 포함) */
+function resendApprovalMail(){
+  const sh = schoolsSheet_(); const ui = SpreadsheetApp.getUi();
+  const row = sh.getActiveRange() ? sh.getActiveRange().getRow() : 0;
+  const rows = listSchools_().filter(r=> r.status===STATUS.OK && r.sheetUrl && (row<2 || r.row===row));
+  if(!rows.length){ ui.alert("보낼 대상이 없어요. '학교' 탭에서 승인된 학교의 행을 선택한 뒤 실행하세요."); return; }
+  rows.forEach(r=>{
+    const links = schoolLinks_(r.id);
+    let qr=null;
+    try{ if(r.qrUrl){ const id=r.qrUrl.match(/[-\w]{25,}/)[0]; const f=DriveApp.getFileById(id); qr={blob:f.getBlob(), fileUrl:f.getUrl()}; } }catch(e){}
+    if(!qr) qr = makeQr_(r, links.lock);
+    if(qr && !r.qrUrl) sh.getRange(r.row,15).setValue(qr.fileUrl);
+    if(!r.link) sh.getRange(r.row,14).setValue(links.short);
+    if(r.email) sendApprovalMail_(r, r.sheetUrl, links, qr);
+    log_("재발송", r.id, r.email);
+  });
+  ui.alert(`${rows.length}개 학교에 안내 메일을 다시 보냈어요.`);
 }
 
 // ===================== 학생 제출 기록 =====================
@@ -305,7 +382,8 @@ function listSchools_(){
   const sh = schoolsSheet_(); const n = sh.getLastRow(); if(n<2) return [];
   return sh.getRange(2,1,n-1,SCHOOL_COLS.length).getValues().map((v,i)=>({
     row:i+2, id:String(v[0]).trim(), name:v[1], region:v[2], district:v[3], teacher:v[4], email:String(v[5]).trim(),
-    phone:v[6], status:String(v[7]).trim(), sheetUrl:String(v[8]).trim(), requestedAt:v[9], approvedAt:v[10], count:v[11], note:v[12]
+    phone:v[6], status:String(v[7]).trim(), sheetUrl:String(v[8]).trim(), requestedAt:v[9], approvedAt:v[10], count:v[11], note:v[12],
+    link:String(v[13]||"").trim(), qrUrl:String(v[14]||"").trim()
   })).filter(r=>r.id);
 }
 function findSchool_(id){ id=String(id||"").trim().toLowerCase(); if(!id) return null; return listSchools_().find(r=>r.id.toLowerCase()===id) || null; }
