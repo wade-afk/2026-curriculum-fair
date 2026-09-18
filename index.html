@@ -1017,6 +1017,18 @@ body.locked .slide{min-height:calc(100vh - 64px)}
 
 .jj-toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:14px 22px;border-radius:14px;font-size:15px;font-weight:700;box-shadow:0 12px 30px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:.25s;z-index:9999;max-width:calc(100vw - 32px);text-align:center}
 .jj-toast.show{opacity:1;transform:translate(-50%,0)}
+
+.sm-search{padding:16px 28px 0}
+.sm-search input{width:100%;font:inherit;font-size:15px;padding:12px 16px;border:1.5px solid var(--line);border-radius:12px;background:#fff}
+.sm-search input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px var(--blue-soft)}
+.sm-found{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.sm-found .sm-item{padding:7px 12px;font-size:14px}
+.sm-found .sm-item small{margin-left:6px}
+
+.sgate{background:#FFF8E1;border:1.5px solid #F3E4A1;border-radius:14px;padding:16px 18px;margin:4px 0 8px}
+.sgate b{font-size:15.5px}
+.sgate p{font-size:14px;color:var(--ink-soft);line-height:1.65;margin:8px 0 14px}
+.sgate .btn{text-decoration:none;display:flex;justify-content:center}
 </style>
 </head>
 <body>
@@ -1628,6 +1640,13 @@ body.locked .slide{min-height:calc(100vh - 64px)}
       <p class="swarn" id="submitWarn"></p>
       <p class="ssch" id="submitSchool">🏫 <span><b id="submitSchoolName">작전고등학교</b>로 제출합니다</span><small>학교가 다르면 담당 선생님이 준 링크로 다시 접속하세요</small></p>
       <p class="slink" id="submitLink"></p>
+      <div class="sgate" id="submitGate" style="display:none">
+        <b>🔒 학교 전용 주소로 접속해야 제출할 수 있어요.</b>
+        <p>결과가 다른 학교로 들어가는 일을 막기 위해, 선생님이 안내한 <b>우리 학교 전용 주소(QR)</b>로 들어온 경우에만 제출을 받습니다.<br>
+        지금 보고 있는 학교가 맞다면 아래 버튼으로 이동한 뒤 다시 제출해 주세요. 선택 내용은 그대로 유지됩니다.</p>
+        <a class="btn btn-submit btn-full" id="gateGo" href="#checklist">🏫 <span id="gateSchool">우리 학교</span> 전용 페이지로 이동</a>
+      </div>
+      <div id="submitForm">
       <div class="sfield">
         <label for="sId">학번 (5자리 · 예: 10315 = 1학년 3반 15번)</label>
         <input id="sId" type="text" inputmode="numeric" maxlength="5" placeholder="학번 5자리를 입력하세요" autocomplete="off">
@@ -1638,6 +1657,7 @@ body.locked .slide{min-height:calc(100vh - 64px)}
       </div>
       <button class="btn btn-submit btn-full" id="submitSend">제출하기</button>
       <p class="sresult" id="submitResult"></p>
+      </div>
     </div>
   </div>
 </div>
@@ -1981,6 +2001,7 @@ body.locked .slide{min-height:calc(100vh - 64px)}
       <p>고교학점제 안내와 과목 설명은 모든 학교가 같아요. 학교를 고르면 <b>교육과정 편성표</b>와 <b>과목 선택 체크리스트</b>가 그 학교 것으로 바뀝니다.</p>
       <button class="modal-close" id="smClose" aria-label="닫기">✕</button>
     </div>
+    <div class="sm-search"><input type="search" id="smSearch" placeholder="학교 이름으로 바로 찾기 (예: 효성)" aria-label="학교 검색"><div class="sm-found" id="smFound"></div></div>
     <div class="sm-body">
       <div class="sm-col"><div class="sm-lab"><span class="n">1</span>지역</div><div class="sm-list" id="smRegions"></div></div>
       <div class="sm-col"><div class="sm-lab"><span class="n">2</span>구·군</div><div class="sm-list" id="smDists"></div></div>
@@ -2015,6 +2036,7 @@ body.locked .slide{min-height:calc(100vh - 64px)}
 const URL_PARAMS = new URLSearchParams(location.search);
 const URL_SCHOOL = (URL_PARAMS.get("school")||"").trim().toLowerCase();
 const LOCKED = URL_PARAMS.get("lock")==="1" && !!URL_SCHOOL;
+const SUBMIT_REQUIRES_LOCK = true;   // true: 학교 전용 주소(/s/학교id/)로 접속했을 때만 결과 제출 허용
 const SCHOOL_SEL = (function(){
   try{ const s = JSON.parse(localStorage.getItem("jj_school_cfg")) || null;
        return (s && URL_SCHOOL && s.id===URL_SCHOOL) ? s : null;      // 저장된 학교는 주소와 같을 때만 사용
@@ -2447,6 +2469,8 @@ document.addEventListener("keydown",e=>{ if(e.key==="Escape" && overlay.classLis
 const OPERATOR_URL = (function(){ try{ return (JSON.parse(localStorage.getItem("jj_operator_url"))||""); }catch(e){ return ""; } })() || "https://script.google.com/macros/s/AKfycbw4qPV2TOzy8bcjiLn_LxLQS8miCY0EmacuRdksmw6vi_kxm807v66SuslGrJxjpNCYAw/exec";
 let COLLECT_OK = false;   // 운영자 접수 승인 여부 (schools.json operatorUrl에 ?action=list로 조회)
 let COLLECT_ERR = "";     // 승인 조회 실패 사유
+let COLLECT_VER = 0;      // 운영자 스크립트(배포된 웹 앱) 버전
+const NEED_SCRIPT_VER = 4;
 function ckSubmitUrl(){
   if(COLLECT_OK && OPERATOR_URL) return OPERATOR_URL;   // 운영자 승인이 있으면 최우선
   if(SITE.submitUrl) return SITE.submitUrl;
@@ -2982,11 +3006,24 @@ const sWarn = document.getElementById("submitWarn");
 function renderSubmitLink(){
   const el=document.getElementById("submitLink"); if(!el) return;
   const url=ckSubmitUrl();
-  if(url){ el.className="slink ok"; el.textContent = (COLLECT_OK && OPERATOR_URL) ? "🔗 제출 연결: 운영자 접수 (승인됨)" : (SITE.submitUrl ? "🔗 제출 연결: 학교 자체 시트" : (SITE.sheetId ? "🔗 제출 연결: 학교 시트(접수 대행)" : "🔗 제출 연결: 기본 시트")); }
+  if(url && COLLECT_OK && OPERATOR_URL && COLLECT_VER < NEED_SCRIPT_VER){
+    el.className="slink err"; el.textContent = `⚠ 운영자 스크립트 배포가 옛 버전(v${COLLECT_VER||"?"})이에요. Apps Script에서 [배포 관리 → ✏ → 새 버전 → 배포]를 하면 새 시트 서식으로 기록됩니다. (제출은 됩니다)`; return;
+  }
+  if(url){ el.className="slink ok"; el.textContent = (COLLECT_OK && OPERATOR_URL) ? `🔗 제출 연결: 운영자 접수 (승인됨 · 스크립트 v${COLLECT_VER})` : (SITE.submitUrl ? "🔗 제출 연결: 학교 자체 시트" : (SITE.sheetId ? "🔗 제출 연결: 학교 시트(접수 대행)" : "🔗 제출 연결: 기본 시트")); }
   else { el.className="slink err"; el.textContent = "⚠ 이 학교는 아직 결과 수집이 연결되지 않았어요. 담당 선생님이 [결과 수집 신청]을 해 주세요." + (COLLECT_ERR ? " ("+COLLECT_ERR+")" : ""); }
+}
+function lockedUrl(){
+  const id = SITE.schoolId || "jakjeon";
+  const u = new URL(location.href); u.search=""; u.searchParams.set("school", id); u.searchParams.set("lock","1"); u.hash="#checklist";
+  return u.toString();
 }
 document.getElementById("ckSubmit").addEventListener("click",()=>{
   { const n=document.getElementById("submitSchoolName"); if(n) n.textContent = SITE.name || "작전고등학교"; }
+  const gate=document.getElementById("submitGate"), form=document.getElementById("submitForm");
+  const blocked = SUBMIT_REQUIRES_LOCK && !LOCKED;
+  if(gate) gate.style.display = blocked ? "block" : "none";
+  if(form) form.style.display = blocked ? "none" : "";
+  if(blocked){ const a=document.getElementById("gateGo"); if(a) a.href=lockedUrl(); const g=document.getElementById("gateSchool"); if(g) g.textContent=SITE.name||"우리 학교"; }
   const el=document.getElementById("submitLink"); if(el){ el.className="slink"; el.textContent="🔄 제출 연결 확인 중…"; }
   checkCollect(renderSubmitLink);
   sWarn.classList.add("show");
@@ -3059,6 +3096,9 @@ document.getElementById("submitSend").addEventListener("click",async ()=>{
     return;
   }
   const grade = String(gradeNum);
+  if(SUBMIT_REQUIRES_LOCK && !LOCKED){
+    sResult.className="sresult err"; sResult.textContent="학교 전용 주소로 접속한 경우에만 제출할 수 있어요."; return;
+  }
   if(!ckSubmitUrl()){
     sResult.className="sresult err";
     sResult.textContent="이 학교는 아직 결과 수집이 연결되지 않았어요. 담당 선생님께 [결과 수집 신청]을 요청해 주세요." + (COLLECT_ERR ? " ("+COLLECT_ERR+")" : "");
@@ -3743,6 +3783,15 @@ function buildPlanInner(plan){
     $("smRegions").querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>{curRegion=REG.regions.find(r=>r.name===b.dataset.r);curDist=curRegion.districts[0];renderCols();});
     $("smDists").querySelectorAll("[data-d]").forEach(b=>b.onclick=()=>{curDist=curRegion.districts.find(d=>d.name===b.dataset.d);renderCols();});
     $("smSchools").querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>select(b.dataset.s));
+    const si=$("smSearch"); if(si && !si._bound){ si._bound=true; si.addEventListener("input",()=>searchSchools(si.value)); }
+  }
+  function searchSchools(q){
+    const box=$("smFound"); if(!box) return; q=(q||"").trim().replace(/\s/g,"");
+    if(!q){ box.innerHTML=""; return; }
+    const hits=[];
+    REG.regions.forEach(r=>r.districts.forEach(d=>d.schools.forEach(s=>{ if((s.name+(s.short||"")).replace(/\s/g,"").includes(q)) hits.push({s,r,d}); })));
+    box.innerHTML = hits.length ? hits.slice(0,30).map(h=>`<button type="button" class="sm-item" data-s="${h.s.id}">${h.s.name}<small>${h.d.name}</small></button>`).join("") : `<div class="sm-empty">'${esc(q)}' 학교를 찾지 못했어요.</div>`;
+    box.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>select(b.dataset.s));
   }
   function note(cls,html){ const m=$("smMsg"); m.className="sm-foot "+(cls||""); m.innerHTML=html; }
 
@@ -3845,7 +3894,7 @@ function updateSubmitUI(){
 function checkCollect(cb){
   if(!OPERATOR_URL){ if(cb) cb(); return; }
   const id = SITE.schoolId || "jakjeon";
-  const done = j => { COLLECT_OK = !!(j && j.collect); COLLECT_ERR = (j&&j.error)||""; updateSubmitUI(); if(cb) cb(); };
+  const done = j => { COLLECT_OK = !!(j && j.collect); COLLECT_ERR = (j&&j.error)||""; COLLECT_VER = (j&&j.version)||0; updateSubmitUI(); if(cb) cb(); };
   const jsonp = () => {   // fetch가 막히면(CORS 등) <script> 방식으로 재시도
     const name = "__ckcb"+Date.now();
     const s = document.createElement("script");
