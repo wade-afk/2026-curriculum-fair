@@ -1029,6 +1029,8 @@ body.locked .slide{min-height:calc(100vh - 64px)}
 .sgate b{font-size:15.5px}
 .sgate p{font-size:14px;color:var(--ink-soft);line-height:1.65;margin:8px 0 14px}
 .sgate .btn{text-decoration:none;display:flex;justify-content:center}
+
+.btn-pro.static{cursor:default;pointer-events:none;box-shadow:none}
 </style>
 </head>
 <body>
@@ -3886,6 +3888,9 @@ function updateSubmitUI(){
   const viaOperator = COLLECT_OK && OPERATOR_URL;
   r.classList.toggle("on", !!viaOperator);
   r.classList.toggle("err", !viaOperator && !!COLLECT_ERR);
+  // 전용 주소(잠금)로 들어온 화면에서 이미 연결된 학교면 상태 표시만 하고 눌리지 않게
+  r.disabled = !!(LOCKED && viaOperator);
+  r.classList.toggle("static", !!(LOCKED && viaOperator));
   r.title = COLLECT_ERR ? COLLECT_ERR : "선생님용 · 결과 수집(Pro) 신청";
   r.innerHTML = viaOperator ? '<span class="pro-tag">PRO</span> 결과 수집 연결됨'
     : (COLLECT_ERR ? '<span class="pro-tag">PRO</span> 연결 확인 실패 · 다시 시도' : '<span class="pro-tag">PRO</span> 결과 수집 신청');
