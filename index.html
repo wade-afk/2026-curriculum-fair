@@ -928,10 +928,10 @@ html:has(body.snap){scroll-snap-type:y mandatory;scroll-padding-top:64px}
 .slide-hero .lead{margin-bottom:34px}
 .br-d{display:none}@media(min-width:900px){.br-d{display:inline}}
 .badge{font-size:14px;padding:8px 14px}
-.scroll-hint{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);font-size:14px;color:var(--ink-soft);text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:0}
-.scroll-hint span{font-size:22px;line-height:1;animation:hint 1.6s ease-in-out infinite}
+.hero-hint{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);font-size:14px;color:var(--ink-soft);text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:0}
+.hero-hint span{font-size:22px;line-height:1;animation:hint 1.6s ease-in-out infinite}
 @keyframes hint{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
-@media(prefers-reduced-motion:reduce){.scroll-hint span{animation:none}}
+@media(prefers-reduced-motion:reduce){.hero-hint span{animation:none}}
 .slide-now{background:#FFFDF3}
 .slide-key{background:var(--ink);color:#fff}
 .slide-key h2,.slide-key .lead{color:#fff}.slide-key .lead{color:rgba(255,255,255,.75)}
@@ -1031,6 +1031,58 @@ body.locked .slide{min-height:calc(100vh - 64px)}
 .sgate .btn{text-decoration:none;display:flex;justify-content:center}
 
 .btn-pro.static{cursor:default;pointer-events:none;box-shadow:none}
+
+/* 선택군 머리글 강조 */
+.grp-head{flex-wrap:wrap;padding:12px 16px}
+.grp-head .gtitle{font-size:15px}
+.grp-head .gtitle small{font-weight:600;font-size:12px;opacity:.75;margin-left:8px}
+.grp-head .rule{display:inline-flex;align-items:center;gap:8px;font-size:13px}
+.grp-head .rule .need{font-size:18px;font-weight:900;letter-spacing:-.01em}
+.grp-head .rule .prog{font-size:13px;font-weight:800;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.7)}
+.grp-head .rule.todo .prog{background:#D63333;color:#fff}
+.grp-head .rule.done .prog{background:#1E7B3A;color:#fff}
+.grp-head .rule.todo .need{color:#B42323}
+@media(max-width:640px){.grp-head .rule .need{font-size:16px}}
+
+/* ---------- 모바일: 교과(군)별 과목표를 카드형으로 ---------- */
+@media(max-width:700px){
+  .table-scroll:has(> table.cur:not(.info-table)){border:0;background:transparent;overflow:visible}
+  table.cur:not(.info-table){min-width:0;display:block;font-size:14px}
+  table.cur:not(.info-table) thead{display:none}
+  table.cur:not(.info-table) tbody{display:block}
+  table.cur:not(.info-table) tr{display:block;background:#fff;border:1.5px solid var(--line);border-radius:16px;margin-bottom:14px;overflow:hidden}
+  table.cur:not(.info-table) td{display:block;text-align:left;padding:10px 14px;border:0}
+  table.cur:not(.info-table) td.gname{background:var(--ink);color:#fff;font-size:16px;padding:12px 16px;white-space:normal}
+  table.cur:not(.info-table) td:not(.gname)::before{display:block;font-size:12px;font-weight:800;margin-bottom:6px;letter-spacing:.02em}
+  table.cur:not(.info-table) td:nth-child(2)::before{content:"공통 과목";color:var(--c-common)}
+  table.cur:not(.info-table) td:nth-child(3)::before{content:"일반 선택";color:var(--c-general)}
+  table.cur:not(.info-table) td:nth-child(4)::before{content:"진로 선택";color:var(--c-career)}
+  table.cur:not(.info-table) td:nth-child(5)::before{content:"융합 선택";color:var(--c-fusion)}
+  table.cur:not(.info-table) td:not(.gname)+td:not(.gname){border-top:1px dashed var(--line)}
+  table.cur:not(.info-table) .chips{justify-content:flex-start}
+  table.cur:not(.info-table) .empty{color:#B0B6C6}
+  .table-scroll:has(> table.cur:not(.info-table)) + .scroll-hint{display:none}
+  /* 정보표(성적처리·선이수)는 가로 스크롤 유지하되 첫 열 고정 */
+  table.cur.info-table td.gname, table.cur.info-table th:first-child{position:sticky;left:0;z-index:2;background:#FAFBFD;box-shadow:2px 0 0 var(--line)}
+  table.cur.info-table th:first-child{background:#F2F4F9}
+  /* 편성표(홈) 첫 열 고정 */
+  .plan-scroll table td:first-child, .plan-scroll table th:first-child{position:sticky;left:0;z-index:2;background:#fff}
+  /* 전체 여백·글자 */
+  .wrap{padding:0 16px}
+  .slide{padding:44px 0}
+  .badge{font-size:12.5px;padding:6px 10px}
+  .cta-row .btn{width:100%;justify-content:center}
+  .ck-tabs{gap:6px}.ck-tab{padding:9px 14px;font-size:14px}
+  .ck-footbar .btn{padding:10px 12px;font-size:14px}
+}
+
+@media(max-width:700px){
+  .ck-footbar-inner{flex-direction:column;align-items:stretch;gap:10px}
+  .ck-totals{justify-content:space-between}
+  .ck-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .ck-actions .btn{width:100%;justify-content:center;white-space:nowrap;padding:12px 8px;font-size:14px}
+  .ck-actions .btn-submit{order:1}.ck-actions .btn-pro{order:2;font-size:13px}.ck-actions #ckSaveImg{order:3}.ck-actions #ckReset{order:4}
+}
 </style>
 </head>
 <body>
@@ -1122,7 +1174,7 @@ body.locked .slide{min-height:calc(100vh - 64px)}
         </div>
       </div>
     </div>
-    <a class="scroll-hint" href="#start" aria-label="아래로">아래로 넘겨 보세요 <span>⌄</span></a>
+    <a class="hero-hint" href="#start" aria-label="아래로">아래로 넘겨 보세요 <span>⌄</span></a>
   </section>
 
   <!-- ===== 2. 어디부터 시작할까요 ===== -->
@@ -2778,11 +2830,29 @@ function renderTabs(){
     `<button class="ck-tab ${ckTab===i?'on':''}" role="tab" data-tab="${i}">${g.name}</button>`).join("") +
     `<button class="ck-tab grad ${ckTab===3?'on':''}" role="tab" data-tab="3">🎓 졸업요건</button>`;
 }
+function gradeIncomplete(tabIdx){
+  const g = CK_GRADES[tabIdx]; if(!g) return [];
+  return g.semesters.flatMap(sem => sem.groups
+    .map(gr => ({sem, gr, n:((ckState[sem.id]||{})[gr.name]||[]).length}))
+    .filter(x => x.n>0 && x.n<x.gr.pick));      // 손을 댔는데 덜 고른 묶음만 (아예 안 건드린 학년은 통과)
+}
 ckTabsEl.addEventListener("click",e=>{
   const b = e.target.closest("[data-tab]");
   if(!b) return;
-  ckTab = +b.dataset.tab;
-  renderTabs(); renderView();
+  const next = +b.dataset.tab;
+  if(next===ckTab) return;
+  const inc = ckTab<3 ? gradeIncomplete(ckTab) : [];
+  const go = ()=>{ ckTab = next; renderTabs(); renderView(); };
+  if(!inc.length){ go(); return; }
+  ckAlert({
+    tone:"danger", ico:"✋",
+    title:`${CK_GRADES[ckTab].name} 선택이 아직 끝나지 않았어요`,
+    bodyHTML:`<p>아래 묶음은 정해진 수만큼 고르지 않았어요.</p><ul>${inc.map(x=>`<li>• <b>${x.sem.name} · ${x.gr.name}</b> — ${x.gr.pick}과목 중 ${x.n}과목만 선택</li>`).join("")}</ul><p>남은 과목을 마저 고른 뒤 넘어가세요.</p>`,
+    buttons:[
+      {label:"이어서 선택하기", cls:"btn-retry", onClick:()=>{ const first=inc[0]; const el=document.querySelector(`.sem-card[data-sem="${first.sem.id}"] .grp-head[data-grp="${CSS.escape(first.gr.name)}"]`); if(el){ el.scrollIntoView({behavior:"smooth",block:"center"}); el.classList.add("flash"); setTimeout(()=>el.classList.remove("flash"),600); } }},
+      {label:"그래도 이동", cls:"btn-ghost", onClick:go},
+    ],
+  });
 });
 
 /* ----- 본문 렌더링 ----- */
@@ -2820,8 +2890,8 @@ function renderView(){
           const per = g.options[0]?g.options[0][3]:0;
           return `
           <div class="grp-head grp-${GRP_COLOR[g.name] ?? gi%4}" data-grp="${g.name}">
-            <span>● ${g.name}</span>
-            <span class="rule">택${g.pick} × ${per}학점${g.pick>1?` = ${g.pick*per}학점`:''}</span>
+            <span class="gtitle">● ${g.name}<small>${per}학점씩</small></span>
+            <span class="rule ${((ckState[sem.id]||{})[g.name]||[]).length>=g.pick?'done':'todo'}"><b class="need">${g.pick}과목 선택</b><span class="prog">${((ckState[sem.id]||{})[g.name]||[]).length>=g.pick?'✓ 완료':`${((ckState[sem.id]||{})[g.name]||[]).length} / ${g.pick}`}</span></span>
           </div>
           ${g.options.map(o=>{
             const lk = activeLock(sem.id, g.name);
@@ -3893,7 +3963,7 @@ function updateSubmitUI(){
   r.classList.toggle("static", !!(LOCKED && viaOperator));
   r.title = COLLECT_ERR ? COLLECT_ERR : "선생님용 · 결과 수집(Pro) 신청";
   r.innerHTML = viaOperator ? '<span class="pro-tag">PRO</span> 결과 수집 연결됨'
-    : (COLLECT_ERR ? '<span class="pro-tag">PRO</span> 연결 확인 실패 · 다시 시도' : '<span class="pro-tag">PRO</span> 결과 수집 신청');
+    : (COLLECT_ERR ? '<span class="pro-tag">PRO</span> 연결 확인 실패' : '<span class="pro-tag">PRO</span> 결과 수집 신청');
 }
 /* 운영자 접수 승인 여부를 즉시 조회 (제출 창을 열 때도 다시 확인) */
 function checkCollect(cb){
