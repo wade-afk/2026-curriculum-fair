@@ -1,0 +1,20 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>이동 중…</title>
+<meta name="robots" content="noindex"><meta name="viewport" content="width=device-width,initial-scale=1">
+<script>
+/* 학교 전용 주소 처리: /s/<학교id>/ → /?school=<학교id>&lock=1
+   깃허브 페이지·클라우드플레어 페이지는 없는 주소를 열면 이 404.html을 보여주므로,
+   학교별 폴더를 만들지 않아도 schools.json에 있는 모든 학교의 짧은 주소가 동작합니다. */
+(function(){
+  var m = location.pathname.match(/^(.*?)\/s\/([A-Za-z0-9_-]+)\/?(?:index\.html)?$/);
+  if(m){
+    var base = m[1] + "/", id = m[2].toLowerCase();
+    location.replace(base + "?school=" + encodeURIComponent(id) + "&lock=1" + (location.hash || "#home"));
+  }else{
+    document.addEventListener("DOMContentLoaded", function(){ document.getElementById("nf").style.display="block"; });
+  }
+})();
+</script>
+<style>body{font-family:-apple-system,"Malgun Gothic",sans-serif;padding:48px 24px;color:#334;max-width:560px;margin:0 auto;line-height:1.7}#nf{display:none}a{color:#2258ff}</style>
+</head><body>
+<div id="nf"><h2>페이지를 찾을 수 없어요</h2><p>학교 전용 주소는 <code>…/s/학교id/</code> 형태예요.<br>주소를 다시 확인하거나 <a href="./">홈으로</a> 이동하세요.</p></div>
+</body></html>

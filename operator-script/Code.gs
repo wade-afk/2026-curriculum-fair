@@ -216,10 +216,10 @@ function shareSheet_(file, email){
   }catch(e){ log_("공유실패","",email+" "+e); }
 }
 
-/** 학교 전용 주소: lock = 잠금 링크(학교 전환 불가), short = 짧은 폴더 주소(저장소에 <id>/index.html 이 있을 때 동작) */
+/** 학교 전용 주소: lock = 잠금 링크(학교 전환 불가), short = 짧은 주소 /s/<id>/ (저장소의 404.html이 처리 — 학교별 폴더 불필요) */
 function schoolLinks_(id){
   const base = CONFIG.SITE_URL.replace(/\/+$/,"") + "/";
-  return { lock: base + "?school=" + encodeURIComponent(id) + "&lock=1", short: base + encodeURIComponent(id) + "/" , student: base + "?school=" + encodeURIComponent(id) + "&lock=1#checklist" };
+  return { lock: base + "?school=" + encodeURIComponent(id) + "&lock=1", short: base + "s/" + encodeURIComponent(id) + "/" , student: base + "?school=" + encodeURIComponent(id) + "&lock=1#checklist" };
 }
 /** QR 이미지(PNG) 생성 → 학교 폴더에 저장. 실패하면 null (메일은 주소만으로 발송) */
 function makeQr_(r, link){
