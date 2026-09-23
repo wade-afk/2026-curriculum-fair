@@ -1486,6 +1486,19 @@ body.bd-compact .ck-footbar-inner{max-width:1720px;padding-left:24px;padding-rig
 .rp-sign{margin-top:9px;font-size:9.4pt;color:#1F2B4D;font-weight:700}
 .rp-sign span{display:inline-block;width:110px;border-bottom:1px solid #1F2B4D;margin:0 18px 0 6px;vertical-align:-2px}
 
+
+/* ===== 모바일(≤880px): 체크리스트 하단 바 고정 해제 — 스크롤 맨 아래에서 표시 ===== */
+@media(max-width:880px){
+  .ck-footbar{
+    position:static !important;
+    bottom:auto !important;
+    margin-top:26px;
+    background:#fff !important;
+    backdrop-filter:none !important;
+    box-shadow:none !important;
+    border-top:1.5px solid var(--line);
+  }
+}
 </style>
 </head>
 <body>
