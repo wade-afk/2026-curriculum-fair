@@ -24,8 +24,8 @@ from urllib.parse import urljoin
 try:
     import requests
     from bs4 import BeautifulSoup
-except ImportError:
-    sys.exit("먼저 실행:  pip install requests beautifulsoup4")
+except ImportError:          # sync_school_list.py 가 id 규칙만 가져다 쓸 때는 없어도 됨
+    requests = BeautifulSoup = None
 
 BASE = "https://ice-curriculum.kr"
 LIST = BASE + "/hs/school/curriculum/list"
@@ -147,12 +147,13 @@ def update_schools_json(path, new_schools, districts, version):
         if s["name"] in existing_names:           # 이미 있는 학교: 파일 경로·수정일 갱신
             existing_names[s["name"]]["file"] = s["file"]
             existing_names[s["name"]]["updated"] = s["updated"]
+            existing_names[s["name"]].pop("pending", None)   # 편성표를 받았으니 '준비 중' 해제
             updated += 1
-            # '미분류'에 있던 학교가 districts.csv로 구·군을 얻으면 그쪽으로 이동
+            # districts.csv의 구·군과 다르면(미분류 포함) 그쪽으로 이동
             dist_name = districts.get(s["name"])
             if dist_name:
                 for d in region["districts"]:
-                    if d["name"] == "미분류" and existing_names[s["name"]] in d["schools"]:
+                    if d["name"] != dist_name and existing_names[s["name"]] in d["schools"]:
                         d["schools"].remove(existing_names[s["name"]])
                         tgt = next((x for x in region["districts"] if x["name"] == dist_name), None)
                         if not tgt:
@@ -186,6 +187,8 @@ def main():
     ap.add_argument("--districts", default="tools/districts.csv")
     ap.add_argument("--no-download", action="store_true", help="목록만 만들고 파일은 받지 않음")
     a = ap.parse_args()
+    if requests is None:
+        sys.exit("먼저 실행:  pip install requests beautifulsoup4")
 
     os.makedirs(a.out, exist_ok=True)
     s = requests.Session()
