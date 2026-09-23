@@ -1499,6 +1499,13 @@ body.bd-compact .ck-footbar-inner{max-width:1720px;padding-left:24px;padding-rig
     border-top:1.5px solid var(--line);
   }
 }
+
+/* ===== 학년별 보기 통일: 제목 제거, 보드의 '나의 정보·목표 대학' 패널 공유 ===== */
+#page-checklist .ck-hero h1{display:none}
+#careerBar, #gradeBar{display:none!important}
+.bd-classic{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin:4px 0 18px}
+.bd-classic .bd-card{align-self:start}
+@media(max-width:700px){.bd-classic{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -4966,6 +4973,21 @@ document.getElementById("topBtn").addEventListener("click",e=>{
     return `<div class="bd-status ${all?"done":""}" role="status"><span>${who}</span><span class="trk"><i style="width:${pct}%"></i></span><b class="pg">묶음 ${done}/${groups.length}</b>${all&&targetGrade()!==null?`<span>· 아래 <b>결과 제출</b>을 누르세요</span>`:""}</div>`;
   }
 
+  /* 학년별 보기에서도 같은 패널을 쓰기 위한 도우미 */
+  function syncUvFromTargets(T){
+    const t=T&&T[0];
+    if(t && t.unit){
+      uvPick={u:t.univ, i:0, label:t.unit.label};
+      uvCore=new Set([...t.core.subjects].map(k=>DISP.get(k)||k));
+      uvRec =new Set([...t.rec.subjects].map(k=>DISP.get(k)||k).filter(n=>!uvCore.has(n)));
+    } else { uvPick=null; uvCore=new Set(); uvRec=new Set(); }
+  }
+  function classicPanels(T){
+    const d=document.createElement("div"); d.innerHTML=sideHTML(T);
+    const a=d.querySelector(".bd-card.c-info"), b=d.querySelector(".bd-card.c-tgt");
+    return `<div class="bd-classic">${a?a.outerHTML:""}${b?b.outerHTML:""}</div>`;
+  }
+
   function renderBoard(){
     applyLinks();
     const T=[0,1].map(tgtInfo), R=recIndex(T);
@@ -5089,7 +5111,6 @@ document.getElementById("topBtn").addEventListener("click",e=>{
     }
   }, true);
   ckView.addEventListener("change", e=>{
-    if(!BOARD) return;
     const s=e.target; if(s.tagName!=="SELECT" || s.dataset.t===undefined) return;
     const i=+s.dataset.t; targets[i]=targets[i]||{};
     if(s.dataset.f==="univ"){ targets[i]={univ:s.value, key:""}; }
@@ -5098,8 +5119,8 @@ document.getElementById("topBtn").addEventListener("click",e=>{
     saveTargets(); renderView();
   });
   ckView.addEventListener("click", e=>{
-    if(!BOARD) return;
     const b=e.target.closest("[data-grade],[data-career],[data-act],[data-view],[data-go],[data-preview]");
+    if(!BOARD && b && (b.dataset.view || b.dataset.go || b.dataset.preview)) return;
     if(!b || e.target.closest(".ck-info")) return;
     if(b.dataset.grade!==undefined){
       myGrade=+b.dataset.grade; try{ localStorage.setItem(GD_KEY, myGrade); }catch(err){}
@@ -5223,7 +5244,12 @@ document.getElementById("topBtn").addEventListener("click",e=>{
 
   /* ── 기존 렌더 함수에 보드 모드 연결 ── */
   const _renderView=renderView, _gdApply=gdApply, _renderTabs=renderTabs;
-  renderView = function(){ if(BOARD) renderBoard(); else _renderView(); };
+  renderView = function(){
+    const T=[0,1].map(tgtInfo);
+    syncUvFromTargets(T);
+    if(BOARD){ renderBoard(); }
+    else { _renderView(); ckView.insertAdjacentHTML("afterbegin", classicPanels(T)); }
+  };
   gdApply = function(){
     document.body.classList.toggle("bd-on", BOARD);
     if(BOARD){ document.body.classList.remove("gd-pending","ck-hide-hero"); gdUpdateProgress(); }
