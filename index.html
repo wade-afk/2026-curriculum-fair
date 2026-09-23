@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=1100"><!-- PC 레이아웃 통일: 모바일도 1100px 데스크톱 화면을 축소 표시 -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>작전고등학교 2026 교육과정 박람회 | 고교학점제 과목 선택 안내</title>
 <meta name="description" content="작전고등학교 2026 교육과정 박람회 — 고교학점제 완벽 안내, 2022 개정 교육과정 155개 과목 상세 정보, 학기별 과목 선택 체크리스트, 대학별·계열별 권장과목, 선택과목 길라잡이 영상, 2028 대입 전형까지 한곳에서 확인하세요.">
 <meta name="keywords" content="작전고등학교, 교육과정 박람회, 고교학점제, 과목 선택, 선택과목, 2022 개정 교육과정, 진로선택과목, 융합선택과목, 대학별 권장과목, 계열별 권장과목, 2028 대입, 인천 고등학교">
@@ -314,8 +314,8 @@ td.pre-empty{color:#D4D9E4}
 .ck-tab.on{background:var(--ink);border-color:var(--ink);color:#fff}
 .ck-tab.grad.on{background:var(--blue);border-color:var(--blue)}
 
-.ck-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start;margin-top:8px}
-@media(max-width:860px){.ck-grid{grid-template-columns:1fr}}
+.ck-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;align-items:start;margin-top:8px}
+.ck-grid .sem-card{min-width:0}
 .sem-card{background:var(--card);border:1.5px solid var(--line);border-radius:18px;overflow:hidden}
 .sem-head{padding:20px 24px 16px;border-bottom:1.5px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px}
 .sem-head h3{font-size:18px}
@@ -771,10 +771,7 @@ td.p-sum{font-weight:700}
 .ck-tab.allv{margin-left:auto;border-style:dashed}
 .ck-tab.allv.on{border-style:solid}
 @media(max-width:880px){.ck-tab.allv{display:none}}
-.ck-grid.all{grid-template-columns:repeat(3,1fr);gap:16px}
-@media(max-width:1120px){.ck-grid.all{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:860px){.ck-grid.all{grid-template-columns:1fr}}
-.ck-grid.all .sem-card{min-width:0}
+/* 한눈에 보기: 학년별 보기와 동일한 그리드 규칙 공유 (통일 디자인) */
 
 /* ---------- 희망 대학 추천 ---------- */
 .uv-row{flex-basis:100%;display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding-top:10px;margin-top:8px;border-top:1.5px dashed var(--line)}
@@ -3273,8 +3270,8 @@ let myGrade = (function(){ const raw=localStorage.getItem(GD_KEY); if(raw===null
 let gdShowAll = false;
 function gdTargetTab(){ return myGrade===1 ? 1 : myGrade===2 ? 2 : null; }
 function gdVisibleTabs(){ const t=gdTargetTab(); return (t===null || gdShowAll) ? [0,1,2,3] : [t]; }
-let ckAll = false;
-try{ ckAll = localStorage.getItem("jj_ckall")==="1"; }catch(e){}
+let ckAll = window.matchMedia("(min-width: 881px)").matches;   // PC 기본: 한눈에 보기 · 모바일 기본: 학년별 보기
+try{ const _s = localStorage.getItem("jj_ckall"); if(_s !== null) ckAll = _s === "1"; }catch(e){}
 function renderTabs(){
   const vis = gdVisibleTabs();
   const allOn = ckAll && ckTab!==3;
