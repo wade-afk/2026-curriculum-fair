@@ -59,8 +59,16 @@ Source: **Deploy from a branch** / Branch: **main**, **/ (root)** → **Save**
 | `index.html` | 사이트 본체(공용 엔진) — **수정 불필요** |
 | `school-config.js` | 우리 학교 설정(#setup에서 자동 생성) |
 | `school-config.example.js` | 설정 파일이 어떻게 생겼는지 보는 견본 |
+| `schools.json` | 지역 › 구·군 › 학교 목록 (상단 "다른 학교 보기"용) |
+| `schools/*.xlsx` | 학교별 학교알리미 편성표 원본 엑셀 |
+| `404.html` · `s/` | 학교 전용 짧은 주소(`…/s/학교id/`) 처리 |
+| `adm_overview.html` · `adm_cut70.html` | 2028 대입 도구(iframe으로 불러옴) |
 | `2028학년도_대학별_권장과목.xlsx` | 대학별 권장과목 원본(다운로드 버튼용) |
-| `앱스크립트_제출연결.gs` | 결과 수집용 구글 앱스크립트(통합판) |
+| `og-image.png` | 링크 공유 시 미리보기 이미지 |
+| `operator-script/Code.gs` | 결과 수집 운영자용 구글 앱스크립트 |
+| `tools/` | 학교 목록·편성표 일괄 갱신 스크립트(운영자용) |
+
+학교 추가·전용 주소·결과 수집 운영 방식은 **[README-학교추가방법.md](README-학교추가방법.md)** 를 참고하세요.
 
 ## ❓ 자주 묻는 질문
 

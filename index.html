@@ -12,7 +12,7 @@
 
   
 <meta name="google-site-verification" content="TzEVunxFqIkZvAqj1LE-2CLvd8IVUPHH6LObAX6sZCE" />
-<meta name="naver-site-verification" content="네이버_서치어드바이저에서_발급받은_코드">
+<meta name="naver-site-verification" content="48bad7e5941ba010504a1817a2d9b60ddffe7fc7">
 
   
   <meta property="og:type" content="website">
@@ -245,7 +245,7 @@ h2{font-size:clamp(24px,3.4vw,34px);font-weight:700;margin-bottom:14px}
 
 /* ---------- 교과(군)별 과목 안내 페이지 ---------- */
 .guide-hero{padding:70px 0 10px}
-.guide-hero h1{font-family:"Black Han Sans";font-weight:400;font-size:clamp(30px,4.6vw,44px);margin:12px 0 16px}
+.guide-hero h2{font-family:"Black Han Sans";font-weight:400;font-size:clamp(30px,4.6vw,44px);margin:12px 0 16px}
 .legend-bar{display:flex;gap:14px;flex-wrap:wrap;margin-top:22px;font-size:13px;font-weight:600;color:var(--ink-soft)}
 .table-head{
   display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;
@@ -303,7 +303,7 @@ td.pre-empty{color:#D4D9E4}
 
 /* ---------- 과목 선택 체크리스트 ---------- */
 .ck-hero{padding:64px 0 8px}
-.ck-hero h1{font-family:"Black Han Sans";font-weight:400;font-size:clamp(28px,4.4vw,42px);margin:12px 0 8px}
+.ck-hero h2{font-family:"Black Han Sans";font-weight:400;font-size:clamp(28px,4.4vw,42px);margin:12px 0 8px}
 .ck-hero .sub{font-size:14px;color:var(--ink-soft);font-weight:600}
 .ck-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-top:26px}
 .ck-tab{
@@ -696,7 +696,9 @@ table.plan td .mini-tag{font-size:9.5px;padding:2px 7px}
 td.p-div{font-weight:700;background:#F2F4F9;color:var(--ink);min-width:34px;font-size:12px}
 td.p-grp{font-weight:700;background:#FAFBFD;white-space:normal;min-width:62px;border-right:1px solid var(--line);font-size:11px}
 td.p-name{text-align:left;font-weight:600;white-space:nowrap}
-td.p-pick{font-size:11px;color:var(--c-career);min-width:32px}
+td.p-pick{font-size:12px;color:var(--c-career);min-width:36px;vertical-align:middle}
+td.p-pick b{display:inline-block;background:var(--c-career-bg);border-radius:8px;padding:3px 7px;white-space:nowrap}
+td.p-pick:has(b){border-left:2px solid var(--c-career);border-right:2px solid var(--c-career)}
 td.p-cr{font-weight:600;color:var(--ink-soft)}
 td.p-sem{min-width:30px;color:#D4D9E4}
 td.p-sem.on{background:var(--blue-soft);color:#1D3FAE;font-weight:700}
@@ -753,6 +755,9 @@ td.p-sum{font-weight:700}
 .adm-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:12px 0 0}
 .adm-bar .src{font-size:12.5px;color:var(--ink-soft)}
 .adm-loading{padding:60px;text-align:center;color:var(--ink-soft);font-size:14px}
+/* JS 렌더 전 임시 행: 실제 행이 추가되면 자동으로 숨김 (JS 수정 없음) */
+tr.tb-loading td{padding:28px;text-align:center;color:var(--ink-soft);font-size:13.5px}
+tr.tb-loading:not(:only-child){display:none}
 
 /* ---------- 학년별 시작 가이드 ---------- */
 .jn-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
@@ -1180,7 +1185,7 @@ nav.menu .gs-btn{margin:6px 4px 2px;justify-content:center}
 .ck-info{font-family:inherit;border:0;background:transparent;color:#9AA1B5;font-size:15px;line-height:1;padding:2px 6px;cursor:pointer;border-radius:50%;vertical-align:-1px}
 .ck-info:hover{color:var(--blue);background:var(--blue-soft)}
 body.ck-hide-hero .ck-hero .eyebrow, body.ck-hide-hero .ck-hero .sub{display:none}
-body.ck-hide-hero .ck-hero h1{font-size:clamp(22px,3.4vw,30px);margin-bottom:4px}
+body.ck-hide-hero .ck-hero h2{font-size:clamp(22px,3.4vw,30px);margin-bottom:4px}
 
 body.gd-pending #ckView, body.gd-pending #ckTabs, body.gd-pending #careerBar, body.gd-pending .ck-note, body.gd-pending .ck-footbar{display:none!important}
 
@@ -1200,7 +1205,7 @@ body.bd-on #gradeGate, body.bd-on #gradeBar, body.bd-on #careerBar, body.bd-on #
 body.bd-on #page-checklist .wrap{max-width:1720px}
 body.bd-on .ck-hero{padding:26px 0 0}
 body.bd-on .ck-hero .eyebrow{display:none}
-body.bd-on .ck-hero h1{font-size:clamp(22px,2.4vw,30px);margin:0 0 2px}
+body.bd-on .ck-hero h2{font-size:clamp(22px,2.4vw,30px);margin:0 0 2px}
 body.bd-on .ck-hero .sub{display:block}
 body.bd-on #page-checklist > section:nth-of-type(2){padding-top:14px!important}
 body.bd-on .ck-note{margin-top:14px}
@@ -1501,7 +1506,7 @@ body.bd-compact .ck-footbar-inner{max-width:1720px;padding-left:24px;padding-rig
 }
 
 /* ===== 학년별 보기 통일: 제목 제거, 보드의 '나의 정보·목표 대학' 패널 공유 ===== */
-#page-checklist .ck-hero h1{display:none}
+#page-checklist .ck-hero h2{display:none}
 #careerBar, #gradeBar{display:none!important}
 .bd-classic{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin:4px 0 18px}
 .bd-classic .bd-card{align-self:start}
@@ -1575,23 +1580,23 @@ body.bd-compact .ck-footbar-inner{max-width:1720px;padding-left:24px;padding-rig
         <div class="tt">
           <div class="h"></div><div class="h">월</div><div class="h">화</div><div class="h">수</div><div class="h">목</div><div class="h">금</div>
           <div class="p">1</div>
-          <div class="cell f common" style="animation-delay:.1s">공통<br>국어</div>
+          <div class="cell f general" style="animation-delay:.1s">화법과<br>언어</div>
           <div class="cell f general" style="animation-delay:.3s">대수</div>
           <div class="cell"></div>
-          <div class="cell f career" style="animation-delay:.6s">정치</div>
+          <div class="cell f general" style="animation-delay:.6s">물리학</div>
           <div class="cell f general" style="animation-delay:.8s">영어Ⅰ</div>
           <div class="p">2</div>
-          <div class="cell f fusion" style="animation-delay:1s">여행<br>지리</div>
+          <div class="cell f fusion" style="animation-delay:1s">스포츠<br>생활1</div>
           <div class="cell"></div>
-          <div class="cell f career" style="animation-delay:1.2s">물질과<br>에너지</div>
-          <div class="cell f general" style="animation-delay:1.4s">문학</div>
+          <div class="cell f career" style="animation-delay:1.2s">윤리와<br>사상</div>
+          <div class="cell f general" style="animation-delay:1.4s">세계사</div>
           <div class="cell"></div>
           <div class="p">3</div>
           <div class="cell"></div>
-          <div class="cell f career" style="animation-delay:1.6s">인공지능<br>기초</div>
-          <div class="cell f general" style="animation-delay:1.8s">음악</div>
+          <div class="cell f career" style="animation-delay:1.6s">기하</div>
+          <div class="cell f general" style="animation-delay:1.8s">중국어</div>
           <div class="cell"></div>
-          <div class="cell f fusion" style="animation-delay:2s">실용<br>통계</div>
+          <div class="cell f general" style="animation-delay:2s">대수</div>
         </div>
         <div class="tt-legend">
           <span><i class="dot" style="background:var(--c-common)"></i>공통</span>
@@ -1909,7 +1914,7 @@ body.bd-compact .ck-footbar-inner{max-width:1720px;padding-left:24px;padding-rig
             </tbody>
           </table>
         </div>
-      </div></details><details class="acc"><summary><span class="acc-no">08</span>대학수학능력시험(2028 수능~) 출제범위<span class="acc-car">›</span></summary><div class="acc-body">
+      </div></details><details class="acc"><summary><span class="acc-no">04</span>대학수학능력시험(2028 수능~) 출제범위<span class="acc-car">›</span></summary><div class="acc-body">
         <p class="wb-sub">2028학년도 수능부터는 아래 과목에서 출제돼요. 대부분 공통과목과 일반선택과목이에요.</p>
         <div class="wb-table-scroll">
           <table class="wbt" style="min-width:700px">
@@ -1962,7 +1967,7 @@ body.bd-compact .ck-footbar-inner{max-width:1720px;padding-left:24px;padding-rig
   <section class="guide-hero">
     <div class="wrap">
       <span class="eyebrow">SUBJECT GUIDE</span>
-      <h1>교과(군)별 과목 안내</h1>
+      <h2>교과(군)별 과목 안내</h2>
       <p class="lead">
         2022 개정 교육과정의 보통 교과를 교과(군)별로 정리했습니다.
         과목 이름을 누르면 <span class="hl">학점·성적산출·수능 관련 정보와 과목 소개</span>를 확인할 수 있어요.
@@ -1993,7 +1998,7 @@ body.bd-compact .ck-footbar-inner{max-width:1720px;padding-left:24px;padding-rig
               <th scope="col" class="h-fusion">융합 선택</th>
             </tr>
           </thead>
-          <tbody id="curBody"><!-- JS 렌더링 --></tbody>
+          <tbody id="curBody"><tr class="tb-loading"><td colspan="5">불러오는 중…</td></tr></tbody>
         </table>
       </div>
       <p class="scroll-hint">← 표를 옆으로 밀어 전체를 볼 수 있어요 →</p>
@@ -2014,7 +2019,7 @@ body.bd-compact .ck-footbar-inner{max-width:1720px;padding-left:24px;padding-rig
               <th scope="col">석차등급</th>
             </tr>
           </thead>
-          <tbody id="gradeBody"><!-- JS 렌더링 --></tbody>
+          <tbody id="gradeBody"><tr class="tb-loading"><td colspan="5">불러오는 중…</td></tr></tbody>
         </table>
       </div>
       <p class="scroll-hint">← 표를 옆으로 밀어 전체를 볼 수 있어요 →</p>
@@ -2038,7 +2043,7 @@ body.bd-compact .ck-footbar-inner{max-width:1720px;padding-left:24px;padding-rig
               <th scope="col">선이수 권장 과목</th>
             </tr>
           </thead>
-          <tbody id="preBody"><!-- JS 렌더링 --></tbody>
+          <tbody id="preBody"><tr class="tb-loading"><td colspan="4">불러오는 중…</td></tr></tbody>
         </table>
       </div>
       <p class="scroll-hint">← 표를 옆으로 밀어 전체를 볼 수 있어요 →</p>
@@ -2079,8 +2084,8 @@ body.bd-compact .ck-footbar-inner{max-width:1720px;padding-left:24px;padding-rig
   <section class="ck-hero">
     <div class="wrap">
       <span class="eyebrow">MY CHOICE</span>
-      <h1>🏫 <span id="cfgCkName">작전고등학교</span> 과목 선택 체크리스트</h1>
-      <p class="sub" id="cfgCkSub">2026학년도 입학생 · 학기당 29학점 (창체 3학점 포함 32학점)</p>
+      <h2>🏫 <span id="cfgCkName">작전고등학교</span> 과목 선택 체크리스트</h2>
+      <p class="sub" id="cfgCkSub">1·2학년 대상 · 2026학년도 입학생 편성표 기준 · 학기당 29학점 (창체 3학점 포함 32학점)</p>
       <div class="gd-gate" id="gradeGate">
         <div class="gd-q">나는 지금 몇 학년인가요?</div>
         <div class="gd-btns">
@@ -2207,7 +2212,7 @@ body.bd-compact .ck-footbar-inner{max-width:1720px;padding-left:24px;padding-rig
   <section class="guide-hero">
     <div class="wrap">
       <span class="eyebrow">UNIVERSITY GUIDE</span>
-      <h1>2028학년도 대학별 권장과목</h1>
+      <h2>2028학년도 대학별 권장과목</h2>
       <p class="lead">
         대학·모집단위별로 <span class="hl">이수를 권장하는 과목</span>을 정리했습니다.
         지역과 대학을 선택하면 모집단위별 핵심과목·권장과목을 확인할 수 있어요.
@@ -2239,7 +2244,7 @@ body.bd-compact .ck-footbar-inner{max-width:1720px;padding-left:24px;padding-rig
                 <th style="width:25%">비고</th>
               </tr>
             </thead>
-            <tbody id="uvBody"></tbody>
+            <tbody id="uvBody"><tr class="tb-loading"><td colspan="5">불러오는 중…</td></tr></tbody>
           </table>
         </div>
         <p class="uv-empty" id="uvEmpty" style="display:none">검색 결과가 없습니다.</p>
@@ -2263,7 +2268,7 @@ body.bd-compact .ck-footbar-inner{max-width:1720px;padding-left:24px;padding-rig
   <section class="guide-hero">
     <div class="wrap">
       <span class="eyebrow">FIELD GUIDE</span>
-      <h1>2028학년도 계열별 권장과목</h1>
+      <h2>2028학년도 계열별 권장과목</h2>
       <p class="lead">
         계열별 <span class="hl">대표 모집단위</span>를 기준으로, 대학마다 어떤 과목을 반영하는지 한 표로 정리했습니다.
         표 안의 대학명은 <span class="hl">그 과목을 반영하는 대학</span>이라는 뜻이에요.
@@ -2299,7 +2304,7 @@ body.bd-compact .ck-footbar-inner{max-width:1720px;padding-left:24px;padding-rig
               <th class="g-sci">물리학</th><th class="g-sci">화학</th><th class="g-sci">생명과학</th><th class="g-sci">지구과학</th>
             </tr>
           </thead>
-          <tbody id="fdBody"></tbody>
+          <tbody id="fdBody"><tr class="tb-loading"><td colspan="17">불러오는 중…</td></tr></tbody>
         </table>
         <p class="uv-empty" id="fdEmpty" style="display:none">검색 결과가 없습니다.</p>
       </div>
@@ -2317,10 +2322,10 @@ body.bd-compact .ck-footbar-inner{max-width:1720px;padding-left:24px;padding-rig
   <section class="guide-hero">
     <div class="wrap">
       <span class="eyebrow">VIDEO GUIDE</span>
-      <h1>🎬 선택과목 길라잡이 영상</h1>
+      <h2>🎬 선택과목 길라잡이 영상</h2>
       <p class="lead">
         교과별 선택과목, 영상으로 쉽게 이해해 보세요.
-        오른쪽 목록에서 <span class="hl">과목을 클릭하면 바로 재생</span>됩니다.
+        목록에서 <span class="hl">과목을 클릭하면 바로 재생</span>됩니다.
       </p>
     </div>
   </section>
@@ -2332,7 +2337,7 @@ body.bd-compact .ck-footbar-inner{max-width:1720px;padding-left:24px;padding-rig
           <div class="vd-frame" id="vdFrame"><!-- JS: 썸네일/플레이어 --></div>
           <div class="vd-info">
             <h3 id="vdTitle"></h3>
-            <a class="vd-yt" id="vdYtLink" href="#" target="_blank" rel="noopener">유튜브에서 보기 ↗</a>
+            <a class="vd-yt" id="vdYtLink" href="https://www.youtube.com/watch?v=5-WoCOfQ2Gc" target="_blank" rel="noopener">유튜브에서 보기 ↗</a>
           </div>
         </div>
         <div class="vd-list" id="vdList"><!-- JS: 영상 목록 --></div>
@@ -2347,7 +2352,7 @@ body.bd-compact .ck-footbar-inner{max-width:1720px;padding-left:24px;padding-rig
   <section class="guide-hero">
     <div class="wrap">
       <span class="eyebrow">ADMISSION 2028</span>
-      <h1>🎓 2028 대입 살펴보기</h1>
+      <h2>🎓 2028 대입 살펴보기</h2>
       <p class="lead">
         2028학년도 대입(현 고1 이하 적용)의 전형 구조와 지원 가능 대학을
         <span class="hl">직접 탐색해 볼 수 있는 도구</span> 두 가지를 준비했어요.
@@ -2368,7 +2373,7 @@ body.bd-compact .ck-footbar-inner{max-width:1720px;padding-left:24px;padding-rig
         </button>
       </div>
       <div class="adm-frame-wrap" id="admWrap">
-        <p class="adm-loading">불러오는 중…</p>
+        <p class="adm-loading">불러오는 중… 화면이 계속 비어 있으면 아래 <b>[↗ 새 창에서 크게 보기]</b>를 눌러 주세요.</p>
       </div>
       <div class="adm-bar">
         <p class="src">📖 자료 출처: <b>대입전략연구회</b> · 컷 수치는 참고용 추정치이며,
@@ -2392,7 +2397,7 @@ body.bd-compact .ck-footbar-inner{max-width:1720px;padding-left:24px;padding-rig
   <section class="guide-hero">
     <div class="wrap">
       <span class="eyebrow">ADMIN</span>
-      <h1>⚙ 관리자 설정 <small style="font-size:15px;color:var(--ink-soft);font-weight:600">— 우리 학교 버전 만들기</small></h1>
+      <h2>⚙ 관리자 설정 <small style="font-size:15px;color:var(--ink-soft);font-weight:600">— 우리 학교 버전 만들기</small></h2>
       <p class="lead">이 도구는 <b>선생님용</b>이에요. 학교 정보를 입력하고 편성표 엑셀을 올리면,
         이 사이트를 <span class="hl">우리 학교 이름과 교육과정으로 바꿔 주는 설정 파일</span>을 만들어 드립니다.</p>
       <div class="su-step">
@@ -2522,7 +2527,7 @@ body.bd-compact .ck-footbar-inner{max-width:1720px;padding-left:24px;padding-rig
   <div class="foot-inner">
     <div>
       <b id="cfgFootName">작전고등학교 2026 교육과정 박람회</b>
-      <span id="cfgFootDesc">인천광역시 계양구</span> · · 본 페이지는 인천광역시교육청 고교학점제 자료 및 과목 안내서를 재구성한 것입니다.
+      <span id="cfgFootDesc">인천광역시 계양구</span> · 본 페이지는 인천광역시교육청 고교학점제 자료 및 과목 안내서를 재구성한 것입니다.
     </div>
     <div>
       <b>문의</b>
@@ -2532,7 +2537,7 @@ body.bd-compact .ck-footbar-inner{max-width:1720px;padding-left:24px;padding-rig
   </div>
 </footer>
 
-<a class="top-link" href="#" id="topBtn" aria-label="맨 위로">↑</a>
+<a class="top-link" href="#home" id="topBtn" aria-label="맨 위로">↑</a>
 
 <script src="school-config.js"></script><!-- 학교별 설정 파일(없으면 작전고 기본값으로 동작) -->
 <script>
@@ -4115,7 +4120,7 @@ if(location.protocol === "file:"){
 function vdRenderList(){
   vdList.innerHTML = VIDEOS.map((v,i)=>`
     <button class="vd-item ${i===vdCurrent?'on':''}" data-v="${i}">
-      <span class="vd-thumb"><img src="https://i.ytimg.com/vi/${v.vid}/mqdefault.jpg" alt="" loading="lazy"></span>
+      <span class="vd-thumb"><img src="https://i.ytimg.com/vi/${v.vid}/mqdefault.jpg" alt="${v.subj} ${v.desc} 썸네일" loading="lazy"></span>
       <span class="vd-item-txt"><b>${v.subj} 교과</b><span>${v.desc}</span></span>
     </button>`).join("") + `
     <a class="vd-item ext" href="${EBS_CHANNEL}" target="_blank" rel="noopener">
