@@ -1521,21 +1521,31 @@ body.bd-compact .ck-footbar-inner{max-width:1720px;padding-left:24px;padding-rig
 
 @media(max-width:600px){.bd-grid{display:flex;flex-direction:column;gap:12px}.bd-grid>.bd-col,.bd-grid>.bd-band{width:100%;min-width:0}.bd-scroll{margin:0;padding:0;overflow:visible}.bd-colhead{position:static}.bd-side{max-height:none!important;overflow:visible}.topbar-inner{flex-wrap:wrap;height:auto!important;min-height:62px;gap:8px;padding-top:8px!important;padding-bottom:8px!important}.hdr-actions{margin-left:auto}.bd-hdr{flex-wrap:wrap}.bd-quick{flex-wrap:wrap}.wb-table-scroll{max-width:100%;overflow:auto}.wb-table-scroll table.wbt{min-width:0!important;table-layout:fixed}.wb-table-scroll .wbt th,.wb-table-scroll .wbt td{padding:8px 4px;font-size:11px;overflow-wrap:anywhere;white-space:normal}select{max-width:100%;min-width:0}.gd-prog{min-width:0;flex-basis:100%}}
 
-/* Desktop categories share the logo row; mobile retains the hamburger. */
+/* Grouped navigation uses native disclosures for keyboard and touch. */
+.nav-group{position:relative;margin:0;border:0;padding:0}
+.nav-group>summary{display:flex;align-items:center;justify-content:space-between;gap:8px;list-style:none;cursor:pointer;font-size:14px;font-weight:700;color:var(--ink-soft);padding:10px 14px;border-radius:10px;white-space:nowrap}
+.nav-group>summary::-webkit-details-marker{display:none}
+.nav-group[open]>summary,.nav-group>summary:hover,.nav-group:has(a.active)>summary{background:#edf0f8;color:var(--ink)}
+.nav-group[open]>summary span{transform:rotate(180deg)}
+.nav-dropdown{padding:8px;background:white;border:1px solid var(--line);border-radius:16px;box-shadow:0 16px 36px #202c4c24}
+nav.menu .nav-dropdown a{display:block;padding:12px 14px;font-size:14px;white-space:normal;border-radius:10px}
+.nav-dropdown small{display:block;font-size:12px;font-weight:400;line-height:1.5;margin-top:4px;color:#737f98}
+.nav-dropdown a.active small{color:#dbe1f0}
 @media(min-width:821px){
- .topbar-inner,body.bd-compact .topbar-inner{max-width:1760px;height:76px;min-height:64px;flex-wrap:nowrap;padding:0 24px;gap:16px}
- .topbar-inner>.brand{flex:0 0 auto}
- .hdr-actions{flex:0 0 auto;margin-left:0}.nav-toggle{display:none}
- nav.menu,nav.menu.open{display:flex;position:static;flex:1 1 0;min-width:0;max-width:none;flex-direction:row;align-items:center;justify-content:flex-start;gap:2px;border:0;border-radius:0;box-shadow:none;background:transparent;padding:6px 0;overflow-x:auto;overflow-y:hidden;scrollbar-width:thin}
- nav.menu::-webkit-scrollbar{display:block;height:3px}nav.menu::-webkit-scrollbar-thumb{background:#c7cede;border-radius:4px}
- nav.menu .menu-title{display:none}nav.menu a{flex:0 0 auto;font-size:13px;padding:10px 9px;white-space:nowrap;border-radius:8px}
- nav.menu .gs-btn{flex:0 0 auto;margin:0 0 0 5px;font-size:12px;padding:8px 10px;white-space:nowrap}
+ .topbar-inner,body.bd-compact .topbar-inner{max-width:var(--maxw);height:76px;min-height:64px;flex-wrap:nowrap;padding:0 20px;gap:16px}
+ .topbar-inner>.brand{flex:0 0 auto}.hdr-actions{flex:0 0 auto;margin-left:0}.nav-toggle{display:none}
+ nav.menu,nav.menu.open{display:flex;position:static;flex:1 1 auto;min-width:0;max-width:none;flex-direction:row;align-items:center;justify-content:flex-end;gap:6px;border:0;border-radius:0;box-shadow:none;background:transparent;padding:0;overflow:visible}
+ nav.menu>a{font-size:14px;padding:10px 14px;white-space:nowrap;border-radius:10px}
+ nav.menu .gs-btn{flex:none;margin:0 0 0 6px;font-size:12px;padding:8px 10px;white-space:nowrap}
+ .nav-dropdown{position:absolute;top:100%;left:0;width:310px;z-index:70}
  body.bd-compact .bd-hdr{flex:0 1 auto}body.bd-compact .bd-hdr-t{display:none}
 }
-@media(min-width:1600px){nav.menu{justify-content:center}nav.menu a{font-size:14px;padding:10px 12px}}
+@media(min-width:821px) and (max-width:1000px){.topbar-inner,body.bd-compact .topbar-inner{gap:8px;padding:0 16px}.brand-text{font-size:13px}.brand-text small{font-size:10px}.nav-group>summary,nav.menu>a{font-size:13px;padding:10px 8px}nav.menu{gap:2px}.hdr-cta{font-size:13px;padding:8px 10px}}
 @media(max-width:820px){
  .nav-toggle{display:inline-flex}nav.menu{max-height:calc(100dvh - 130px);overflow-y:auto;min-width:0}
- nav.menu a{font-size:15px;padding:12px 14px}
+ nav.menu>a,.nav-group>summary{font-size:15px;padding:12px 14px}.nav-group{width:100%}
+ .nav-dropdown{position:static;width:auto;margin:2px 4px 8px;background:#f6f8fc;box-shadow:none;border-radius:10px}
+ nav.menu .nav-dropdown a{font-size:14px}.nav-dropdown small{font-size:11px}
 }
 </style>
 </head>
@@ -1563,15 +1573,24 @@ body.bd-compact .ck-footbar-inner{max-width:1720px;padding-left:24px;padding-rig
       <span class="brand-text"><span id="cfgName">작전고등학교</span><small id="cfgSub">2026 교육과정 박람회</small></span>
     </a>
     <nav class="menu" id="mainMenu" aria-label="주요 메뉴">
-      <div class="menu-title">주요 메뉴</div>
       <a href="#home" data-nav="home" class="active">홈</a>
-      <a href="#what" data-nav="what">고교학점제란?</a>
-      <a href="#guide" data-nav="guide">교과(군)별 과목 안내</a>
-      <a href="#video" data-nav="video">선택과목 길라잡이 영상</a>
-      <a href="admission/2028/" data-admission-link>대학별 선택과목 상세글</a>
-      <a href="#univ" data-nav="univ">대학별 권장과목</a>
-      <a href="#field" data-nav="field">계열별 권장과목</a>
-      <a href="#adm" data-nav="adm">2028 대입</a>
+      <details class="nav-group">
+        <summary>과목 알아보기 <span aria-hidden="true">⌄</span></summary>
+        <div class="nav-dropdown">
+          <a href="#what" data-nav="what">고교학점제란?<small>학점제와 교육과정의 기본 이해</small></a>
+          <a href="#guide" data-nav="guide">교과별 과목 안내<small>과목마다 무엇을 배우는지 살펴보기</small></a>
+          <a href="#video" data-nav="video">선택과목 안내 영상<small>영상으로 알아보는 과목과 진로</small></a>
+        </div>
+      </details>
+      <details class="nav-group">
+        <summary>대학·입시 <span aria-hidden="true">⌄</span></summary>
+        <div class="nav-dropdown">
+          <a href="admission/2028/" data-admission-link>대학별 선택과목 상세글<small>서울대·고려대·연세대 공식자료 해설</small></a>
+          <a href="#univ" data-nav="univ">대학별 권장과목<small>희망 대학·학과의 과목 찾아보기</small></a>
+          <a href="#field" data-nav="field">계열별 권장과목<small>관심 계열에 맞는 과목 살펴보기</small></a>
+          <a href="#adm" data-nav="adm">2028 대입<small>전형 정보와 입시 도구 이용하기</small></a>
+        </div>
+      </details>
       <button class="gs-btn" id="gsBtn" title="과목 검색 (155개 과목)">🔍 과목 검색</button>
     </nav>
     <div class="hdr-actions">
@@ -4701,18 +4720,28 @@ function showToast(msg, ms){
   clearTimeout(t._tm); t._tm=setTimeout(()=>t.classList.remove("show"), ms||3500);
 }
 
-/* 모바일 햄버거 메뉴 */
+/* Responsive navigation: hover, native keyboard disclosure, and touch. */
 (function(){
-  const t=document.getElementById("navToggle"), m=document.getElementById("mainMenu"); if(!t||!m) return;
-  const cur=document.getElementById("navCur");
-  function sync(){ const a=m.querySelector("a.active"); if(cur) cur.textContent = a ? a.textContent.trim() : "더 알아보기"; const c=document.getElementById("hdrPick"); if(c) c.classList.toggle("active", location.hash.replace("#","")==="checklist"); }
-  t.addEventListener("click",e=>{ e.stopPropagation(); const o=m.classList.toggle("open"); t.setAttribute("aria-expanded",o); });
-  m.addEventListener("click",e=>{ if(e.target.closest("a")||e.target.closest("button")) { m.classList.remove("open"); t.setAttribute("aria-expanded","false"); } });
-  document.addEventListener("click",e=>{ if(!m.contains(e.target) && !t.contains(e.target)){ m.classList.remove("open"); t.setAttribute("aria-expanded","false"); } });
-  window.addEventListener("hashchange",()=>setTimeout(sync,0)); setTimeout(sync,0);
-  new MutationObserver(sync).observe(m,{attributes:true,subtree:true,attributeFilter:["class"]});
+  const t=document.getElementById("navToggle"),m=document.getElementById("mainMenu");if(!t||!m)return;
+  const groups=[...m.querySelectorAll('.nav-group')],cur=document.getElementById('navCur');
+  const desktop=matchMedia('(min-width:821px)'),hover=matchMedia('(hover:hover)');
+  function closeGroups(){groups.forEach(g=>g.open=false);}
+  function closeMenu(){closeGroups();m.classList.remove('open');t.setAttribute('aria-expanded','false');}
+  function sync(){const a=m.querySelector('a.active');if(cur)cur.textContent=a?a.childNodes[0].textContent.trim():'메뉴';const c=document.getElementById('hdrPick');if(c)c.classList.toggle('active',location.hash==='#checklist');}
+  groups.forEach(g=>{
+    g.addEventListener('pointerenter',()=>{if(desktop.matches&&hover.matches){groups.forEach(other=>{if(other!==g)other.open=false;});g.open=true;}});
+    g.addEventListener('pointerleave',()=>{if(desktop.matches&&hover.matches&&!g.contains(document.activeElement))g.open=false;});
+    g.querySelector('summary').addEventListener('click',()=>{groups.forEach(other=>{if(other!==g)other.open=false;});});
+    g.addEventListener('focusout',e=>{if(!g.contains(e.relatedTarget))g.open=false;});
+  });
+  t.addEventListener('click',()=>{const open=m.classList.toggle('open');t.setAttribute('aria-expanded',String(open));if(!open)closeGroups();});
+  m.addEventListener('click',e=>{if(e.target.closest('a')||e.target.closest('#gsBtn'))closeMenu();});
+  document.addEventListener('click',e=>{if(!m.contains(e.target)&&!t.contains(e.target))closeMenu();});
+  document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;const g=groups.find(x=>x.open);if(g){g.open=false;g.querySelector('summary').focus();}else if(m.classList.contains('open')){closeMenu();t.focus();}});
+  desktop.addEventListener('change',closeMenu);
+  window.addEventListener('hashchange',()=>{closeGroups();setTimeout(sync,0);});setTimeout(sync,0);
+  new MutationObserver(sync).observe(m,{attributes:true,subtree:true,attributeFilter:['class']});
 })();
-
 
 /* 좁은 화면 카드형 표: 각 셀에 열 이름(data-label) 부여 (rowspan 고려) */
 function labelTable(tbl){
