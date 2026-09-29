@@ -35,11 +35,14 @@ def page(title, desc, path, body, detail=False, name='연세대학교', citation
     if detail: schema.append({'@context':'https://schema.org','@type':'Article','headline':title,'description':desc,'mainEntityOfPage':url,'citation':citation,'inLanguage':'ko-KR'})
     root = '../../../' if detail else '../../'
     assets = '../' if detail else './'
+    university_nav = ''.join(f'<a href="{assets}{slug}/"'+(' aria-current="page"' if f'/{slug}/' in path else '')+f'>{label}</a>' for slug,label in [('snu','서울대'),('korea','고려대'),('yonsei','연세대')])
+    body = re.sub(r'<aside class="summary"><span class="eyebrow">먼저 알아둘 3가지</span>(.*?)</aside>', r'<details class="summary mobile-fold" open><summary>먼저 알아둘 3가지</summary>\1</details>', body, flags=re.S)
     return f'''<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{E(title)}</title><meta name="description" content="{E(desc)}"><meta name="robots" content="index,follow"><link rel="canonical" href="{url}">
 <meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc)}"><meta property="og:url" content="{url}"><meta property="og:type" content="{'article' if detail else 'website'}"><meta property="og:image" content="{BASE}og-image.png">
 <script type="application/ld+json">{json.dumps(schema,ensure_ascii=False)}</script><link rel="stylesheet" href="{assets}admission.css"><script src="{assets}admission.js" defer></script></head>
-<body><a class="skip" href="#main">본문 바로가기</a><header><a class="brand" href="{root}"><span class="logo">作</span> 작전고 교육과정 박람회</a><a class="header-link school-link" href="{root}#checklist">내 과목 선택표 <span>↗</span></a></header>
+<body class="{'detail-page' if detail else 'hub-page'}"><a class="skip" href="#main">본문 바로가기</a><header><a class="brand" href="{root}"><span class="logo">作</span> 작전고 교육과정 박람회</a><a class="header-link school-link" href="{root}#checklist">내 과목 선택표 <span>↗</span></a></header>
+<nav class="university-nav" aria-label="대학별 선택과목"><a class="category-link" href="{assets}">대학별 선택과목</a>{university_nav}</nav>
 <main id="main"><nav class="crumb" aria-label="현재 위치"><a href="{root}">홈</a><span>/</span><a href="{assets}">2028 대입</a>{'<span>/</span>'+E(name) if detail else ''}</nav>{body}</main>
 <footer><strong>작전고 교육과정 박람회</strong><p>대학의 안내를 읽고, 우리 학교에서 가능한 선택으로 연결합니다.</p><a href="{root}#guide">과목 안내</a> · <a class="school-link" href="{root}#checklist">과목 선택 체크리스트</a></footer></body></html>'''
 

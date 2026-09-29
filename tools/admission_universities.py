@@ -45,6 +45,10 @@ def build(root,base,page):
 <section id="faq"><p class="eyebrow">QUESTIONS & ANSWERS</p><h2>선택 전에 많이 묻는 질문</h2>{faq}</section>
 <aside class="source"><h2>공식자료와 적용 범위</h2><ul>{sources}</ul><p>{E(article['scope'])} 기준입니다. 발표 내용은 변경될 수 있으므로 최종 전형별 모집요강을 확인하세요. 과목 이름 매칭은 대학 평가·지원 자격·합격 가능성을 판정하는 기능이 아닙니다.</p></aside>
 <nav class="related" aria-label="다른 대학 안내"><a href="../">전체 대학 안내 ←</a><a href="../yonsei/">연세대 →</a><a href="../{'korea' if slug=='snu' else 'snu'}/">{'고려대' if slug=='snu' else '서울대'} →</a></nav>'''
+        guide_match=re.search(r'<section id="guide">.*?</section>',body,re.S)
+        dept_match=re.search(r'<section id="departments">.*?</section>',body,re.S)
+        body=body[:guide_match.start()]+dept_match[0]+guide_match[0]+body[dept_match.end():]
+        body=body.replace('01 선택 가이드','선택 가이드').replace('02 모집단위 찾기','모집단위 찾기').replace('03 자주 묻는 질문','자주 묻는 질문')
         (folder/'index.html').write_text(page(article['title'],article['description'],f'admission/2028/{slug}/',body,True,article['name'],data['source']),encoding='utf-8')
         hub_cards.append(f'<a class="featured" href="{slug}/"><div><span class="eyebrow">{E(article["scope"])}</span><h3>{E(article["name"])}</h3><p>{E(article["emphasis"])}</p></div><span class="big-arrow">↗</span></a>')
     (root/'index.html').write_text(source[:match.start(1)]+json.dumps(universities,ensure_ascii=False,separators=(',',':'))+source[match.end(1):],encoding='utf-8')
@@ -53,6 +57,9 @@ def build(root,base,page):
     text=text.replace('<p>공식자료를 확인한 상세페이지부터 순차적으로 추가합니다.</p>','<p>서울대·고려대·연세대의 공식 안내를 각각의 기준에 맞춰 확인하세요.</p>'+''.join(hub_cards))
     text=text.replace('<a class="button" href="yonsei/">연세대 선택과목 살펴보기 →</a>','<a class="button" href="#universities">3개 대학 선택과목 살펴보기 ↓</a>')
     text=text.replace('<section><p class="eyebrow">UNIVERSITY GUIDES','<section id="universities"><p class="eyebrow">UNIVERSITY GUIDES')
+    text=re.sub(r'<section class="hero hub-hero">.*?</section>', '<section class="catalog-heading"><p class="eyebrow">2028 ADMISSION GUIDE</p><h1>대학별 선택과목</h1><p>희망 대학을 누르면 학과별 과목 안내와 과목 설계로 연결됩니다.</p><span class="count">공식자료 기반 · 3개 대학</span></section>',text,flags=re.S)
+    text=text.replace('<section id="universities"><p class="eyebrow">UNIVERSITY GUIDES</p><h2>대학별 선택과목 안내</h2><p>서울대·고려대·연세대의 공식 안내를 각각의 기준에 맞춰 확인하세요.</p>','<section id="universities" class="university-catalog" aria-label="대학 상세페이지 목록">')
+    text=text.replace('<span class="big-arrow">↗</span>','<span class="big-arrow">상세보기 →</span>')
     hub.write_text(text,encoding='utf-8')
     yonsei=root/'admission/2028/yonsei/index.html'
     text=yonsei.read_text(encoding='utf-8').replace('</main>','<nav class="related" aria-label="다른 대학 안내"><a href="../">전체 대학 안내 ←</a><a href="../snu/">서울대 →</a><a href="../korea/">고려대 →</a></nav></main>')

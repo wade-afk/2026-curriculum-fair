@@ -368,6 +368,8 @@
     tbody td { max-width: none; }
     .cellText { display: block !important; overflow: visible !important; }
   }
+
+@media(max-width:680px){.tableWrap{max-height:none;overflow:visible}table{min-width:0;display:block}thead{display:none}tbody,tr{display:block;width:100%}tbody tr{border:1px solid var(--line);border-radius:12px;margin:10px 0;padding:8px;background:white}td,td.col-univ{display:grid;grid-template-columns:minmax(70px,.7fr) minmax(0,1.3fr);gap:10px;position:static;min-width:0;width:100%;text-align:left;white-space:normal;padding:9px;background:transparent}td:before{content:attr(data-label);font-weight:800;color:#475569;font-size:11px}.cellText{min-width:0;overflow-wrap:anywhere}.sticky{position:static}.hero h1{font-size:26px}.sectionTitle{max-width:100%}.sectionTitle h2{overflow-wrap:anywhere}}
 </style>
 </head>
 <body>
@@ -639,7 +641,7 @@ function renderTable(sheetName, sheet, rows, terms) {
   const body = rows.map(row => `<tr>${colIdxs.map(i => {
     const cls = i === uniIdx ? 'col-univ' : '';
     const val = row[i] ?? '';
-    return `<td class="${cls}"><span class="cellText">${highlight(val, terms) || '<span style="color:#cbd5e1">-</span>'}</span></td>`;
+    return `<td class="${cls}" data-label="${escapeHtml(prettyLabel(sheet.labels[i]))}"><span class="cellText">${highlight(val, terms) || '<span style="color:#cbd5e1">-</span>'}</span></td>`;
   }).join('')}</tr>`).join('');
   return `<section class="section" id="sec-${encodeURIComponent(sheetName)}">
     <div class="sectionHeader">

@@ -1511,6 +1511,15 @@ body.bd-compact .ck-footbar-inner{max-width:1720px;padding-left:24px;padding-rig
 .bd-classic{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin:4px 0 18px}
 .bd-classic .bd-card{align-self:start}
 @media(max-width:700px){.bd-classic{grid-template-columns:1fr}}
+
+/* University articles remain reachable from every route, including mobile. */
+.admission-shortcuts{display:flex;justify-content:center;gap:8px;padding:7px 16px;background:#edf4eb;border-bottom:1px solid #d6e2d4;flex-wrap:wrap}
+.admission-shortcuts a{display:flex;align-items:center;justify-content:center;min-height:40px;padding:6px 16px;border-radius:8px;font-size:13px;font-weight:800;text-decoration:none;color:#18553f}
+.admission-shortcuts a:hover,.admission-shortcuts a:focus-visible{background:#d6e8cd}
+.admission-shortcuts a:first-child{background:#18553f;color:white}
+@media(max-width:600px){.admission-shortcuts{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:3px;padding:4px 8px}.admission-shortcuts a{padding:4px;font-size:11px;min-height:40px}.topbar-inner{min-width:0}nav.menu{max-width:calc(100vw - 24px);min-width:0}.page .wrap{max-width:100%;min-width:0}iframe{max-width:100%}.bd-status{min-width:0;flex-wrap:wrap}.bd-hdr{min-width:0!important}.bd-hdr-t{overflow-wrap:anywhere}.bd-top{flex-wrap:wrap}}
+
+@media(max-width:600px){.bd-grid{display:flex;flex-direction:column;gap:12px}.bd-grid>.bd-col,.bd-grid>.bd-band{width:100%;min-width:0}.bd-scroll{margin:0;padding:0;overflow:visible}.bd-colhead{position:static}.bd-side{max-height:none!important;overflow:visible}.topbar-inner{flex-wrap:wrap;height:auto!important;min-height:62px;gap:8px;padding-top:8px!important;padding-bottom:8px!important}.hdr-actions{margin-left:auto}.bd-hdr{flex-wrap:wrap}.bd-quick{flex-wrap:wrap}.wb-table-scroll{max-width:100%;overflow:auto}.wb-table-scroll table.wbt{min-width:0!important;table-layout:fixed}.wb-table-scroll .wbt th,.wb-table-scroll .wbt td{padding:8px 4px;font-size:11px;overflow-wrap:anywhere;white-space:normal}select{max-width:100%;min-width:0}.gd-prog{min-width:0;flex-basis:100%}}
 </style>
 </head>
 <body>
@@ -1546,6 +1555,7 @@ body.bd-compact .ck-footbar-inner{max-width:1720px;padding-left:24px;padding-rig
       <a href="#what" data-nav="what">고교학점제란?</a>
       <a href="#guide" data-nav="guide">교과(군)별 과목 안내</a>
       <a href="#video" data-nav="video">선택과목 길라잡이 영상</a>
+      <a href="admission/2028/" data-admission-link>대학별 선택과목 상세글</a>
       <a href="#univ" data-nav="univ">대학별 권장과목</a>
       <a href="#field" data-nav="field">계열별 권장과목</a>
       <a href="#adm" data-nav="adm">2028 대입</a>
@@ -1553,6 +1563,7 @@ body.bd-compact .ck-footbar-inner{max-width:1720px;padding-left:24px;padding-rig
     </nav>
   </div>
 </header>
+<nav class="admission-shortcuts" aria-label="대학별 선택과목 바로가기"><a href="admission/2028/" data-admission-link>대학별 선택과목</a><a href="admission/2028/snu/" data-admission-link>서울대</a><a href="admission/2028/korea/" data-admission-link>고려대</a><a href="admission/2028/yonsei/" data-admission-link>연세대</a></nav>
 </div>
 
 <!-- =================== 홈 =================== -->
@@ -4985,8 +4996,8 @@ document.getElementById("topBtn").addEventListener("click",e=>{
       else if(tg===null){ cls="target"; label=`<span>${g.name}</span><em>선택 과목</em>`; }
       else if(gi===tg){ cls="target"; label=`<span>${g.name}</span><em>지금 고를 학기</em>`; }
       else { cls="preview"; label=`<span>${g.name}</span><em>${gi<tg?"이미 정한 학기":"미리 보기"}</em>`; }
-      bands += `<div class="bd-band ${cls}" style="grid-column:${col} / span ${n}">${label}</div>`;
-      g.semesters.forEach(s=>{ cells += colHTML(s,R,T, fixed?"fixed":(cls==="preview"?"preview":(tg!==null?"target":""))); });
+      bands += `<div class="bd-band ${cls}" style="grid-column:${col} / span ${n};order:${gi*10}">${label}</div>`;
+      g.semesters.forEach((s,si)=>{ cells += colHTML(s,R,T, fixed?"fixed":(cls==="preview"?"preview":(tg!==null?"target":""))).replace('class="bd-col', `style="order:${gi*10+si+1}" class="bd-col`); });
       col+=n;
     });
     return `<div class="bd-scroll"><div class="bd-grid" style="--bd-cols:${cols};--bd-n:${sems.length}">${bands}${cells}</div></div>`;
@@ -5028,7 +5039,7 @@ document.getElementById("topBtn").addEventListener("click",e=>{
     const views = `<div class="bd-views" role="tablist"><button type="button" role="tab" data-view="board" class="${ckTab!==3?"on":""}" aria-selected="${ckTab!==3}">3년 설계표</button><button type="button" role="tab" data-view="grad" class="${ckTab===3?"on":""}" aria-selected="${ckTab===3}">졸업 요건</button></div>`;
     const tot=allSems().reduce((a,s)=>a+semCredits(s),0);
     const quick=`<div class="bd-quick"><span class="bd-tot">교과 <b>${tot}</b> / ${CK_TOTAL}학점</span><button type="button" class="bd-q-img" data-act="print">상담 리포트 인쇄</button><button type="button" class="bd-q-sub" data-act="submit">결과 제출</button></div>`;
-    ckView.innerHTML = `<div class="bd">${sideHTML(T)}<div class="bd-main"><div class="bd-top">${views}${statusHTML()}${quick}<span class="bd-swipe">옆으로 밀어 다른 학기를 보세요</span></div>${main}</div></div>`;
+    ckView.innerHTML = `<div class="bd">${sideHTML(T)}<div class="bd-main"><div class="bd-top">${views}${statusHTML()}${quick}<span class="bd-swipe">학기별 과목과 선택 현황을 확인하세요</span></div>${main}</div></div>`;
     const sc2=ckView.querySelector(".bd-scroll"); if(sc2 && sx!==null) sc2.scrollLeft=sx;
     const sd2=ckView.querySelector(".bd-side"); if(sd2) sd2.scrollTop=sy;
     if(focusSel){ const el=ckView.querySelector(focusSel); if(el) el.focus({preventScroll:true}); }
@@ -5329,5 +5340,7 @@ document.getElementById("topBtn").addEventListener("click",e=>{
 })();
 
 </script>
-</body>
+<script>
+document.querySelectorAll('[data-admission-link]').forEach(a=>{const u=new URL(a.href,location.href),p=new URLSearchParams(location.search);for(const k of ['school','lock'])if(p.has(k))u.searchParams.set(k,p.get(k));a.href=u.href;});
+</script></body>
 </html>
